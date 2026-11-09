@@ -1,0 +1,13 @@
+{
+  "result": "Static asset inspection passed",
+  "profiles": 2,
+  "clips": 11,
+  "places": 12,
+  "guides": 12,
+  "business_files": 36,
+  "generated_icons": 36,
+  "generated_backgrounds": 2,
+  "generated_app_icon": 1,
+  "checks": "UUIDs, flat DTO fields, references, bytes, SHA-256, dimensions, provenance, generated alpha and bundle separation",
+  "not_performed": "No app compilation, typecheck, launch, simulator, Preview or runtime acceptance."
+}

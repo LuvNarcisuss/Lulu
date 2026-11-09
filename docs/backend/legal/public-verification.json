@@ -1,0 +1,20 @@
+[
+  {
+    "name": "terms",
+    "url": "https://dlbaneeshycwmhgfeokx.supabase.co/storage/v1/object/public/legal/terms.pdf",
+    "status": 200,
+    "contentType": "application/pdf",
+    "bytes": 36876,
+    "sha256": "b4f353127f392497f7066116e15122fa45115f5f3f70ab4c03cba60c8872c921",
+    "verified": true
+  },
+  {
+    "name": "privacy",
+    "url": "https://dlbaneeshycwmhgfeokx.supabase.co/storage/v1/object/public/legal/privacy.pdf",
+    "status": 200,
+    "contentType": "application/pdf",
+    "bytes": 37399,
+    "sha256": "70d20bc04f03aed49539e3913d9d29be4efb7076a3f4688cf291c524a5f8059a",
+    "verified": true
+  }
+]

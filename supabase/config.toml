@@ -1,0 +1,9 @@
+project_id = "dlbaneeshycwmhgfeokx"
+
+[functions.travel-account]
+# Modern publishable keys are not JWTs. The function validates the user's token with Auth.
+verify_jwt = false
+
+[functions.travel-entry]
+# The handler validates modern user JWTs through Auth before user-context RPC.
+verify_jwt = false

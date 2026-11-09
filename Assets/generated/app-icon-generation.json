@@ -1,0 +1,12 @@
+{
+  "name": "app-icon",
+  "prompt": "Use case: logo-brand. Asset type: actual 1024 by 1024 iPhone app icon original, full-bleed opaque square. Create an elegant unnamed travel journal symbol: a bold beautiful deep teal hand-painted compass rose with a small warm ochre northward needle, centered on cream cotton paper texture. A subtle teal watercolor wash and tiny ochre sunlight warmth bring life to the paper. Refined editorial watercolor and expressive ink, simple confident silhouette instantly recognizable at small sizes. Palette deep teal #164E50, warm ochre #C99132, warm ivory #F7F1E6. The compass symbol is large, occupies central 68 percent, balanced and uncluttered. Image fills all 1024 by 1024 pixels, opaque background to all four edges. No baked rounded corners, no frame, no border, no drop shadow, no lettering, no initials, no text, no brand name, no letters N S E W, no watermark. This is an original app icon, not an interface screenshot or mockup.",
+  "transparent_background": false,
+  "source_file": "/Users/apple/.codex/generated_images/01a1a0a5-f4d2-7ae2-a315-34c759f1a632/exec-1e216449-25bc-4735-8276-1aca6c40674b.png",
+  "project_file": "Assets/generated/app-icon-original.png",
+  "packaged_file": "TravelApp/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+  "processing": "Independently generated 1254x1254 RGB full-icon original; Lanczos downsample to opaque RGB 1024x1024. No tile enlargement or baked corner mask.",
+  "review": "Human visual review confirmed centered travel compass, opaque cream background, no lettering, no baked rounded corners.",
+  "engine": "Built-in image_gen.imagegen; model version not exposed.",
+  "created_on": "2026-11-03"
+}

@@ -1,0 +1,172 @@
+{
+  "rpc": [
+    {
+      "name": "travel_action",
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "travel_bootstrap",
+      "anon_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "travel_snapshot",
+      "anon_execute": false,
+      "security_definer": false,
+      "authenticated_execute": true
+    }
+  ],
+  "tables": [
+    {
+      "rls": true,
+      "name": "profiles",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "places",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "clips",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "guides",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "conversations",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "conversation_members",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "messages",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "comments",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "likes",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "saved_clips",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "saved_places",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "follows",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "blocks",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "reports",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "journeys",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "chat_preferences",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "submissions",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    },
+    {
+      "rls": true,
+      "name": "wallet_activity",
+      "anon_select": false,
+      "client_insert": false,
+      "authenticated_select": true
+    }
+  ],
+  "media_policies": [
+    {
+      "cmd": "SELECT",
+      "qual": "((bucket_id = 'uploads'::text) AND (((storage.foldername(name))[1] = (( SELECT auth.uid() AS uid))::text) OR (EXISTS ( SELECT 1\n   FROM messages m\n  WHERE (((m.data ->> 'attachment_path'::text) = ('uploads/'::text || objects.name)) AND private.member(m.conversation_id, ( SELECT auth.uid() AS uid))))) OR (EXISTS ( SELECT 1\n   FROM profiles p\n  WHERE ((p.data ->> 'avatar_path'::text) = ('uploads/'::text || objects.name))))))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "policyname": "read_upload",
+      "schemaname": "storage"
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "policyname": "upload_own",
+      "schemaname": "storage"
+    }
+  ]
+}

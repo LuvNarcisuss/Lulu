@@ -1,0 +1,118 @@
+[
+  {
+    "slug": "paris-skyline",
+    "id_number": "4145",
+    "name": "The Eiffel Tower and the buildings near it",
+    "contentUrl": "https://assets.mixkit.co/videos/4145/4145-1080.mp4",
+    "@id": "https://mixkit.co/free-stock-video/the-eiffel-tower-and-the-buildings-near-it-4145/#video",
+    "copyrightNotice": "Free",
+    "license": "https://mixkit.co/license/#videoFree",
+    "source_sha256": "a039f64ac76fbac6b06d68911e6188ff2449fdf056b15577958118b6e84fc74d"
+  },
+  {
+    "slug": "paris-street",
+    "id_number": "4348",
+    "name": "A calm street in Paris",
+    "contentUrl": "https://assets.mixkit.co/videos/4348/4348-1080.mp4",
+    "@id": "https://mixkit.co/free-stock-video/a-calm-street-in-paris-4348/#video",
+    "copyrightNotice": "Free",
+    "license": "https://mixkit.co/license/#videoFree",
+    "source_sha256": "1ac50de063564485203cfd5488d682b933cf2dae9c624903c7dd8ae3b1f55a18"
+  },
+  {
+    "slug": "new-york-times-square",
+    "id_number": "4442",
+    "name": "Times Square during a sunny day",
+    "contentUrl": "https://assets.mixkit.co/videos/4442/4442-1080.mp4",
+    "@id": "https://mixkit.co/free-stock-video/times-square-during-a-sunny-day-4442/#video",
+    "copyrightNotice": "Free",
+    "license": "https://mixkit.co/license/#videoFree",
+    "source_sha256": "555172031963a86d6589826e9163b036f9400c027e54f16b8048694adf4cde08"
+  },
+  {
+    "slug": "london-tower-bridge",
+    "id_number": "4457",
+    "name": "Tower Bridge in London during sunset",
+    "contentUrl": "https://assets.mixkit.co/videos/4457/4457-1080.mp4",
+    "@id": "https://mixkit.co/free-stock-video/tower-bridge-in-london-during-sunset-4457/#video",
+    "copyrightNotice": "Free",
+    "license": "https://mixkit.co/license/#videoFree",
+    "source_sha256": "90eb0a24b49327e732de0f66d8ccf66bc8732ee9d92b6ae5b4ded38b24ecdf89"
+  },
+  {
+    "slug": "london-big-ben",
+    "id_number": "4079",
+    "name": "Big Ben clock time lapse",
+    "contentUrl": "https://assets.mixkit.co/videos/4079/4079-1080.mp4",
+    "@id": "https://mixkit.co/free-stock-video/big-ben-clock-time-lapse-4079/#video",
+    "copyrightNotice": "Free",
+    "license": "https://mixkit.co/license/#videoFree",
+    "source_sha256": "1d44ce823688e4c48782cb0db641faae5db0c601f3de21d11c03fc9953235b1e"
+  },
+  {
+    "slug": "venice-alley",
+    "id_number": "4600",
+    "name": "Narrow and old alley in Venice",
+    "contentUrl": "https://assets.mixkit.co/videos/4600/4600-1080.mp4",
+    "@id": "https://mixkit.co/free-stock-video/narrow-and-old-alley-in-venice-4600/#video",
+    "copyrightNotice": "Free",
+    "license": "https://mixkit.co/license/#videoFree",
+    "source_sha256": "1220b9efdf54056f4c85e85559b39d9e2111dea3d2ddebb13b64119cf9f42f29"
+  },
+  {
+    "slug": "venice-canal",
+    "id_number": "4469",
+    "name": "An empty canal in Venice",
+    "contentUrl": "https://assets.mixkit.co/videos/4469/4469-1080.mp4",
+    "@id": "https://mixkit.co/free-stock-video/an-empty-canal-in-venice-4469/#video",
+    "copyrightNotice": "Free",
+    "license": "https://mixkit.co/license/#videoFree",
+    "source_sha256": "0365e446962d92be87adb5555ffd88849510a1468530e953a7bf887e3fb91e2f"
+  },
+  {
+    "slug": "rome-colosseum",
+    "id_number": "5087354",
+    "name": "A Video Footage of the Colosseum",
+    "author": "Max Avans",
+    "contentUrl": "https://videos.pexels.com/video-files/5087354/5087354-hd_1080_1920_25fps.mp4",
+    "@id": "https://www.pexels.com/video/a-video-footage-of-the-colosseum-5087354/",
+    "copyrightNotice": "Pexels License",
+    "license": "https://www.pexels.com/license/",
+    "source_sha256": "bf76ed263c4af360989ace0466aca42d67eef532dd10a192601dd3e522b0a8e6"
+  },
+  {
+    "slug": "iceland-waterfall",
+    "id_number": "37313953",
+    "name": "Majestic Waterfall Cascading in Iceland",
+    "author": "Gylfi Gylfason",
+    "contentUrl": "https://videos.pexels.com/video-files/37313953/15804827_3840_2160_30fps.mp4",
+    "@id": "https://www.pexels.com/video/majestic-waterfall-cascading-in-iceland-37313953/",
+    "copyrightNotice": "Pexels License",
+    "license": "https://www.pexels.com/license/",
+    "source_sha256": "59659e03fc593bd69c8c69ae4297c5b08c263cca62b6f6ede34ea46e180b99eb"
+  },
+  {
+    "slug": "swiss-alpine-train",
+    "id_number": "3640406",
+    "name": "Train Transporting Public Above The Mountains Alps Of Switzerland",
+    "author": "SwissHumanity Stories",
+    "contentUrl": "https://videos.pexels.com/video-files/3640406/3640406-uhd_3840_2160_25fps.mp4",
+    "@id": "https://www.pexels.com/video/train-transporting-public-above-the-mountains-alps-of-switzerland-3640406/",
+    "copyrightNotice": "Pexels License",
+    "license": "https://www.pexels.com/license/",
+    "source_sha256": "eed7af88b18231de9dcdbf7aac18128962441ac16ada853bdc59ce3952b29a36"
+  },
+  {
+    "slug": "yosemite-waterfall",
+    "id_number": "A45A7B7C-295C-4718-B5FA-FE30882C291F",
+    "name": "Yosemite Stock Footage (2021)",
+    "author": "National Park Service",
+    "contentUrl": "https://www.nps.gov/nps-audiovideo/audiovideo/787c8143-9811-4037-ac56-8c873be9b798720p.mp4",
+    "@id": "https://www.nps.gov/media/video/view.htm?id=A45A7B7C-295C-4718-B5FA-FE30882C291F",
+    "copyrightNotice": "Public domain",
+    "license": "https://www.nps.gov/aboutus/disclaimer.htm",
+    "source_start_seconds": 114,
+    "excerpt_seconds": 10,
+    "source_sha256": "79e9e8d59ef051c093752f931fd33662f90f2481a2ecb303113942497dd986b3"
+  }
+]

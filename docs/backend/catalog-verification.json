@@ -1,0 +1,20 @@
+{
+  "project": "dlbaneeshycwmhgfeokx",
+  "checks": [
+    "full catalog IDs, every field, and editorial profile separation match source via authenticated snapshot",
+    "clip/place save and like, comments/replies, ownership rejection, report and withdrawal",
+    "owner upload, unshared denial, participant signed read, nonmember denial, discoverable avatar authorization",
+    "video upload, private pending submission persistence and deletion"
+  ],
+  "status": "passed",
+  "testUploads": [
+    "uploads/935137a5-2ec9-4c08-94f0-1b3b335a862d/verification/photo.jpg",
+    "uploads/935137a5-2ec9-4c08-94f0-1b3b335a862d/verification/video.mp4"
+  ],
+  "counts": {
+    "clips": 11,
+    "places": 12,
+    "guides": 12,
+    "editorialPublishers": 2
+  }
+}

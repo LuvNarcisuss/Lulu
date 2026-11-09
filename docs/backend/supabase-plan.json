@@ -1,0 +1,109 @@
+{
+  "stage": "A",
+  "accountLink": "link_6ae9a0dba46881918588c741c7d6c89f",
+  "organizationID": "wuwstedwrsfrxkbxjuqa",
+  "projectName": "travel-social-20261103",
+  "region": "eu-west-1",
+  "creationAttemptRecordedAt": "2026-11-03",
+  "creationStatus": "ACTIVE_HEALTHY",
+  "reuseOtherApplication": false,
+  "projectRef": "dlbaneeshycwmhgfeokx",
+  "projectURL": "https://dlbaneeshycwmhgfeokx.supabase.co",
+  "publishableKey": "sb_publishable_fILH9r1CitJSP2ZOA2HaNQ_jSZ20Znb",
+  "status": "deployed_verified_with_explicit_dependencies",
+  "projectStatus": "ACTIVE_HEALTHY",
+  "plan": "Free",
+  "catalog": {
+    "profiles": 2,
+    "clips": 11,
+    "places": 12,
+    "guides": 12
+  },
+  "media": {
+    "expected": 36,
+    "verifiedFullGETAndSHA256": 36
+  },
+  "auth": {
+    "anonymousSignIns": true,
+    "guestSessionStorage": "Project-scoped SDK Keychain",
+    "entryFunction": "travel-entry",
+    "entryVersion": 1
+  },
+  "tables": {
+    "count": 18,
+    "rlsEnabled": 18,
+    "rawAnonSelect": false,
+    "rawAnonRPCExecute": false
+  },
+  "verification": {
+    "api": "api-verification.json",
+    "catalog": "catalog-verification.json",
+    "realtime": "realtime-verification.json",
+    "media": "media-verification.json",
+    "schema": "schema-verification.json",
+    "applicationBuild": "not_authorized",
+    "runtimeAcceptance": "not_authorized"
+  },
+  "accountDeletion": {
+    "sourceAuthored": true,
+    "deployed": false,
+    "blockedBy": "automatic approval review: explicit authorization required"
+  },
+  "fixtureCleanup": {
+    "uploadedObjectsRemoved": 2,
+    "authUsersRemoved": 3,
+    "authUsersPending": [],
+    "blockedBy": null,
+    "ownerApproved": true,
+    "uiVerifiedNoUsers": true,
+    "testConversationCleanup": "Exact two empty fixture conversations removed by coordinator after owner approval",
+    "completed": true,
+    "testConversationsRemoved": 2,
+    "finalCounts": {
+      "editorialProfiles": 2,
+      "places": 12,
+      "clips": 11,
+      "guides": 12,
+      "rlsTables": 18,
+      "catalogObjects": 36,
+      "legalObjects": 2,
+      "privateUploads": 0,
+      "fixtureAuthRemaining": 0,
+      "fixtureConversationsRemaining": 0,
+      "messages": 0,
+      "journeys": 0,
+      "submissions": 0,
+      "anonActionExecute": false,
+      "authenticatedActionExecute": true
+    }
+  },
+  "consentVersion": "travel-9d874d451884299ab284b3a3",
+  "legal": {
+    "version": "2026-11-03-v1",
+    "language": "English",
+    "documents": [
+      {
+        "name": "terms",
+        "url": "https://dlbaneeshycwmhgfeokx.supabase.co/storage/v1/object/public/legal/terms.pdf",
+        "status": 200,
+        "contentType": "application/pdf",
+        "bytes": 36876,
+        "sha256": "b4f353127f392497f7066116e15122fa45115f5f3f70ab4c03cba60c8872c921",
+        "verified": true
+      },
+      {
+        "name": "privacy",
+        "url": "https://dlbaneeshycwmhgfeokx.supabase.co/storage/v1/object/public/legal/privacy.pdf",
+        "status": 200,
+        "contentType": "application/pdf",
+        "bytes": 37399,
+        "sha256": "70d20bc04f03aed49539e3913d9d29be4efb7076a3f4688cf291c524a5f8059a",
+        "verified": true
+      }
+    ],
+    "frozen": true,
+    "modificationRequiresExplicitOwnerRequest": true
+  },
+  "stageB": "not_requested",
+  "purchases": "disabled_no_owned_product_ids"
+}

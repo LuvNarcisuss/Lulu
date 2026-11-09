@@ -1,0 +1,6 @@
+{
+  "kind": "Static grammar parse only",
+  "swift_files": 22,
+  "errors": [],
+  "not_performed": "Swift compilation, typechecking, linking, launch, simulator, runtime tests and device acceptance"
+}

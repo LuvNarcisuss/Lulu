@@ -1,0 +1,11 @@
+{
+  "projectURL": "https://dlbaneeshycwmhgfeokx.supabase.co",
+  "publishableKey": "sb_publishable_fILH9r1CitJSP2ZOA2HaNQ_jSZ20Znb",
+  "termsURL": "https://dlbaneeshycwmhgfeokx.supabase.co/storage/v1/object/public/legal/terms.pdf",
+  "privacyURL": "https://dlbaneeshycwmhgfeokx.supabase.co/storage/v1/object/public/legal/privacy.pdf",
+  "stage": "A",
+  "consentVersion": "travel-9d874d451884299ab284b3a3",
+  "termsSHA256": "b4f353127f392497f7066116e15122fa45115f5f3f70ab4c03cba60c8872c921",
+  "privacySHA256": "70d20bc04f03aed49539e3913d9d29be4efb7076a3f4688cf291c524a5f8059a",
+  "accountDeletionDeployed": false
+}

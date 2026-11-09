@@ -1,0 +1,43 @@
+{
+  "engine": "Built-in image_gen.imagegen (model version is not exposed by this tool)",
+  "created_on": "2026-11-03",
+  "assets": [
+    {
+      "name": "travel-icons-sheet",
+      "prompt": "Use case: icon-system. Asset type: iPhone travel journal application raster icon sprite sheet. Create exactly 36 distinct hand-painted ink icons in a perfectly regular 6-column by 6-row grid on genuinely transparent background. Image square, each equal cell, all icons centered, generous transparent gutter, no borders/grid, no text or labels. Consistent simple bold deep teal #164E50 rounded strokes with tiny warm ochre accents, elegant travel sketchbook aesthetic. Each icon readable at 24 points. No lettering, no shadows. Exact row-major subjects:\nrow 1: shorts play rectangle; explore compass; journeys suitcase; chats two speech bubbles; profile person bust; search magnifying glass.\nrow 2: add plus; back left arrow; close X; heart outline; comment bubble; bookmark.\nrow 3: share arrow out of tray; more horizontal three dots; location map pin; folded map; calendar; checkmark.\nrow 4: wallet; diamond gem; settings gear; edit pencil; camera; photo landscape.\nrow 5: send paper plane; group three people; push pin; muted bell; trash bin; report flag.\nrow 6: blocked user with slash; phone handset; video camera; refresh circular arrows; route dotted path; globe.\nAll cells have one icon only. Actual alpha transparency outside icon shapes, no checkerboard painting.",
+      "transparent_background": true,
+      "source_file": "/Users/apple/.codex/generated_images/01a1a0a5-f4d2-7ae2-a315-34c759f1a632/exec-8a7bc34c-8659-41a8-8f35-316b1ba33c84.png",
+      "project_file": "Assets/generated/travel-icons-sheet.png",
+      "processing": "Six by six row-major equal-cell crop; alpha-bounds crop; aspect fit 144 by 144; centered on transparent 160 by 160 canvas. No icons redrawn."
+    },
+    {
+      "name": "background-paper",
+      "prompt": "Use case: stylized-concept. Asset type: subtle full-screen iPhone travel journal background, portrait 1024 by 1536. Warm ivory cotton paper #F7F1E6, fine natural paper grain, almost empty center with extremely faint watercolor washes. Very tiny hand-painted teal and ochre travel accents only at outer corners: compass top right, little sun bottom left, one tiny winding route at lower edge. Sophisticated editorial travel journal atmosphere. No text, letters, words, borders, logo, interface, photographic content, or large objects. Readable unobtrusive negative space covers 90 percent.",
+      "transparent_background": false,
+      "source_file": "/Users/apple/.codex/generated_images/01a1a0a5-f4d2-7ae2-a315-34c759f1a632/exec-d8346384-562d-49d7-acd2-9a3105d6ac88.png",
+      "project_file": "Assets/generated/background-paper.png",
+      "processing": "Original pixels retained."
+    },
+    {
+      "name": "background-welcome",
+      "prompt": "Use case: illustration-story. Asset type: portrait iPhone travel welcome illustration, 1024 by 1536. A premium hand-painted watercolor travel journal spread on warm ivory textured cotton paper. Dreamlike collage of European coast and Alpine adventure: graceful Paris rooftops and a very small daytime Eiffel Tower on left, Venetian canal arch and terracotta Italian village beside blue Mediterranean water below, sweeping snow-capped Alpine mountains behind pine trees on right. Tiny ochre sun and softly winding teal path. Original delicate watercolor and expressive pencil accents, deep teal, warm ochre, muted coral, sky blue. Composition main illustration occupies lower 60 percent and side edges, with calm empty cream upper central 35 percent for actual UI heading. No text, lettering, brands, logo, stamp words, interface or people. Polished editorial cover illustration, rich yet serene.",
+      "transparent_background": false,
+      "source_file": "/Users/apple/.codex/generated_images/01a1a0a5-f4d2-7ae2-a315-34c759f1a632/exec-34bec338-2333-4072-a08e-b1df92f7001c.png",
+      "project_file": "Assets/generated/background-welcome.png",
+      "processing": "Original pixels retained."
+    },
+    {
+      "name": "app-icon",
+      "prompt": "Use case: logo-brand. Asset type: actual 1024 by 1024 iPhone app icon original, full-bleed opaque square. Create an elegant unnamed travel journal symbol: a bold beautiful deep teal hand-painted compass rose with a small warm ochre northward needle, centered on cream cotton paper texture. A subtle teal watercolor wash and tiny ochre sunlight warmth bring life to the paper. Refined editorial watercolor and expressive ink, simple confident silhouette instantly recognizable at small sizes. Palette deep teal #164E50, warm ochre #C99132, warm ivory #F7F1E6. The compass symbol is large, occupies central 68 percent, balanced and uncluttered. Image fills all 1024 by 1024 pixels, opaque background to all four edges. No baked rounded corners, no frame, no border, no drop shadow, no lettering, no initials, no text, no brand name, no letters N S E W, no watermark. This is an original app icon, not an interface screenshot or mockup.",
+      "transparent_background": false,
+      "source_file": "/Users/apple/.codex/generated_images/01a1a0a5-f4d2-7ae2-a315-34c759f1a632/exec-1e216449-25bc-4735-8276-1aca6c40674b.png",
+      "project_file": "Assets/generated/app-icon-original.png",
+      "packaged_file": "TravelApp/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+      "processing": "Independently generated 1254x1254 RGB full-icon original; Lanczos downsample to opaque RGB 1024x1024. No tile enlargement or baked corner mask.",
+      "review": "Human visual review confirmed centered travel compass, opaque cream background, no lettering, no baked rounded corners.",
+      "engine": "Built-in image_gen.imagegen; model version not exposed.",
+      "created_on": "2026-11-03"
+    }
+  ],
+  "review": "All selected originals visually inspected. Icon ordering matches the shared contract. Backgrounds contain no app name or intentional lettering."
+}

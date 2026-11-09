@@ -1,0 +1,21 @@
+{
+  "kind": "Static source/configuration/resource audit only",
+  "swift_files": 22,
+  "passed_assertions": 236,
+  "errors": [],
+  "identity_pending": [
+    "app display name",
+    "registered Bundle ID",
+    "development team",
+    "owned IAP product IDs",
+    "operator details"
+  ],
+  "runtime_performed": false,
+  "limitations": [
+    "No compilation or typechecking",
+    "No dependency resolution",
+    "No app, Simulator or Preview launch",
+    "No UI or StoreKit runtime tests",
+    "APNs signing capability remains unconfigured"
+  ]
+}

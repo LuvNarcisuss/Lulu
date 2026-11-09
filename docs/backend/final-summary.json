@@ -1,0 +1,20 @@
+{
+  "clips": 11,
+  "guides": 12,
+  "places": 12,
+  "journeys": 0,
+  "messages": 0,
+  "profiles": 2,
+  "rls_tables": 18,
+  "submissions": 0,
+  "legal_objects": 2,
+  "catalog_objects": 36,
+  "uploads_objects": 0,
+  "anon_action_execute": false,
+  "fixture_auth_remaining": 0,
+  "authenticated_action_execute": true,
+  "fixture_conversations_remaining": 0,
+  "verificationKind": "Final bounded SQL metadata and fixture cleanup verification",
+  "date": "2026-11-03",
+  "appRuntimeVerified": false
+}

@@ -1,0 +1,17 @@
+.DS_Store
+DerivedData/
+.build/
+xcuserdata/
+*.xcuserstate
+.env
+.env.*
+*.p12
+*.p8
+*.mobileprovision
+
+# Supabase catalog media staging
+/Assets/catalog/
+
+# Local design originals and media inspection images
+/Assets/generated/*.png
+/docs/media/inspection/

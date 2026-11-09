@@ -1,0 +1,579 @@
+{
+  "profiles": [
+    {
+      "id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "display_name": "European Field Notes",
+      "bio": "An editorial travel collection. Original footage creators are credited on each film; this publisher is not a traveler account.",
+      "avatar_path": "",
+      "is_editorial": true,
+      "source_url": "https://www.pexels.com/license/",
+      "consent_version": "editorial-2026-11-03"
+    },
+    {
+      "id": "ae1fe04b-4e55-5710-b478-aa2a6f32f7d4",
+      "display_name": "North American Field Notes",
+      "bio": "An editorial destination collection with creator credits and official planning links. This publisher is not a traveler account.",
+      "avatar_path": "",
+      "is_editorial": true,
+      "source_url": "https://www.nps.gov/aboutus/disclaimer.htm",
+      "consent_version": "editorial-2026-11-03"
+    }
+  ],
+  "clips": [
+    {
+      "id": "2a6010ca-0b3d-52c2-ab82-4dec259e49f7",
+      "title": "Paris in Passing",
+      "caption": "A recorded daytime time-lapse of the Eiffel Tower and its surrounding cityscape.",
+      "place_id": "3581e286-25db-5eff-848e-10b50af25ac1",
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/videos/paris-skyline.mp4",
+      "cover_path": "catalog/covers/paris-skyline.jpg",
+      "source_url": "https://mixkit.co/free-stock-video/the-eiffel-tower-and-the-buildings-near-it-4145/",
+      "author": null,
+      "duration": 23.8,
+      "category": "Architecture"
+    },
+    {
+      "id": "aed38460-97a8-5a45-b4d1-37b49896c113",
+      "title": "A Paris Side Street",
+      "caption": "Bicycles, neighborhood facades and a calm recorded street scene in Paris.",
+      "place_id": "3581e286-25db-5eff-848e-10b50af25ac1",
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/videos/paris-street.mp4",
+      "cover_path": "catalog/covers/paris-street.jpg",
+      "source_url": "https://mixkit.co/free-stock-video/a-calm-street-in-paris-4348/",
+      "author": null,
+      "duration": 22.12,
+      "category": "City"
+    },
+    {
+      "id": "c52902cf-48cc-56b9-b1c8-8d6d06065b04",
+      "title": "A New York Minute",
+      "caption": "Recorded daytime street movement in Times Square. Visible signs belong to the location; no endorsement is implied.",
+      "place_id": "ea21d48f-af5a-5cf1-9435-5690e8edd4fc",
+      "publisher_id": "ae1fe04b-4e55-5710-b478-aa2a6f32f7d4",
+      "video_path": "catalog/videos/new-york-times-square.mp4",
+      "cover_path": "catalog/covers/new-york-times-square.jpg",
+      "source_url": "https://mixkit.co/free-stock-video/times-square-during-a-sunny-day-4442/",
+      "author": null,
+      "duration": 9.0,
+      "category": "City"
+    },
+    {
+      "id": "2b74173e-3cf8-5fb5-afbb-f8dff2456846",
+      "title": "The Thames at Dusk",
+      "caption": "A recorded time-lapse of Tower Bridge as daylight gives way to evening.",
+      "place_id": "7117c66f-51a0-5b19-94dc-ebb4a4841f28",
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/videos/london-tower-bridge.mp4",
+      "cover_path": "catalog/covers/london-tower-bridge.jpg",
+      "source_url": "https://mixkit.co/free-stock-video/tower-bridge-in-london-during-sunset-4457/",
+      "author": null,
+      "duration": 14.066667,
+      "category": "Architecture"
+    },
+    {
+      "id": "15f81b6b-0939-5df5-ba13-b35c172cf106",
+      "title": "Clouds Above Westminster",
+      "caption": "A recorded close view of London's clock tower with passing clouds.",
+      "place_id": "7117c66f-51a0-5b19-94dc-ebb4a4841f28",
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/videos/london-big-ben.mp4",
+      "cover_path": "catalog/covers/london-big-ben.jpg",
+      "source_url": "https://mixkit.co/free-stock-video/big-ben-clock-time-lapse-4079/",
+      "author": null,
+      "duration": 10.333333,
+      "category": "Architecture"
+    },
+    {
+      "id": "56c2065b-7db4-522e-b7ce-2814ab72608a",
+      "title": "Between the Canals",
+      "caption": "A slow recorded walk through a narrow Venetian passage.",
+      "place_id": "24f0be99-d029-54ae-8584-f9a14f0e17a6",
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/videos/venice-alley.mp4",
+      "cover_path": "catalog/covers/venice-alley.jpg",
+      "source_url": "https://mixkit.co/free-stock-video/narrow-and-old-alley-in-venice-4600/",
+      "author": null,
+      "duration": 11.36,
+      "category": "City"
+    },
+    {
+      "id": "d2374b56-154c-5e13-8bc0-8dca2b479c3a",
+      "title": "A Quiet Venetian Canal",
+      "caption": "A recorded canal corner with old facades, boats and a narrow bridge in Venice.",
+      "place_id": "24f0be99-d029-54ae-8584-f9a14f0e17a6",
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/videos/venice-canal.mp4",
+      "cover_path": "catalog/covers/venice-canal.jpg",
+      "source_url": "https://mixkit.co/free-stock-video/an-empty-canal-in-venice-4469/",
+      "author": null,
+      "duration": 7.333333,
+      "category": "Waterfront"
+    },
+    {
+      "id": "cb4a45fb-ecca-5d91-a72e-0c1851797170",
+      "title": "Rome in Stone",
+      "caption": "A recorded portrait view of the Colosseum and surrounding streets in Rome.",
+      "place_id": "a42c1b6c-7fcc-51b7-837d-0ee7e3375fbe",
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/videos/rome-colosseum.mp4",
+      "cover_path": "catalog/covers/rome-colosseum.jpg",
+      "source_url": "https://www.pexels.com/video/a-video-footage-of-the-colosseum-5087354/",
+      "author": "Max Avans",
+      "duration": 7.21,
+      "category": "Heritage"
+    },
+    {
+      "id": "7fd817fd-1b8c-506e-a164-ebfbae922fa6",
+      "title": "Water over Iceland",
+      "caption": "Recorded aerial footage in Iceland. The creator does not identify the exact waterfall.",
+      "place_id": null,
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/videos/iceland-waterfall.mp4",
+      "cover_path": "catalog/covers/iceland-waterfall.jpg",
+      "source_url": "https://www.pexels.com/video/majestic-waterfall-cascading-in-iceland-37313953/",
+      "author": "Gylfi Gylfason",
+      "duration": 20.687333,
+      "category": "Nature"
+    },
+    {
+      "id": "a1747570-9624-5d85-b92f-4010a2036bd9",
+      "title": "A Train through the Alps",
+      "caption": "Recorded snow-covered Swiss Alpine scenery and a mountain train, with the Matterhorn visible.",
+      "place_id": "4ef64bb4-498a-55ab-8a24-e244e49252ec",
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/videos/swiss-alpine-train.mp4",
+      "cover_path": "catalog/covers/swiss-alpine-train.jpg",
+      "source_url": "https://www.pexels.com/video/train-transporting-public-above-the-mountains-alps-of-switzerland-3640406/",
+      "author": "SwissHumanity Stories",
+      "duration": 40.0,
+      "category": "Mountains"
+    },
+    {
+      "id": "7e460225-9c44-5918-a660-e5afd55c29d4",
+      "title": "Yosemite in Motion",
+      "caption": "A recorded waterfall view in Yosemite National Park, excerpted from public-domain National Park Service footage.",
+      "place_id": "17a7552b-5573-5f31-a932-99214eca2db1",
+      "publisher_id": "ae1fe04b-4e55-5710-b478-aa2a6f32f7d4",
+      "video_path": "catalog/videos/yosemite-waterfall.mp4",
+      "cover_path": "catalog/covers/yosemite-waterfall.jpg",
+      "source_url": "https://www.nps.gov/media/video/view.htm?id=A45A7B7C-295C-4718-B5FA-FE30882C291F",
+      "author": "National Park Service",
+      "duration": 10.01,
+      "category": "National Park"
+    }
+  ],
+  "places": [
+    {
+      "id": "3581e286-25db-5eff-848e-10b50af25ac1",
+      "name": "Paris by the Seine",
+      "city": "Paris",
+      "country": "France",
+      "region": "Europe",
+      "category": "City",
+      "latitude": 48.8584,
+      "longitude": 2.2945,
+      "summary": "Riverside walks, grand avenues and small neighborhood streets make a Paris day worth leaving open-ended.",
+      "photo_path": "catalog/places/paris.jpg",
+      "source_url": "https://parisjetaime.com/eng/",
+      "best_time": "Choose your season, then check attraction availability.",
+      "practical_tip": "Group nearby sights into one walk and leave room for a neighborhood stop."
+    },
+    {
+      "id": "a42c1b6c-7fcc-51b7-837d-0ee7e3375fbe",
+      "name": "Colosseum and Ancient Rome",
+      "city": "Rome",
+      "country": "Italy",
+      "region": "Europe",
+      "category": "Heritage",
+      "latitude": 41.8902,
+      "longitude": 12.4922,
+      "summary": "Roman stonework and the surrounding archaeological landscape tell a story far larger than one amphitheater.",
+      "photo_path": "catalog/places/rome.jpg",
+      "source_url": "https://colosseo.it/en/opening-times-and-tickets/",
+      "best_time": "Check the current seasonal schedule before booking.",
+      "practical_tip": "Reserve through the official ticketing link and check your assigned entrance time."
+    },
+    {
+      "id": "24f0be99-d029-54ae-8584-f9a14f0e17a6",
+      "name": "Venice Canal Walks",
+      "city": "Venice",
+      "country": "Italy",
+      "region": "Europe",
+      "category": "Waterfront",
+      "latitude": 45.4408,
+      "longitude": 12.3155,
+      "summary": "Quiet canal corners and weathered bridges reward a slow route through Venice beyond the busiest passages.",
+      "photo_path": "catalog/places/venice.jpg",
+      "source_url": "https://www.veneziaunica.it/en/sustainable-venice/enjoy-respect-venezia",
+      "best_time": "Consider an off-peak visit and check city visitor requirements.",
+      "practical_tip": "Keep narrow walking routes clear and follow the city's visitor guidance."
+    },
+    {
+      "id": "71cbb70e-1413-5fb9-85bc-9c8857fb36ce",
+      "name": "Lisbon Hills and Trams",
+      "city": "Lisbon",
+      "country": "Portugal",
+      "region": "Europe",
+      "category": "City",
+      "latitude": 38.7223,
+      "longitude": -9.1393,
+      "summary": "Trams, tiled streets and hilltop viewpoints give Lisbon an inviting rhythm for a flexible city day.",
+      "photo_path": "catalog/places/lisbon.jpg",
+      "source_url": "https://www.visitlisboa.com/en",
+      "best_time": "Choose dates around the events and experiences you want.",
+      "practical_tip": "Pair one hilltop viewpoint with nearby streets instead of repeatedly crossing the city."
+    },
+    {
+      "id": "4ef64bb4-498a-55ab-8a24-e244e49252ec",
+      "name": "Swiss Alps",
+      "city": "Swiss Alps",
+      "country": "Switzerland",
+      "region": "Europe",
+      "category": "Mountains",
+      "latitude": 46.5775,
+      "longitude": 8.0056,
+      "summary": "Mountain rail journeys, snowy ridges and walking routes offer different ways into Switzerland's Alpine landscapes.",
+      "photo_path": "catalog/places/swiss-alps.jpg",
+      "source_url": "https://www.myswitzerland.com/en-us/experiences/summer-autumn/hiking/",
+      "best_time": "Match the season to the route and verify mountain conditions.",
+      "practical_tip": "Choose a route suited to your experience and check transport and weather before setting out."
+    },
+    {
+      "id": "7117c66f-51a0-5b19-94dc-ebb4a4841f28",
+      "name": "Tower Bridge and the Thames",
+      "city": "London",
+      "country": "United Kingdom",
+      "region": "Europe",
+      "category": "Waterfront",
+      "latitude": 51.5055,
+      "longitude": -0.0754,
+      "summary": "Blue suspension spans, riverside paths and a working bridge create an absorbing London riverside stop.",
+      "photo_path": "catalog/places/london.jpg",
+      "source_url": "https://www.towerbridge.org.uk/",
+      "best_time": "Check current exhibition access and bridge lift information.",
+      "practical_tip": "Treat the public bridge crossing and the indoor visitor experience as separate plans."
+    },
+    {
+      "id": "35ffded9-bbbc-5988-8630-cc9d5df64ee9",
+      "name": "Park Guell, Barcelona",
+      "city": "Barcelona",
+      "country": "Spain",
+      "region": "Europe",
+      "category": "Architecture",
+      "latitude": 41.4145,
+      "longitude": 2.1527,
+      "summary": "Curving architecture, planted slopes and city views turn Park Guell into a distinctive Barcelona walk.",
+      "photo_path": "catalog/places/barcelona.jpg",
+      "source_url": "https://parkguell.barcelona/en/planifica-la-teva-visita",
+      "best_time": "Check the seasonal opening schedule and ticket availability.",
+      "practical_tip": "Book through the official site and plan a sustainable route to the park."
+    },
+    {
+      "id": "aa21212b-b0d0-58ce-99be-ee3834bddf6d",
+      "name": "Santorini Caldera Villages",
+      "city": "Santorini",
+      "country": "Greece",
+      "region": "Europe",
+      "category": "Coast",
+      "latitude": 36.3932,
+      "longitude": 25.4615,
+      "summary": "Whitewashed settlements, volcanic cliffs and the Aegean horizon reveal Santorini's layered island landscape.",
+      "photo_path": "catalog/places/santorini.jpg",
+      "source_url": "https://www.visitgreece.gr/en/islands/cyclades/santorini",
+      "best_time": "Check seasonal transport and local conditions before choosing dates.",
+      "practical_tip": "Add a village or food stop alongside the caldera view."
+    },
+    {
+      "id": "9c269449-085f-5cb3-ade1-652f28ca8e53",
+      "name": "Iceland Waterfalls",
+      "city": "Iceland",
+      "country": "Iceland",
+      "region": "Europe",
+      "category": "Nature",
+      "latitude": 64.9631,
+      "longitude": -19.0208,
+      "summary": "A countrywide starting point for waterfall journeys. The photograph shows Dynjandi; video locations remain as credited by their creators.",
+      "photo_path": "catalog/places/iceland.jpg",
+      "source_url": "https://www.visiticeland.com/article/safe-travel-in-iceland/",
+      "best_time": "Plan around daylight, road conditions and changing weather.",
+      "practical_tip": "Check SafeTravel and stay on marked paths, behind barriers and away from slippery edges."
+    },
+    {
+      "id": "ea21d48f-af5a-5cf1-9435-5690e8edd4fc",
+      "name": "New York City",
+      "city": "New York",
+      "country": "United States",
+      "region": "North America",
+      "category": "City",
+      "latitude": 40.758,
+      "longitude": -73.9855,
+      "summary": "Street-level energy and skyline views make New York a city best explored one neighborhood at a time.",
+      "photo_path": "catalog/places/new-york.jpg",
+      "source_url": "https://www.nyctourism.com/",
+      "best_time": "Choose dates for your preferred neighborhood and cultural experiences.",
+      "practical_tip": "Choose one area for a walk before adding another borough or a timed attraction."
+    },
+    {
+      "id": "17a7552b-5573-5f31-a932-99214eca2db1",
+      "name": "Yosemite Valley",
+      "city": "Yosemite National Park",
+      "country": "United States",
+      "region": "North America",
+      "category": "National Park",
+      "latitude": 37.7456,
+      "longitude": -119.5936,
+      "summary": "Granite walls, waterfalls, forests and the Merced River frame an extraordinary Sierra Nevada valley.",
+      "photo_path": "catalog/places/yosemite.jpg",
+      "source_url": "https://www.nps.gov/yose/planyourvisit/index.htm",
+      "best_time": "Check current roads, weather and entry arrangements for your date.",
+      "practical_tip": "Save official park information offline and keep plans flexible around traffic and conditions."
+    },
+    {
+      "id": "4d3613c5-fd86-558f-b635-8c8e7484cc86",
+      "name": "Moraine Lake, Banff",
+      "city": "Banff National Park",
+      "country": "Canada",
+      "region": "North America",
+      "category": "National Park",
+      "latitude": 51.3217,
+      "longitude": -116.186,
+      "summary": "Turquoise water and the Valley of the Ten Peaks make Moraine Lake a memorable Canadian Rockies destination.",
+      "photo_path": "catalog/places/banff.jpg",
+      "source_url": "https://parks.canada.ca/pn-np/ab/banff/visit/parkbus/louise",
+      "best_time": "Check the seasonal shuttle operating dates and lake access conditions.",
+      "practical_tip": "Plan transport in advance; consult Parks Canada for current access and reservations."
+    }
+  ],
+  "guides": [
+    {
+      "id": "a0af4e11-2fee-5be6-8418-aea0df526e5c",
+      "place_id": "3581e286-25db-5eff-848e-10b50af25ac1",
+      "title": "Paris by the Seine: Field Notes",
+      "intro": "Riverside walks, grand avenues and small neighborhood streets make a Paris day worth leaving open-ended.",
+      "sections": [
+        {
+          "title": "A day with room to wander",
+          "body": "Start with one landmark, then follow the river rather than racing between distant attractions. Pair a monument with a small neighborhood walk for a more varied day."
+        },
+        {
+          "title": "Plan the practical details",
+          "body": "The official tourism office links district walks, transport options and accessibility information. Confirm arrangements for each attraction directly before you go; booking and access can change."
+        }
+      ],
+      "source_name": "Paris je t'aime",
+      "source_url": "https://parisjetaime.com/eng/",
+      "reading_minutes": 2
+    },
+    {
+      "id": "777ba655-213e-5b4e-b855-92a6ccb93408",
+      "place_id": "a42c1b6c-7fcc-51b7-837d-0ee7e3375fbe",
+      "title": "Colosseum and Ancient Rome: Field Notes",
+      "intro": "Roman stonework and the surrounding archaeological landscape tell a story far larger than one amphitheater.",
+      "sections": [
+        {
+          "title": "Build around your entry slot",
+          "body": "Begin with the official archaeological park website and choose the visit that matches your interests. Colosseum entry uses a reserved time, so plan other stops around that commitment."
+        },
+        {
+          "title": "Give the wider site time",
+          "body": "The Roman Forum and Palatine form a much broader visit than a quick photograph outside the arena. Read what your selected ticket includes and allow time for walking between areas."
+        }
+      ],
+      "source_name": "Parco archeologico del Colosseo",
+      "source_url": "https://colosseo.it/en/opening-times-and-tickets/",
+      "reading_minutes": 2
+    },
+    {
+      "id": "1de34275-77c1-5a3a-91a0-ee8fb9826717",
+      "place_id": "24f0be99-d029-54ae-8584-f9a14f0e17a6",
+      "title": "Venice Canal Walks: Field Notes",
+      "intro": "Quiet canal corners and weathered bridges reward a slow route through Venice beyond the busiest passages.",
+      "sections": [
+        {
+          "title": "Move at the city's pace",
+          "body": "Use smaller streets to discover artisan workshops and everyday corners of Venice. On narrow routes, walk to the right in single file so residents and other visitors can pass."
+        },
+        {
+          "title": "Respect a living place",
+          "body": "Choose proper rest areas, look after waterways and historic spaces, and sort waste responsibly. Check the official city site for current access requirements rather than relying on an old itinerary."
+        }
+      ],
+      "source_name": "Venezia Unica",
+      "source_url": "https://www.veneziaunica.it/en/sustainable-venice/enjoy-respect-venezia",
+      "reading_minutes": 2
+    },
+    {
+      "id": "b0cb3252-5cc5-5078-a5e5-fb7b6a831abe",
+      "place_id": "71cbb70e-1413-5fb9-85bc-9c8857fb36ce",
+      "title": "Lisbon Hills and Trams: Field Notes",
+      "intro": "Trams, tiled streets and hilltop viewpoints give Lisbon an inviting rhythm for a flexible city day.",
+      "sections": [
+        {
+          "title": "Choose a small area",
+          "body": "Build a walk around one Lisbon neighborhood, adding a viewpoint or cultural stop along the way. The official tourism site organizes experiences by area and interest."
+        },
+        {
+          "title": "Plan the connections",
+          "body": "Consult the official getting-around information before combining trams, walking and farther-away sights. Keep time for slopes and pauses; a short map distance can still make a full afternoon."
+        }
+      ],
+      "source_name": "Turismo de Lisboa",
+      "source_url": "https://www.visitlisboa.com/en",
+      "reading_minutes": 2
+    },
+    {
+      "id": "8d69926f-a1cc-5419-8021-f71955ca36d2",
+      "place_id": "4ef64bb4-498a-55ab-8a24-e244e49252ec",
+      "title": "Swiss Alps: Field Notes",
+      "intro": "Mountain rail journeys, snowy ridges and walking routes offer different ways into Switzerland's Alpine landscapes.",
+      "sections": [
+        {
+          "title": "Pick the right kind of day",
+          "body": "Choose between a scenic rail journey, a valley walk and a demanding mountain route before adding stops. Distances on a map do not describe the effort of an Alpine trail."
+        },
+        {
+          "title": "Leave a flexible margin",
+          "body": "Use the official hiking information to compare routes and preparation. Mountain weather and service availability affect plans, so keep another activity available if conditions change."
+        }
+      ],
+      "source_name": "Switzerland Tourism",
+      "source_url": "https://www.myswitzerland.com/en-us/experiences/summer-autumn/hiking/",
+      "reading_minutes": 2
+    },
+    {
+      "id": "c87245b5-6c29-5629-a957-93116d29553e",
+      "place_id": "7117c66f-51a0-5b19-94dc-ebb4a4841f28",
+      "title": "Tower Bridge and the Thames: Field Notes",
+      "intro": "Blue suspension spans, riverside paths and a working bridge create an absorbing London riverside stop.",
+      "sections": [
+        {
+          "title": "See it from both banks",
+          "body": "A riverside walk gives space to appreciate the towers and suspension spans. If you want to go inside, consult the official visitor page and book the experience that fits your day."
+        },
+        {
+          "title": "Look beyond the photograph",
+          "body": "The visitor experience includes high-level walkways and the Victorian Engine Rooms. Check accessibility information and current bridge lift details before arranging a tightly timed visit."
+        }
+      ],
+      "source_name": "Tower Bridge",
+      "source_url": "https://www.towerbridge.org.uk/",
+      "reading_minutes": 2
+    },
+    {
+      "id": "36d14ba6-f206-5c1e-b578-1e6e733e61c6",
+      "place_id": "35ffded9-bbbc-5988-8630-cc9d5df64ee9",
+      "title": "Park Guell, Barcelona: Field Notes",
+      "intro": "Curving architecture, planted slopes and city views turn Park Guell into a distinctive Barcelona walk.",
+      "sections": [
+        {
+          "title": "Plan before the climb",
+          "body": "The park limits visitor capacity, so check availability before setting your day's route. Its opening times change with the season; use current official information for your date."
+        },
+        {
+          "title": "Slow down inside",
+          "body": "Leave time to notice details and the relationship between architecture and planting. The official site offers route, services, transport and guided-visit information to help shape a comfortable visit."
+        }
+      ],
+      "source_name": "Park Guell Official Website",
+      "source_url": "https://parkguell.barcelona/en/planifica-la-teva-visita",
+      "reading_minutes": 2
+    },
+    {
+      "id": "bee1d55a-f90c-5aef-b5b5-b1f4f4865656",
+      "place_id": "aa21212b-b0d0-58ce-99be-ee3834bddf6d",
+      "title": "Santorini Caldera Villages: Field Notes",
+      "intro": "Whitewashed settlements, volcanic cliffs and the Aegean horizon reveal Santorini's layered island landscape.",
+      "sections": [
+        {
+          "title": "Look beyond one viewpoint",
+          "body": "Fira and Oia sit within a wider volcanic island landscape. Combine a caldera view with another settlement or one of the island's contrasting beaches rather than building a day around a single image."
+        },
+        {
+          "title": "Taste the landscape",
+          "body": "The island's volcanic soil supports distinctive crops, including vines, small tomatoes and yellow split peas. Use the official destination information to explore food and cultural stops at an unhurried pace."
+        }
+      ],
+      "source_name": "Greek National Tourism Organisation",
+      "source_url": "https://www.visitgreece.gr/en/islands/cyclades/santorini",
+      "reading_minutes": 2
+    },
+    {
+      "id": "a7dd9e42-8919-5441-8528-99581e884b24",
+      "place_id": "9c269449-085f-5cb3-ade1-652f28ca8e53",
+      "title": "Iceland Waterfalls: Field Notes",
+      "intro": "A countrywide starting point for waterfall journeys. The photograph shows Dynjandi; video locations remain as credited by their creators.",
+      "sections": [
+        {
+          "title": "Let conditions set the route",
+          "body": "Weather can change quickly, and a beautiful scene does not show whether a road or path is suitable today. Consult current travel conditions before committing to a long drive."
+        },
+        {
+          "title": "Keep the view at a distance",
+          "body": "Waterfall rocks can be slippery and some hazards are difficult to see. Respect signs, fences and marked paths. For longer independent outdoor trips, prepare suitable equipment and leave a travel plan."
+        }
+      ],
+      "source_name": "Visit Iceland",
+      "source_url": "https://www.visiticeland.com/article/safe-travel-in-iceland/",
+      "reading_minutes": 2
+    },
+    {
+      "id": "18231422-934f-5718-b0ff-47099a22d510",
+      "place_id": "ea21d48f-af5a-5cf1-9435-5690e8edd4fc",
+      "title": "New York City: Field Notes",
+      "intro": "Street-level energy and skyline views make New York a city best explored one neighborhood at a time.",
+      "sections": [
+        {
+          "title": "Think in neighborhoods",
+          "body": "Pick a neighborhood as the anchor for a morning or afternoon. A small number of nearby stops leaves more time for streets, food and unexpected discoveries."
+        },
+        {
+          "title": "Keep exploring",
+          "body": "The city extends across five boroughs. Consult the official tourism site for current ideas and practical planning, then check the individual venue's own information for reservations and access."
+        }
+      ],
+      "source_name": "NYC Tourism + Conventions",
+      "source_url": "https://www.nyctourism.com/",
+      "reading_minutes": 2
+    },
+    {
+      "id": "6fbff3dc-f149-5c7f-8ba7-633e8f67bc29",
+      "place_id": "17a7552b-5573-5f31-a932-99214eca2db1",
+      "title": "Yosemite Valley: Field Notes",
+      "intro": "Granite walls, waterfalls, forests and the Merced River frame an extraordinary Sierra Nevada valley.",
+      "sections": [
+        {
+          "title": "Prepare before arriving",
+          "body": "Use the National Park Service planning pages for current conditions, road access and reservation requirements. Lodging and camping need advance thought, while mobile coverage can be limited."
+        },
+        {
+          "title": "Stay with the landscape",
+          "body": "Observe wildlife from a distance and never feed it. Near rivers and waterfalls, stay back from fast water and slippery rocks. Choose a walk that matches your preparation and available daylight."
+        }
+      ],
+      "source_name": "National Park Service",
+      "source_url": "https://www.nps.gov/yose/planyourvisit/index.htm",
+      "reading_minutes": 2
+    },
+    {
+      "id": "bd63ff90-3dd1-595d-b175-5e8764fbb355",
+      "place_id": "4d3613c5-fd86-558f-b635-8c8e7484cc86",
+      "title": "Moraine Lake, Banff: Field Notes",
+      "intro": "Turquoise water and the Valley of the Ten Peaks make Moraine Lake a memorable Canadian Rockies destination.",
+      "sections": [
+        {
+          "title": "Start with access",
+          "body": "Lake Louise and Moraine Lake are popular and need planning. The official Parks Canada page explains available transport and shuttle reservations; confirm the arrangements for your own travel date."
+        },
+        {
+          "title": "Make room in the day",
+          "body": "Allow time for connections and potential queues rather than packing a lake visit between tight commitments. Separate park entry from transport planning and use the official information for current requirements."
+        }
+      ],
+      "source_name": "Parks Canada",
+      "source_url": "https://parks.canada.ca/pn-np/ab/banff/visit/parkbus/louise",
+      "reading_minutes": 2
+    }
+  ]
+}

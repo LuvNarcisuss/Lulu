@@ -1,0 +1,9 @@
+{
+  "project": "dlbaneeshycwmhgfeokx",
+  "checks": [
+    "deployed travel-entry valid session and anonymous/bad-token rejection",
+    "two participant sockets receive persisted messages in both directions",
+    "disconnect history catchup, resubscribed live event, and nonmember receives no message event"
+  ],
+  "status": "passed"
+}

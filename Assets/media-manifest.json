@@ -1,0 +1,1049 @@
+{
+  "version": 1,
+  "created_on": "2026-11-03",
+  "purpose": "Editorial travel discovery within the application; no stock redistribution service.",
+  "business_media_root": "Assets/",
+  "bundle_policy": "Business media is uploaded to Supabase Storage and is not included in the application target.",
+  "files": [
+    {
+      "path": "catalog/videos/paris-skyline.mp4",
+      "local_file": "Assets/catalog/videos/paris-skyline.mp4",
+      "kind": "video",
+      "sha256": "60fed384474a436760fe1fbd91f5f6b9238258ea73c1dc3dbc23982be1ccd163",
+      "source_sha256": "a039f64ac76fbac6b06d68911e6188ff2449fdf056b15577958118b6e84fc74d",
+      "bytes": 8879209,
+      "width": 1280,
+      "height": 720,
+      "duration": 23.8,
+      "codec": "h264",
+      "frame_rate": "30/1",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": null,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 11.9
+      },
+      "source_url": "https://mixkit.co/free-stock-video/the-eiffel-tower-and-the-buildings-near-it-4145/",
+      "download_url": "https://assets.mixkit.co/videos/4145/4145-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          11.9,
+          23.5
+        ],
+        "scene": "Daytime Eiffel Tower, clouds and surrounding buildings; no protected nighttime lighting. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/paris-skyline.jpg",
+      "local_file": "Assets/catalog/covers/paris-skyline.jpg",
+      "kind": "video_cover",
+      "sha256": "a907e643c8992a331d60e4fb56c30a5ae367d178cb024095df0c3689b7afd3a0",
+      "bytes": 167065,
+      "width": 1280,
+      "height": 720,
+      "derived_from": "catalog/videos/paris-skyline.mp4",
+      "source_url": "https://mixkit.co/free-stock-video/the-eiffel-tower-and-the-buildings-near-it-4145/",
+      "download_url": "https://assets.mixkit.co/videos/4145/4145-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          11.9,
+          23.5
+        ],
+        "scene": "Daytime Eiffel Tower, clouds and surrounding buildings; no protected nighttime lighting. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/videos/paris-street.mp4",
+      "local_file": "Assets/catalog/videos/paris-street.mp4",
+      "kind": "video",
+      "sha256": "28ba736308ed9a0189767c71a0763479fc7b82bae64a5f9f39ab19b82619baf1",
+      "source_sha256": "1ac50de063564485203cfd5488d682b933cf2dae9c624903c7dd8ae3b1f55a18",
+      "bytes": 2775265,
+      "width": 1280,
+      "height": 720,
+      "duration": 22.12,
+      "codec": "h264",
+      "frame_rate": "25/1",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": null,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 11.06
+      },
+      "source_url": "https://mixkit.co/free-stock-video/a-calm-street-in-paris-4348/",
+      "download_url": "https://assets.mixkit.co/videos/4348/4348-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          11.06,
+          21.82
+        ],
+        "scene": "Paris street with parked bicycles, facades and passing road users. Incidental street signage only; no added watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/paris-street.jpg",
+      "local_file": "Assets/catalog/covers/paris-street.jpg",
+      "kind": "video_cover",
+      "sha256": "59cc86ce59e492b9f546b061585e928d2b6a9ad72b310a5d09ee6eaa51487883",
+      "bytes": 203939,
+      "width": 1280,
+      "height": 720,
+      "derived_from": "catalog/videos/paris-street.mp4",
+      "source_url": "https://mixkit.co/free-stock-video/a-calm-street-in-paris-4348/",
+      "download_url": "https://assets.mixkit.co/videos/4348/4348-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          11.06,
+          21.82
+        ],
+        "scene": "Paris street with parked bicycles, facades and passing road users. Incidental street signage only; no added watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/videos/new-york-times-square.mp4",
+      "local_file": "Assets/catalog/videos/new-york-times-square.mp4",
+      "kind": "video",
+      "sha256": "e3d064c3616e7b7cb036d3fa86f4659dc66e9f107c29da70e654611634cc2326",
+      "source_sha256": "555172031963a86d6589826e9163b036f9400c027e54f16b8048694adf4cde08",
+      "bytes": 2638227,
+      "width": 1280,
+      "height": 720,
+      "duration": 9.0,
+      "codec": "h264",
+      "frame_rate": "24/1",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": null,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 4.5
+      },
+      "source_url": "https://mixkit.co/free-stock-video/times-square-during-a-sunny-day-4442/",
+      "download_url": "https://assets.mixkit.co/videos/4442/4442-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          4.5,
+          8.7
+        ],
+        "scene": "Identifiable Times Square with yellow taxis, pedestrians and English advertising signs. Incidental location brands; no added watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/new-york-times-square.jpg",
+      "local_file": "Assets/catalog/covers/new-york-times-square.jpg",
+      "kind": "video_cover",
+      "sha256": "c06177f66c5ec142b3536385911c15073612e5164ece68536982eccbe0062b90",
+      "bytes": 238682,
+      "width": 1280,
+      "height": 720,
+      "derived_from": "catalog/videos/new-york-times-square.mp4",
+      "source_url": "https://mixkit.co/free-stock-video/times-square-during-a-sunny-day-4442/",
+      "download_url": "https://assets.mixkit.co/videos/4442/4442-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          4.5,
+          8.7
+        ],
+        "scene": "Identifiable Times Square with yellow taxis, pedestrians and English advertising signs. Incidental location brands; no added watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/videos/london-tower-bridge.mp4",
+      "local_file": "Assets/catalog/videos/london-tower-bridge.mp4",
+      "kind": "video",
+      "sha256": "7e20386313c0425620463aad1c2f9f6ded9e208b4276393a363289e3a2719246",
+      "source_sha256": "90eb0a24b49327e732de0f66d8ccf66bc8732ee9d92b6ae5b4ded38b24ecdf89",
+      "bytes": 3807038,
+      "width": 1280,
+      "height": 720,
+      "duration": 14.066667,
+      "codec": "h264",
+      "frame_rate": "30/1",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": null,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 7.0333335
+      },
+      "source_url": "https://mixkit.co/free-stock-video/tower-bridge-in-london-during-sunset-4457/",
+      "download_url": "https://assets.mixkit.co/videos/4457/4457-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          7.033,
+          13.767
+        ],
+        "scene": "Distinctive Tower Bridge from the Thames at dusk into evening. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/london-tower-bridge.jpg",
+      "local_file": "Assets/catalog/covers/london-tower-bridge.jpg",
+      "kind": "video_cover",
+      "sha256": "ef63cec9705ed5605ad18562183c59cf06073441cd184fc2c84f7eda354a436f",
+      "bytes": 103776,
+      "width": 1280,
+      "height": 720,
+      "derived_from": "catalog/videos/london-tower-bridge.mp4",
+      "source_url": "https://mixkit.co/free-stock-video/tower-bridge-in-london-during-sunset-4457/",
+      "download_url": "https://assets.mixkit.co/videos/4457/4457-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          7.033,
+          13.767
+        ],
+        "scene": "Distinctive Tower Bridge from the Thames at dusk into evening. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/videos/london-big-ben.mp4",
+      "local_file": "Assets/catalog/videos/london-big-ben.mp4",
+      "kind": "video",
+      "sha256": "5f14dc66b78b7fb0455731da3fc6dd00867d87b1c60319c6f3dbc53278fb89aa",
+      "source_sha256": "1d44ce823688e4c48782cb0db641faae5db0c601f3de21d11c03fc9953235b1e",
+      "bytes": 2358062,
+      "width": 1280,
+      "height": 720,
+      "duration": 10.333333,
+      "codec": "h264",
+      "frame_rate": "24/1",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": null,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 5.1666665
+      },
+      "source_url": "https://mixkit.co/free-stock-video/big-ben-clock-time-lapse-4079/",
+      "download_url": "https://assets.mixkit.co/videos/4079/4079-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          5.167,
+          10.033
+        ],
+        "scene": "Elizabeth Tower clock face and clouds in daylight. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/london-big-ben.jpg",
+      "local_file": "Assets/catalog/covers/london-big-ben.jpg",
+      "kind": "video_cover",
+      "sha256": "d56d8e4dbb05b8af3ff351c11032426444d277c85979234c8cc06ab37658c114",
+      "bytes": 91853,
+      "width": 1280,
+      "height": 720,
+      "derived_from": "catalog/videos/london-big-ben.mp4",
+      "source_url": "https://mixkit.co/free-stock-video/big-ben-clock-time-lapse-4079/",
+      "download_url": "https://assets.mixkit.co/videos/4079/4079-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          5.167,
+          10.033
+        ],
+        "scene": "Elizabeth Tower clock face and clouds in daylight. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/videos/venice-alley.mp4",
+      "local_file": "Assets/catalog/videos/venice-alley.mp4",
+      "kind": "video",
+      "sha256": "dbe60b37642e85972a6870e32da515781a865fb7db71d2051c1ed088f56e9983",
+      "source_sha256": "1220b9efdf54056f4c85e85559b39d9e2111dea3d2ddebb13b64119cf9f42f29",
+      "bytes": 1278910,
+      "width": 1280,
+      "height": 720,
+      "duration": 11.36,
+      "codec": "h264",
+      "frame_rate": "25/1",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": null,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 5.68
+      },
+      "source_url": "https://mixkit.co/free-stock-video/narrow-and-old-alley-in-venice-4600/",
+      "download_url": "https://assets.mixkit.co/videos/4600/4600-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          5.68,
+          11.06
+        ],
+        "scene": "Moving walking view along a narrow old Venice alley. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/venice-alley.jpg",
+      "local_file": "Assets/catalog/covers/venice-alley.jpg",
+      "kind": "video_cover",
+      "sha256": "9ea26f2e71ed282c0300423229dc07c85a9973bb980ab13955fc9e99082266fa",
+      "bytes": 113818,
+      "width": 1280,
+      "height": 720,
+      "derived_from": "catalog/videos/venice-alley.mp4",
+      "source_url": "https://mixkit.co/free-stock-video/narrow-and-old-alley-in-venice-4600/",
+      "download_url": "https://assets.mixkit.co/videos/4600/4600-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          5.68,
+          11.06
+        ],
+        "scene": "Moving walking view along a narrow old Venice alley. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/videos/venice-canal.mp4",
+      "local_file": "Assets/catalog/videos/venice-canal.mp4",
+      "kind": "video",
+      "sha256": "251228b285a5a88d7aab7438c3cc9139201b9136f3c62b72c2e70f9bbb205c4f",
+      "source_sha256": "0365e446962d92be87adb5555ffd88849510a1468530e953a7bf887e3fb91e2f",
+      "bytes": 1067634,
+      "width": 1280,
+      "height": 720,
+      "duration": 7.333333,
+      "codec": "h264",
+      "frame_rate": "30/1",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": null,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 3.6666665
+      },
+      "source_url": "https://mixkit.co/free-stock-video/an-empty-canal-in-venice-4469/",
+      "download_url": "https://assets.mixkit.co/videos/4469/4469-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          3.667,
+          7.033
+        ],
+        "scene": "Venetian canal, ochre facades, moored boat and narrow stone bridge. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/venice-canal.jpg",
+      "local_file": "Assets/catalog/covers/venice-canal.jpg",
+      "kind": "video_cover",
+      "sha256": "d067da19071477e1a1c3ad7ff50b14cf4184d551f5c9dfb962c2fa6102d1a9ba",
+      "bytes": 175137,
+      "width": 1280,
+      "height": 720,
+      "derived_from": "catalog/videos/venice-canal.mp4",
+      "source_url": "https://mixkit.co/free-stock-video/an-empty-canal-in-venice-4469/",
+      "download_url": "https://assets.mixkit.co/videos/4469/4469-1080.mp4",
+      "author": null,
+      "license": "Mixkit Stock Video Free License",
+      "license_url": "https://mixkit.co/license/#videoFree",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          3.667,
+          7.033
+        ],
+        "scene": "Venetian canal, ochre facades, moored boat and narrow stone bridge. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/videos/rome-colosseum.mp4",
+      "local_file": "Assets/catalog/videos/rome-colosseum.mp4",
+      "kind": "video",
+      "sha256": "0112ce475f82b55c033f31e507c28e6407311b226e158bb537d0e5ddee8b49f9",
+      "source_sha256": "bf76ed263c4af360989ace0466aca42d67eef532dd10a192601dd3e522b0a8e6",
+      "bytes": 377674,
+      "width": 406,
+      "height": 720,
+      "duration": 7.21,
+      "codec": "h264",
+      "frame_rate": "25/1",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": null,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 3.605
+      },
+      "source_url": "https://www.pexels.com/video/a-video-footage-of-the-colosseum-5087354/",
+      "download_url": "https://videos.pexels.com/video-files/5087354/5087354-hd_1080_1920_25fps.mp4",
+      "author": "Max Avans",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          3.605,
+          6.91
+        ],
+        "scene": "Portrait panning view of the Colosseum facade, palm and surrounding streets. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/rome-colosseum.jpg",
+      "local_file": "Assets/catalog/covers/rome-colosseum.jpg",
+      "kind": "video_cover",
+      "sha256": "20a985f0a36189025a9f40413b5f139f042cf9a4e88de47cdb683967aabfd64c",
+      "bytes": 45114,
+      "width": 406,
+      "height": 720,
+      "derived_from": "catalog/videos/rome-colosseum.mp4",
+      "source_url": "https://www.pexels.com/video/a-video-footage-of-the-colosseum-5087354/",
+      "download_url": "https://videos.pexels.com/video-files/5087354/5087354-hd_1080_1920_25fps.mp4",
+      "author": "Max Avans",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          3.605,
+          6.91
+        ],
+        "scene": "Portrait panning view of the Colosseum facade, palm and surrounding streets. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/videos/iceland-waterfall.mp4",
+      "local_file": "Assets/catalog/videos/iceland-waterfall.mp4",
+      "kind": "video",
+      "sha256": "119101bbe149e830a0327a25278beaceaddcb20850c6d768e95db502ce2afc93",
+      "source_sha256": "59659e03fc593bd69c8c69ae4297c5b08c263cca62b6f6ede34ea46e180b99eb",
+      "bytes": 6442892,
+      "width": 1280,
+      "height": 720,
+      "duration": 20.687333,
+      "codec": "h264",
+      "frame_rate": "30000/1001",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": null,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 10.3436665
+      },
+      "source_url": "https://www.pexels.com/video/majestic-waterfall-cascading-in-iceland-37313953/",
+      "download_url": "https://videos.pexels.com/video-files/37313953/15804827_3840_2160_30fps.mp4",
+      "author": "Gylfi Gylfason",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          10.344,
+          20.387
+        ],
+        "scene": "Aerial view over a cascading river and mossy cliffs; source identifies Iceland only. No exact waterfall identification asserted. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/iceland-waterfall.jpg",
+      "local_file": "Assets/catalog/covers/iceland-waterfall.jpg",
+      "kind": "video_cover",
+      "sha256": "5524456b9eeebd9b5f6900fbc35b425e185ad0b3509a426cae902ac8c9d631e0",
+      "bytes": 162280,
+      "width": 1280,
+      "height": 720,
+      "derived_from": "catalog/videos/iceland-waterfall.mp4",
+      "source_url": "https://www.pexels.com/video/majestic-waterfall-cascading-in-iceland-37313953/",
+      "download_url": "https://videos.pexels.com/video-files/37313953/15804827_3840_2160_30fps.mp4",
+      "author": "Gylfi Gylfason",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          10.344,
+          20.387
+        ],
+        "scene": "Aerial view over a cascading river and mossy cliffs; source identifies Iceland only. No exact waterfall identification asserted. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/videos/swiss-alpine-train.mp4",
+      "local_file": "Assets/catalog/videos/swiss-alpine-train.mp4",
+      "kind": "video",
+      "sha256": "7b3dd73e082de6b20bf4f3b15b24b216d44103e49caa1801087df43cde4b19fd",
+      "source_sha256": "eed7af88b18231de9dcdbf7aac18128962441ac16ada853bdc59ce3952b29a36",
+      "bytes": 10722198,
+      "width": 1280,
+      "height": 720,
+      "duration": 40.0,
+      "codec": "h264",
+      "frame_rate": "25/1",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": null,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 20.0
+      },
+      "source_url": "https://www.pexels.com/video/train-transporting-public-above-the-mountains-alps-of-switzerland-3640406/",
+      "download_url": "https://videos.pexels.com/video-files/3640406/3640406-uhd_3840_2160_25fps.mp4",
+      "author": "SwissHumanity Stories",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          20.0,
+          39.7
+        ],
+        "scene": "Snowy Alps, a mountain train and recognizable Matterhorn. Source identifies Switzerland. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/swiss-alpine-train.jpg",
+      "local_file": "Assets/catalog/covers/swiss-alpine-train.jpg",
+      "kind": "video_cover",
+      "sha256": "dc3ade9228d22197adef3baadc4e830f95944be8564c174ea0c39457e440b1e7",
+      "bytes": 243677,
+      "width": 1280,
+      "height": 720,
+      "derived_from": "catalog/videos/swiss-alpine-train.mp4",
+      "source_url": "https://www.pexels.com/video/train-transporting-public-above-the-mountains-alps-of-switzerland-3640406/",
+      "download_url": "https://videos.pexels.com/video-files/3640406/3640406-uhd_3840_2160_25fps.mp4",
+      "author": "SwissHumanity Stories",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          20.0,
+          39.7
+        ],
+        "scene": "Snowy Alps, a mountain train and recognizable Matterhorn. Source identifies Switzerland. No added text or watermark.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/videos/yosemite-waterfall.mp4",
+      "local_file": "Assets/catalog/videos/yosemite-waterfall.mp4",
+      "kind": "video",
+      "sha256": "ba7ecd58fedbd048fc6b8c50ff8a2505c72579598ae631cca8c8548755179540",
+      "source_sha256": "79e9e8d59ef051c093752f931fd33662f90f2481a2ecb303113942497dd986b3",
+      "bytes": 1750767,
+      "width": 1280,
+      "height": 720,
+      "duration": 10.01,
+      "codec": "h264",
+      "frame_rate": "30000/1001",
+      "processing": {
+        "resize": "Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.",
+        "source_start_seconds": 114,
+        "excerpt_seconds": 10,
+        "audio": "Preserved when present, encoded to AAC.",
+        "cover_time_seconds": 5.005
+      },
+      "source_url": "https://www.nps.gov/media/video/view.htm?id=A45A7B7C-295C-4718-B5FA-FE30882C291F",
+      "download_url": "https://www.nps.gov/nps-audiovideo/audiovideo/787c8143-9811-4037-ac56-8c873be9b798720p.mp4",
+      "author": "National Park Service",
+      "license": "Public domain",
+      "license_url": "https://www.nps.gov/aboutus/disclaimer.htm",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          5.005,
+          9.71
+        ],
+        "scene": "Yosemite waterfall and granite landscape. Public-domain NPS source; selected ten-second segment, reviewed independently.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/covers/yosemite-waterfall.jpg",
+      "local_file": "Assets/catalog/covers/yosemite-waterfall.jpg",
+      "kind": "video_cover",
+      "sha256": "ce7c1acd62baa41a23191a8229120cf1cc5437b900ce983f342d1889e3546aa7",
+      "bytes": 130357,
+      "width": 1280,
+      "height": 720,
+      "derived_from": "catalog/videos/yosemite-waterfall.mp4",
+      "source_url": "https://www.nps.gov/media/video/view.htm?id=A45A7B7C-295C-4718-B5FA-FE30882C291F",
+      "download_url": "https://www.nps.gov/nps-audiovideo/audiovideo/787c8143-9811-4037-ac56-8c873be9b798720p.mp4",
+      "author": "National Park Service",
+      "license": "Public domain",
+      "license_url": "https://www.nps.gov/aboutus/disclaimer.htm",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "times_seconds": [
+          0.15,
+          5.005,
+          9.71
+        ],
+        "scene": "Yosemite waterfall and granite landscape. Public-domain NPS source; selected ten-second segment, reviewed independently.",
+        "method": "Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit."
+      }
+    },
+    {
+      "path": "catalog/places/paris.jpg",
+      "local_file": "Assets/catalog/places/paris.jpg",
+      "kind": "destination_photo",
+      "sha256": "0b03638a74af73d29ab88894d38910e4a8310bdc5cf6aa8d5fd467962ce7faaa",
+      "bytes": 594122,
+      "width": 1600,
+      "height": 2133,
+      "source_url": "https://www.pexels.com/photo/eiffel-tower-in-paris-during-daylight-32603607/",
+      "download_url": "https://images.pexels.com/photos/32603607/pexels-photo-32603607.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Antonio Miralles Andorra",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Daytime Eiffel Tower seen from the Seine. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/rome.jpg",
+      "local_file": "Assets/catalog/places/rome.jpg",
+      "kind": "destination_photo",
+      "sha256": "9bdc66238d25bba904f40e0244f166a888d3e7fe61cd13a4c1c0f4f64b00af0f",
+      "bytes": 434148,
+      "width": 1600,
+      "height": 2400,
+      "source_url": "https://www.pexels.com/photo/the-colosseum-in-rome-italy-16878551/",
+      "download_url": "https://images.pexels.com/photos/16878551/pexels-photo-16878551.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Ryan Klaus",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Colosseum arches with foreground greenery. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/venice.jpg",
+      "local_file": "Assets/catalog/places/venice.jpg",
+      "kind": "destination_photo",
+      "sha256": "6db64fe86401adf6814b91b06a348b510a919e49ea34050051f5ffd3a8b51b1e",
+      "bytes": 717481,
+      "width": 1600,
+      "height": 2400,
+      "source_url": "https://www.pexels.com/photo/venice-16986061/",
+      "download_url": "https://images.pexels.com/photos/16986061/pexels-photo-16986061.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Evgeniy Petkevich",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Narrow Venetian canal and historic facades. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/lisbon.jpg",
+      "local_file": "Assets/catalog/places/lisbon.jpg",
+      "kind": "destination_photo",
+      "sha256": "786ce86bae105174c8baf9977fcadc3ceef76667f54cc9555bf60b4b5ada7949",
+      "bytes": 633175,
+      "width": 1600,
+      "height": 2400,
+      "source_url": "https://www.pexels.com/photo/view-of-tram-on-street-1563233/",
+      "download_url": "https://images.pexels.com/photos/1563233/pexels-photo-1563233.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Kaique Rocha",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Red historic tram turning through a tiled Lisbon street; incidental local signage is part of the real scene. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/swiss-alps.jpg",
+      "local_file": "Assets/catalog/places/swiss-alps.jpg",
+      "kind": "destination_photo",
+      "sha256": "3de8db5001446573bec714deab47b8bb87004bdf401b5187a554c717cce157f0",
+      "bytes": 337533,
+      "width": 1600,
+      "height": 1067,
+      "source_url": "https://www.pexels.com/photo/scenic-swiss-alps-mountain-landscape-30688450/",
+      "download_url": "https://images.pexels.com/photos/30688450/pexels-photo-30688450.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Jasper Hunter",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Rugged Swiss Alpine slopes; exact mountain not claimed. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/london.jpg",
+      "local_file": "Assets/catalog/places/london.jpg",
+      "kind": "destination_photo",
+      "sha256": "4eb29d8f8a48945a250aead63fd0fbd8864195a8097b4bfb2313b55d5743a3e0",
+      "bytes": 323259,
+      "width": 1600,
+      "height": 1067,
+      "source_url": "https://www.pexels.com/photo/the-exteriors-of-tower-bridge-in-london-8832262/",
+      "download_url": "https://images.pexels.com/photos/8832262/pexels-photo-8832262.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Szymon Shields",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Close view of Tower Bridge stone towers and blue suspension elements. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/barcelona.jpg",
+      "local_file": "Assets/catalog/places/barcelona.jpg",
+      "kind": "destination_photo",
+      "sha256": "14e975b02136a1d6dd352b4cc0ca9754723395195837c7578e28d059802bc15b",
+      "bytes": 523660,
+      "width": 1600,
+      "height": 1067,
+      "source_url": "https://www.pexels.com/photo/building-at-the-entrance-to-the-park-guell-in-barcelona-catalonia-spain-15577104/",
+      "download_url": "https://images.pexels.com/photos/15577104/pexels-photo-15577104.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Manuel Torres Garcia",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Distinctive entrance building at Park Guell with Barcelona beyond. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/santorini.jpg",
+      "local_file": "Assets/catalog/places/santorini.jpg",
+      "kind": "destination_photo",
+      "sha256": "50116dc6a2cf3ad9cd4332668486237219d9549a97f517b8a93e6ea6e07a67ba",
+      "bytes": 342346,
+      "width": 1600,
+      "height": 2133,
+      "source_url": "https://www.pexels.com/photo/blue-dome-in-santorini-greece-11845901/",
+      "download_url": "https://images.pexels.com/photos/11845901/pexels-photo-11845901.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Atypeek Dgn",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Blue church dome and whitewashed Santorini roof, sea beyond. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/iceland.jpg",
+      "local_file": "Assets/catalog/places/iceland.jpg",
+      "kind": "destination_photo",
+      "sha256": "6287d34eddef6e1b081bb12a5042d9312bd79e26804aa2c7622ab8a38e0cf91b",
+      "bytes": 405023,
+      "width": 1600,
+      "height": 1096,
+      "source_url": "https://www.pexels.com/photo/waterfall-on-mountain-6207652/",
+      "download_url": "https://images.pexels.com/photos/6207652/pexels-photo-6207652.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Koen Swiers",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Distinctive broad Dynjandi waterfall, supported by the source description. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/new-york.jpg",
+      "local_file": "Assets/catalog/places/new-york.jpg",
+      "kind": "destination_photo",
+      "sha256": "4ae71363f2f97937e58187dffb0003d4409335d8464124682a65b79fa3c4f9e6",
+      "bytes": 258391,
+      "width": 1600,
+      "height": 907,
+      "source_url": "https://www.pexels.com/photo/skyline-of-new-york-city-at-sunset-29297529/",
+      "download_url": "https://images.pexels.com/photos/29297529/pexels-photo-29297529.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Andras Stefuca",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "New York skyline and waterfront at sunset. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/yosemite.jpg",
+      "local_file": "Assets/catalog/places/yosemite.jpg",
+      "kind": "destination_photo",
+      "sha256": "8c4c1dd0f11ba0adbc5b37b0463a5b32da86e8c8c74210a4f196545424894f06",
+      "bytes": 267472,
+      "width": 1600,
+      "height": 894,
+      "source_url": "https://www.pexels.com/photo/breathtaking-view-of-yosemite-valley-in-summer-33779772/",
+      "download_url": "https://images.pexels.com/photos/33779772/pexels-photo-33779772.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Soly Moses",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Yosemite Valley granite walls and river reflection. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/banff.jpg",
+      "local_file": "Assets/catalog/places/banff.jpg",
+      "kind": "destination_photo",
+      "sha256": "b139f6ed70d70f6863e49ecd82441e171e97454c114e55b132b6f70ec7195c6b",
+      "bytes": 266842,
+      "width": 1600,
+      "height": 1067,
+      "source_url": "https://www.pexels.com/photo/breathtaking-view-of-moraine-lake-in-banff-32371668/",
+      "download_url": "https://images.pexels.com/photos/32371668/pexels-photo-32371668.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Nicole Seidl",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Moraine Lake turquoise water and mountain backdrop. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/paris-skyline.jpg",
+      "local_file": "Assets/catalog/places/paris-skyline.jpg",
+      "kind": "destination_photo",
+      "sha256": "4404442f1966459afbca662bd0ec07c59c3b825df301f25ad44cf38ad99809bf",
+      "bytes": 601718,
+      "width": 1600,
+      "height": 2844,
+      "source_url": "https://www.pexels.com/photo/eiffel-tower-across-paris-skyline-at-daytime-31669730/",
+      "download_url": "https://images.pexels.com/photos/31669730/pexels-photo-31669730.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Stephan Leuzinger",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "Daytime Eiffel Tower above Paris rooftops. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    },
+    {
+      "path": "catalog/places/banff-shore.jpg",
+      "local_file": "Assets/catalog/places/banff-shore.jpg",
+      "kind": "destination_photo",
+      "sha256": "588bd0ea156d99d6d62c8033ed132f675b956b0b799638e7a9a1b923d49fb739",
+      "bytes": 446174,
+      "width": 1600,
+      "height": 2400,
+      "source_url": "https://www.pexels.com/photo/serene-view-of-moraine-lake-in-banff-national-park-32371667/",
+      "download_url": "https://images.pexels.com/photos/32371667/pexels-photo-32371667.jpeg?auto=compress&cs=tinysrgb&w=1600",
+      "author": "Nicole Seidl",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "processing": "Pexels CDN compression, width 1600; original aspect ratio.",
+      "inspection": {
+        "reviewed_on": "2026-11-03",
+        "scene": "A distinct portrait view of Moraine Lake through trees. No added caption or watermark.",
+        "method": "Human visual review of the actual downloaded image."
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "source_id": "4049",
+      "reason": "Source category implied California, while actual cactus landscape was insufficient to establish that location."
+    },
+    {
+      "source_id": "3323",
+      "reason": "Canadian town not specifically identified; excluded to prefer destination-supported footage."
+    },
+    {
+      "source_id": "3384",
+      "reason": "Canadian mountain area not specifically identified; excluded to prefer destination-supported footage."
+    }
+  ],
+  "guide_sources": [
+    {
+      "place_id": "3581e286-25db-5eff-848e-10b50af25ac1",
+      "source_name": "Paris je t'aime",
+      "source_url": "https://parisjetaime.com/eng/",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "a42c1b6c-7fcc-51b7-837d-0ee7e3375fbe",
+      "source_name": "Parco archeologico del Colosseo",
+      "source_url": "https://colosseo.it/en/opening-times-and-tickets/",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "24f0be99-d029-54ae-8584-f9a14f0e17a6",
+      "source_name": "Venezia Unica",
+      "source_url": "https://www.veneziaunica.it/en/sustainable-venice/enjoy-respect-venezia",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "71cbb70e-1413-5fb9-85bc-9c8857fb36ce",
+      "source_name": "Turismo de Lisboa",
+      "source_url": "https://www.visitlisboa.com/en",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "4ef64bb4-498a-55ab-8a24-e244e49252ec",
+      "source_name": "Switzerland Tourism",
+      "source_url": "https://www.myswitzerland.com/en-us/experiences/summer-autumn/hiking/",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "7117c66f-51a0-5b19-94dc-ebb4a4841f28",
+      "source_name": "Tower Bridge",
+      "source_url": "https://www.towerbridge.org.uk/",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "35ffded9-bbbc-5988-8630-cc9d5df64ee9",
+      "source_name": "Park Guell Official Website",
+      "source_url": "https://parkguell.barcelona/en/planifica-la-teva-visita",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "aa21212b-b0d0-58ce-99be-ee3834bddf6d",
+      "source_name": "Greek National Tourism Organisation",
+      "source_url": "https://www.visitgreece.gr/en/islands/cyclades/santorini",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "9c269449-085f-5cb3-ade1-652f28ca8e53",
+      "source_name": "Visit Iceland",
+      "source_url": "https://www.visiticeland.com/article/safe-travel-in-iceland/",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "ea21d48f-af5a-5cf1-9435-5690e8edd4fc",
+      "source_name": "NYC Tourism + Conventions",
+      "source_url": "https://www.nyctourism.com/",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "17a7552b-5573-5f31-a932-99214eca2db1",
+      "source_name": "National Park Service",
+      "source_url": "https://www.nps.gov/yose/planyourvisit/index.htm",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    },
+    {
+      "place_id": "4d3613c5-fd86-558f-b635-8c8e7484cc86",
+      "source_name": "Parks Canada",
+      "source_url": "https://parks.canada.ca/pn-np/ab/banff/visit/parkbus/louise",
+      "checked_on": "2026-11-03",
+      "copy": "Original English paraphrase; verify current arrangements at the source."
+    }
+  ]
+}

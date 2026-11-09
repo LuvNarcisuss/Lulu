@@ -1,0 +1,102 @@
+{
+  "photographs": [
+    {
+      "path": "catalog/places/paris.jpg",
+      "author": "Antonio Miralles Andorra",
+      "source_url": "https://www.pexels.com/photo/eiffel-tower-in-paris-during-daylight-32603607/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/rome.jpg",
+      "author": "Ryan Klaus",
+      "source_url": "https://www.pexels.com/photo/the-colosseum-in-rome-italy-16878551/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/venice.jpg",
+      "author": "Evgeniy Petkevich",
+      "source_url": "https://www.pexels.com/photo/venice-16986061/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/lisbon.jpg",
+      "author": "Kaique Rocha",
+      "source_url": "https://www.pexels.com/photo/view-of-tram-on-street-1563233/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/swiss-alps.jpg",
+      "author": "Jasper Hunter",
+      "source_url": "https://www.pexels.com/photo/scenic-swiss-alps-mountain-landscape-30688450/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/london.jpg",
+      "author": "Szymon Shields",
+      "source_url": "https://www.pexels.com/photo/the-exteriors-of-tower-bridge-in-london-8832262/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/barcelona.jpg",
+      "author": "Manuel Torres Garcia",
+      "source_url": "https://www.pexels.com/photo/building-at-the-entrance-to-the-park-guell-in-barcelona-catalonia-spain-15577104/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/santorini.jpg",
+      "author": "Atypeek Dgn",
+      "source_url": "https://www.pexels.com/photo/blue-dome-in-santorini-greece-11845901/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/iceland.jpg",
+      "author": "Koen Swiers",
+      "source_url": "https://www.pexels.com/photo/waterfall-on-mountain-6207652/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/new-york.jpg",
+      "author": "Andras Stefuca",
+      "source_url": "https://www.pexels.com/photo/skyline-of-new-york-city-at-sunset-29297529/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/yosemite.jpg",
+      "author": "Soly Moses",
+      "source_url": "https://www.pexels.com/photo/breathtaking-view-of-yosemite-valley-in-summer-33779772/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/banff.jpg",
+      "author": "Nicole Seidl",
+      "source_url": "https://www.pexels.com/photo/breathtaking-view-of-moraine-lake-in-banff-32371668/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/paris-skyline.jpg",
+      "author": "Stephan Leuzinger",
+      "source_url": "https://www.pexels.com/photo/eiffel-tower-across-paris-skyline-at-daytime-31669730/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    {
+      "path": "catalog/places/banff-shore.jpg",
+      "author": "Nicole Seidl",
+      "source_url": "https://www.pexels.com/photo/serene-view-of-moraine-lake-in-banff-national-park-32371667/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/"
+    }
+  ]
+}

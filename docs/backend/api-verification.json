@@ -1,0 +1,37 @@
+{
+  "project": "dlbaneeshycwmhgfeokx",
+  "users": [
+    "935137a5-2ec9-4c08-94f0-1b3b335a862d",
+    "8ad4a688-8256-43ff-b5f9-2ade03bb0e27",
+    "9c17b235-52f0-4d39-8f36-38d5bae7bee7"
+  ],
+  "checks": [
+    "raw anonymous RPC denied",
+    "real guest Auth, bootstrap, profile, zero wallet, empty personal state",
+    "journey save/readback/delete and cross-user read/write isolation",
+    "canonical DM, message persistence/dedup, nonmutual greeting, mutual follow, partial preferences, member isolation, server block",
+    "real group membership and message persistence"
+  ],
+  "cleanupPending": false,
+  "directConversation": "4018692f-f015-4c7a-beb3-16440455903b",
+  "groupConversation": "a7466f6b-dfb0-4be2-8505-ba3238c0be2e",
+  "status": "passed",
+  "cleanupStatus": "Owner approved exact three Auth fixtures and their test records. Official dashboards removed Auth users and test uploads; coordinator deleted only two empty fixture conversations. Final SQL confirmed zero fixtures, messages, journeys, submissions and uploads; editorial catalogs and both legal documents preserved.",
+  "finalCounts": {
+    "editorialProfiles": 2,
+    "places": 12,
+    "clips": 11,
+    "guides": 12,
+    "rlsTables": 18,
+    "catalogObjects": 36,
+    "legalObjects": 2,
+    "privateUploads": 0,
+    "fixtureAuthRemaining": 0,
+    "fixtureConversationsRemaining": 0,
+    "messages": 0,
+    "journeys": 0,
+    "submissions": 0,
+    "anonActionExecute": false,
+    "authenticatedActionExecute": true
+  }
+}
