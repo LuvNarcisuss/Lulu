@@ -83,7 +83,6 @@ final class EntryController: TravelScreen, UITextViewDelegate {
     var onEntry: (() -> Void)?
     private let artwork = UIImageView(image: UIImage(named: "background-welcome"))
     private var accepted = false
-    private var started = false
     private var signingIn = false
     private var feedback: String?
 
@@ -110,44 +109,22 @@ final class EntryController: TravelScreen, UITextViewDelegate {
         let flexibleSpace = UIView()
         flexibleSpace.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
         content.addArrangedSubview(flexibleSpace)
-        content.addArrangedSubview(text(started ? "Sign in to Lulu" : "Lulu", started ? 31 : 40, display: true))
-
-        if !started {
-            content.addArrangedSubview(text("Real places. Small discoveries. Stories worth taking home.", 17, color: Palette.muted))
-            content.addArrangedSubview(agreementConsentRow())
-            content.addArrangedSubview(action("Start exploring", icon: "icon-route") { [weak self] in
-                guard let self else { return }
-                guard self.accepted else {
-                    self.askForConsent()
-                    return
-                }
-                self.started = true
-                self.render()
-            })
-            return
-        }
-
-        if signingIn {
-            let spinner = UIActivityIndicatorView(style: .medium)
-            spinner.color = Palette.teal
-            spinner.startAnimating()
-            content.addArrangedSubview(line([spinner, text("Signing in…", 15, color: Palette.muted)]))
-            return
-        }
-
+        content.addArrangedSubview(text("Lulu", 40, display: true))
+        content.addArrangedSubview(text("Real places. Small discoveries. Stories worth taking home.", 17, color: Palette.muted))
+        content.addArrangedSubview(agreementConsentRow())
         if let feedback { content.addArrangedSubview(text(feedback, 15, color: Palette.coral)) }
-        content.addArrangedSubview(action("Log in", icon: "icon-globe") { [weak self] in
-            self?.continueEntry()
-        })
-        if !store.hasSavedSession || store.savedSessionIsGuest {
-            content.addArrangedSubview(text("Guest access is tied to this device. Signing out may permanently remove access.", 14, color: Palette.muted))
+        let start = action("Start exploring", icon: "icon-route") { [weak self] in
+            guard let self, !self.signingIn else { return }
+            guard self.accepted else {
+                self.askForConsent()
+                return
+            }
+            self.continueEntry()
         }
-        content.addArrangedSubview(action("Back", filled: false) { [weak self] in
-            guard let self else { return }
-            self.started = false
-            self.feedback = nil
-            self.render()
-        })
+        start.isEnabled = !signingIn
+        start.configuration?.showsActivityIndicator = signingIn
+        start.accessibilityValue = signingIn ? "Signing in" : nil
+        content.addArrangedSubview(start)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -156,7 +133,7 @@ final class EntryController: TravelScreen, UITextViewDelegate {
     }
 
     private func askForConsent() {
-        guard presentedViewController == nil else { return }
+        guard !signingIn, presentedViewController == nil else { return }
         let reminder = agreementText("To log in, please agree to the Terms of Service and Privacy Policy.")
         let dialog = AgreementConsentDialog(reminder: reminder) { [weak self] in
             guard let self else { return }
@@ -168,7 +145,6 @@ final class EntryController: TravelScreen, UITextViewDelegate {
 
     private func continueEntry() {
         guard accepted, !signingIn else { return }
-        started = true
         signingIn = true
         feedback = nil
         render()
@@ -177,9 +153,7 @@ final class EntryController: TravelScreen, UITextViewDelegate {
                 try await store.signInWithOneTap()
             } catch is CancellationError {
             } catch {
-                feedback = store.hasSavedSession
-                    ? "Your sign-in is saved. Tap Log in to try opening your account again."
-                    : "Sign-in failed. Please try again."
+                feedback = "Unable to sign in. Tap Start exploring to try again."
             }
             signingIn = false
             if store.isAuthenticated {
@@ -205,11 +179,12 @@ final class EntryController: TravelScreen, UITextViewDelegate {
         let checkbox = UIButton(configuration: configuration)
         checkbox.widthAnchor.constraint(equalToConstant: 44).isActive = true
         checkbox.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        checkbox.isEnabled = !signingIn
         checkbox.accessibilityLabel = "Agree to the Terms of Service and Privacy Policy"
         checkbox.accessibilityValue = accepted ? "Checked" : "Unchecked"
         checkbox.accessibilityTraits = accepted ? [.button, .selected] : .button
         checkbox.addAction(UIAction { [weak self] _ in
-            guard let self else { return }
+            guard let self, !self.signingIn else { return }
             self.accepted.toggle()
             self.render()
         }, for: .touchUpInside)
@@ -263,7 +238,7 @@ final class EntryController: TravelScreen, UITextViewDelegate {
     }
 
     private func openAgreement(for url: URL) {
-        guard !started, let document = TravelAgreement.allCases.first(where: { $0.consentLink == url }) else { return }
+        guard !signingIn, let document = TravelAgreement.allCases.first(where: { $0.consentLink == url }) else { return }
         let reader = AgreementController(store: store, document: document)
         guard let dialog = presentedViewController as? AgreementConsentDialog else {
             push(reader)

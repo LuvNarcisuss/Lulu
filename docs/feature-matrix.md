@@ -1,6 +1,6 @@
 # Feature and Service Matrix
 
-This matrix describes implemented source routes. Runtime UI acceptance is unperformed. Server evidence is maintained separately in `backend/integration.md` and its linked reports.
+This matrix describes implemented source routes. The [November 10 functional acceptance report](runtime-acceptance/2026-11-10-1154-full-functional.md) records observed UI results and outstanding scenarios. Server evidence is maintained separately in `backend/integration.md` and its linked reports.
 
 | Surface | Route | Authoritative operation | Boundary |
 |---|---|---|---|

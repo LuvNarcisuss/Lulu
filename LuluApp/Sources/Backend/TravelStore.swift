@@ -21,6 +21,7 @@ final class TravelStore: ObservableObject {
     private(set) var hasGuideVisibility = false
     private static let guideVisibilityPath = "rest/v1/rpc/travel_guide_visibility"
     private var guideVisibilityVersion = UUID()
+    private var contentStatistics = Record()
     private var snapshot = Record()
     private var generation = UUID()
     private var snapshotRequest = UUID()
@@ -40,6 +41,13 @@ final class TravelStore: ObservableObject {
     }
 
     func rows(_ key: String) -> [Record] { snapshot.records(key) }
+
+    func contentLikeCount(kind: String, id: String) -> Int? {
+        guard let item = contentStatistics.records(kind).first(where: { $0.id == id }),
+              case .number(let value) = item["likes"], value.isFinite, value >= 0,
+              value < Double(Int.max), value.rounded() == value else { return nil }
+        return Int(value)
+    }
 
     var visiblePlaces: [Record] {
         rows("places").filter { !hiddenPlaceIDs.contains($0.id) }
@@ -90,6 +98,19 @@ final class TravelStore: ObservableObject {
     func refresh() async throws {
         guard isAuthenticated else { throw StoreFailure.authenticationRequired }
         try await loadSnapshot(generation: generation)
+    }
+
+    func profileStatistics(_ profileID: String) async throws -> Record {
+        guard isAuthenticated else { throw StoreFailure.authenticationRequired }
+        let attempt = generation
+        let result = try await request(path: "rest/v1/rpc/travel_profile_stats", body: ["target_profile": .string(profileID)], optionalRead: true)
+        guard generation == attempt else { throw CancellationError() }
+        guard result.string("profile_id").lowercased() == profileID.lowercased(),
+              ["likes", "saves", "following", "followers"].allSatisfy({ key in
+                  if case .number(let value) = result[key] { return value.isFinite && value >= 0 && value < Double(Int.max) && value.rounded() == value }
+                  return false
+              }) else { throw StoreFailure.message("Profile statistics could not be loaded.") }
+        return result
     }
 
     @discardableResult
@@ -215,6 +236,12 @@ final class TravelStore: ObservableObject {
     }
 
     func mediaURL(_ path: String) async throws -> URL {
+        // Only these inspected editorial portraits may resolve outside project Storage.
+        let portraitURLs: Set<String> = [
+            "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=512&h=512&fit=crop",
+            "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=512&h=512&fit=crop"
+        ]
+        if portraitURLs.contains(path), let url = URL(string: path) { return url }
         let parts = path.split(separator: "/", maxSplits: 1).map(String.init)
         guard parts.count == 2, !parts[1].contains(".."), !parts[1].isEmpty else {
             throw StoreFailure.message("This media reference is invalid.")
@@ -253,9 +280,11 @@ final class TravelStore: ObservableObject {
         snapshotRequest = requestID
         let visibilityVersion = guideVisibilityVersion
         do {
+            async let statistics = try? request(path: "rest/v1/rpc/travel_content_stats", body: [:], optionalRead: true)
             async let visibility = try? request(path: Self.guideVisibilityPath, body: [:], optionalRead: true)
             let value = try await request(path: "rest/v1/rpc/travel_snapshot", body: [:])
             let guideState = await visibility
+            let latestStatistics = await statistics
             guard generation == attempt, snapshotRequest == requestID, !Task.isCancelled else { throw CancellationError() }
             let requiredKeys = ["clips", "places", "guides", "profiles", "likes", "saved_clips", "saved_places", "comments", "follows", "blocks", "reports", "journeys", "conversations", "messages", "chat_preferences", "submissions", "wallet_activity"]
             for key in requiredKeys {
@@ -273,6 +302,7 @@ final class TravelStore: ObservableObject {
                 hiddenPlaceIDs = Set(guideState.strings("hidden_place_ids"))
                 hasGuideVisibility = true
             }
+            contentStatistics = latestStatistics ?? Record()
             snapshot = value
             profile = value.record("profile")
             lastRefreshError = nil
@@ -377,6 +407,7 @@ final class TravelStore: ObservableObject {
         isAuthenticated = false
         userID = ""
         profile = Record()
+        contentStatistics = Record()
         snapshot = Record()
         hiddenPlaceIDs.removeAll()
         hasGuideVisibility = false

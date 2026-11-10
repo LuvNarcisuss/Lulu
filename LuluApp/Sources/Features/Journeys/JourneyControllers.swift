@@ -35,7 +35,7 @@ final class JourneysController: TravelScreen {
     }
 }
 
-final class JourneyEditorController: TravelScreen {
+final class JourneyEditorController: TravelScreen, UITextFieldDelegate {
     private let original: Record?
     private let initialPlaceID: String?
     private let nameField = input("Journey name")
@@ -67,8 +67,29 @@ final class JourneyEditorController: TravelScreen {
         budgetField.keyboardType = .decimalPad
         currencyField.autocapitalizationType = .allCharacters
         [startField, endField].forEach { $0.autocorrectionType = .no; $0.keyboardType = .numbersAndPunctuation }
+        let keyboardToolbar = UIToolbar()
+        let done = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(finishEditing))
+        done.setTitleTextAttributes([.font: FontBook.font(16)], for: .normal)
+        keyboardToolbar.items = [UIBarButtonItem(systemItem: .flexibleSpace), done]
+        keyboardToolbar.sizeToFit()
+        for field in [nameField, startField, endField, budgetField, currencyField] {
+            field.delegate = self
+            field.returnKeyType = .done
+            field.inputAccessoryView = keyboardToolbar
+        }
+        notes.inputAccessoryView = keyboardToolbar
         super.viewDidLoad()
     }
+
+    @objc private func finishEditing() {
+        view.endEditing(true)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        finishEditing()
+        return true
+    }
+
     override func render() {
         super.render()
         title = original == nil ? "New journey" : "Edit journey"
@@ -100,17 +121,25 @@ final class JourneyEditorController: TravelScreen {
         journey["title"] = .string(title); journey["start_date"] = .string(start); journey["end_date"] = .string(end)
         journey["currency"] = .string(currency); journey["budget"] = .number(budget); journey["notes"] = .string(notes.text)
         let oldDays = original?.records("days") ?? []
-        let retainedCount = count + 1
-        if !allowTrim, oldDays.count > retainedCount,
-           oldDays.dropFirst(retainedCount).contains(where: { !$0.records("stops").isEmpty || !$0.string("note").isEmpty }) {
-            confirm("Shorten this journey?", message: "The final \(oldDays.count - retainedCount) days and their saved stops and notes will be removed.", destructive: true) { [weak self] in self?.save(allowTrim: true) }
+        let removedDays = oldDays.filter { day in
+            let date = day.string("date")
+            return date < start || date > end
+        }
+        if !allowTrim, removedDays.contains(where: { !$0.records("stops").isEmpty || !$0.string("note").isEmpty }) {
+            confirm("Remove planned days?", message: "Dates outside the new range will be removed along with their saved stops and notes.", destructive: true) { [weak self] in self?.save(allowTrim: true) }
             return
         }
         var days: [JSONValue] = []
         for offset in 0...count {
             guard let date = Self.calendar().date(byAdding: .day, value: offset, to: first) else { continue }
-            var day = oldDays.indices.contains(offset) ? oldDays[offset] : Record(["id": .string(UUID().uuidString.lowercased()), "title": .string("Day \(offset + 1)"), "stops": .array([]), "note": .string("")])
-            day["date"] = .string(Self.dateString(date))
+            let dayDate = Self.dateString(date)
+            let previous = oldDays.enumerated().first { $0.element.string("date") == dayDate }
+            let defaultTitle = "Day \(offset + 1)"
+            var day = previous?.element ?? Record(["id": .string(UUID().uuidString.lowercased()), "title": .string(defaultTitle), "stops": .array([]), "note": .string("")])
+            if let previous, day.string("title") == "Day \(previous.offset + 1)" {
+                day["title"] = .string(defaultTitle)
+            }
+            day["date"] = .string(dayDate)
             if original == nil, offset == 0, let initialPlaceID {
                 day["stops"] = .array([Record(["id": .string(UUID().uuidString.lowercased()), "place_id": .string(initialPlaceID), "note": .string("")]).json])
             }
@@ -172,7 +201,7 @@ final class JourneyDetailController: TravelScreen {
                 var views: [UIView] = [text("\(index + 1). " + (place?.string("name") ?? "Unavailable place"), 23, display: true)]
                 if let place {
                     views.insert(remoteImage(place.string("photo_path"), store: store, height: 150), at: 0)
-                    views.append(action("Open place", icon: "icon-location", filled: false) { [weak self] in guard let self else { return }; self.push(PlaceController(store: self.store, placeID: place.id)) })
+                    views.append(action("Open place", icon: "icon-location", filled: false) { [weak self] in guard let self else { return }; self.openPlaceGuide(place.id, store: self.store) })
                 }
                 if !stop.string("note").isEmpty { views.append(text(stop.string("note"), 16)) }
                 views.append(action("Edit stop note", icon: "icon-edit", filled: false) { [weak self] in

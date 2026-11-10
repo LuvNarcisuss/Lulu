@@ -40,7 +40,7 @@ Stage B external authentication, external Socket, WebView and purchase forwardin
 
 Static resource/configuration checks, Swift grammar parsing, XcodeGen metadata generation and an independent static review were performed. Xcode 26.0.1 resolved the Lulu scheme’s Swift packages, and the project’s shared Package.resolved records the verified versions. Finite isolated Supabase API, permissions, media and realtime checks are recorded separately under `docs/backend/`.
 
-**No Swift compilation, typecheck, application launch, simulator, Preview, UI runtime test, local StoreKit Test, Apple sandbox purchase or production purchase was performed.** These actions require the owner's explicit authorization. A syntax parse is not a build or typecheck, and backend protocol verification is not iPhone UI acceptance.
+The owner-authorized November 10 simulator run built and launched Lulu and exercised selected flows across all five tabs. The [functional acceptance report](docs/runtime-acceptance/2026-11-10-1154-full-functional.md) records the scenarios, fixes, and remaining gaps. Apple sandbox and production purchases remain unverified.
 
 Run permitted static inspection with `python3 scripts/static_audit.py` and `python3 scripts/media_verify.py`. `scripts/swift_syntax_audit.py` requires the separately installed `tree-sitter` and `tree-sitter-swift` Python packages and parses grammar only. Do not infer runtime success from these commands.
 

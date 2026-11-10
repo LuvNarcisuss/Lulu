@@ -1,8 +1,12 @@
 # One-Tap Sign-In
 
-The welcome and one-tap sign-in pages use the same cover size at the top. Both pages keep the title and actions together at the bottom, above the safe area. The welcome group includes the agreement checkbox and inline links to Terms of Service and Privacy Policy. Starting with the box unchecked opens a consent dialog with both links. Agree and log in accepts the agreements and starts the same one-tap flow as the Log in button. Disagree dismisses the dialog and leaves the checkbox unchecked.
+The welcome screen is Lulu's only entry screen. It retains the travel cover at the top and the title, tagline, agreement checkbox, linked Terms of Service and Privacy Policy, and Start exploring button near the bottom on one non-scrolling page. There is no separate sign-in page.
 
-Log in restores the existing project-scoped Supabase session or signs in anonymously if there is no saved session. A retry after a successful Auth response restores that same session, including when profile loading failed. Entry requires a matching saved session, a successful authenticated `travel-entry` response, a consent-version write, and an authenticated snapshot. Realtime starts after authentication succeeds.
+With consent checked, Start exploring immediately begins authentication and opens the application after success. With consent unchecked, it opens the agreement dialog. Agree and log in checks consent and starts the same authentication flow directly; Disagree dismisses the dialog without signing in. Both policy links remain available from the welcome screen and dialog. Returning from an agreement preserves the checkbox state.
+
+Authentication shows an activity indicator in Start exploring and disables repeated entry and checkbox changes. Failure leaves the user on the welcome screen with their selection preserved and a retry message. Entry copy contains no guest labels or session-loss explanations.
+
+The shared entry operation restores the existing project-scoped Supabase session or signs in anonymously if there is no saved session. A retry after a successful Auth response restores that same session, including when profile loading failed. Entry requires a matching saved session, a successful authenticated `travel-entry` response, a consent-version write, and an authenticated snapshot. Realtime starts after authentication succeeds.
 
 The Auth UUID links to the profile used by Me and Edit Profile. A new guest starts with the display name Traveler, no custom avatar, and a zero wallet balance. Settings warns before guest sign-out because loss of the saved session can make the account inaccessible.
 

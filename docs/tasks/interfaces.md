@@ -33,7 +33,7 @@ Snapshot keys: `clips`, `places`, `guides`, `profiles`, `likes`, `saved_clips`, 
 ## Record fields
 
 - profile: id, display_name, bio, avatar_path, is_editorial, source_url, consent_version. `profiles` includes editorial publishers (never auth users) and discoverable real members. Only actual members support chat. Profile lookup uses id.
-- clip: id, title, caption, place_id, publisher_id, video_path, cover_path, source_url, author, duration, category, optional positive feed_rank for discovery order. No invented base likes/comments.
+- clip: id, title, caption, place_id, publisher_id, video_path, cover_path, source_url, author, duration, category, optional positive feed_rank for discovery order. No fabricated interaction rows. Owner-authorized editorial display baselines are separate private server records; `travel_content_stats` returns display counts without private liker identities.
 - place: id, name, city, country, region (`Europe` or `North America`), category, latitude, longitude, summary, photo_path, source_url, best_time, practical_tip.
 - guide: id, place_id, title, intro, sections (array of {title,body}), source_name, source_url, reading_minutes.
 - likes/saved_clips: id, clip_id, user_id. saved_places: id, place_id, user_id.

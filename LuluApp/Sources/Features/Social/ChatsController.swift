@@ -8,6 +8,11 @@ final class ChatsController: TravelScreen {
     private var built = false
     private var showArchived = false
     private let filterSlot = column()
+    private lazy var archiveToggle = action("Show archived", filled: false) { [weak self] in
+        guard let self else { return }
+        self.showArchived.toggle()
+        self.updateList()
+    }
 
     override func render() {
         if !built {
@@ -22,9 +27,7 @@ final class ChatsController: TravelScreen {
             search.addTarget(self, action: #selector(searchChanged), for: .editingChanged)
             content.addArrangedSubview(search)
             content.addArrangedSubview(filterSlot)
-            content.addArrangedSubview(action("Show / hide archived", filled: false) { [weak self] in
-                guard let self else { return }; self.showArchived.toggle(); self.updateList()
-            })
+            content.addArrangedSubview(archiveToggle)
             content.addArrangedSubview(action("Refresh", icon: "icon-refresh", filled: false) { [weak self] in
                 guard let self else { return }; self.run { try await self.store.refresh() }
             })
@@ -37,6 +40,9 @@ final class ChatsController: TravelScreen {
     private func discover(_ group: Bool) { push(MemberDiscoveryController(store: store, group: group)) }
     private func updateList() {
         clearStack(list); clearStack(filterSlot)
+        let archiveAction = showArchived ? "Back to inbox" : "Show archived"
+        archiveToggle.configuration?.title = archiveAction
+        archiveToggle.accessibilityLabel = archiveAction
         filterSlot.addArrangedSubview(choiceStrip(["All", "Unread", "Pinned", "Drafts"], selected: filter) { [weak self] index in
             self?.filter = index; self?.updateList()
         })
@@ -55,7 +61,28 @@ final class ChatsController: TravelScreen {
             return left.string("updated_at") > right.string("updated_at")
         }
         if rows.isEmpty {
-            list.addArrangedSubview(card([text(showArchived ? "No archived conversations" : "Your next journey starts with a hello", 23, display: true), text("Find a traveler to start a conversation. Your inbox stays empty until you do.", 16, color: Palette.muted)]))
+            let emptyTitle: String
+            let detail: String
+            if !query.isEmpty {
+                emptyTitle = "No matching conversations"
+                detail = "Try a different search or clear it to see more conversations."
+            } else {
+                switch filter {
+                case 1:
+                    emptyTitle = "No unread conversations"
+                    detail = "New messages will appear here until you read them."
+                case 2:
+                    emptyTitle = "No pinned conversations"
+                    detail = "Pin a conversation from its options to find it here."
+                case 3:
+                    emptyTitle = "No conversation drafts"
+                    detail = "Unsent messages you save as drafts will appear here."
+                default:
+                    emptyTitle = showArchived ? "No archived conversations" : "Your next journey starts with a hello"
+                    detail = showArchived ? "Conversations you archive will appear here." : "Find a traveler to start a conversation."
+                }
+            }
+            list.addArrangedSubview(card([text(emptyTitle, 23, display: true), text(detail, 16, color: Palette.muted)]))
         }
         for record in rows {
             let preference = chatPreference(record.id, store: store)

@@ -4,19 +4,23 @@
       "id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
       "display_name": "European Field Notes",
       "bio": "An editorial travel collection. Original footage creators are credited on each film; this publisher is not a traveler account.",
-      "avatar_path": "",
+      "avatar_path": "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=512&h=512&fit=crop",
       "is_editorial": true,
       "source_url": "https://www.pexels.com/license/",
-      "consent_version": "editorial-2026-11-03"
+      "consent_version": "editorial-2026-11-03",
+      "avatar_credit": "Simon Robben / Pexels",
+      "avatar_is_illustrative": true
     },
     {
       "id": "ae1fe04b-4e55-5710-b478-aa2a6f32f7d4",
       "display_name": "North American Field Notes",
       "bio": "An editorial destination collection with creator credits and official planning links. This publisher is not a traveler account.",
-      "avatar_path": "",
+      "avatar_path": "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=512&h=512&fit=crop",
       "is_editorial": true,
       "source_url": "https://www.nps.gov/aboutus/disclaimer.htm",
-      "consent_version": "editorial-2026-11-03"
+      "consent_version": "editorial-2026-11-03",
+      "avatar_credit": "Andrea Piacquadio / Pexels",
+      "avatar_is_illustrative": true
     }
   ],
   "clips": [
@@ -186,7 +190,7 @@
       "video_path": "catalog/shorts-2026-11-09/brooklyn-bridge-walk.mp4",
       "cover_path": "catalog/shorts-2026-11-09/brooklyn-bridge-walk.jpg",
       "source_url": "https://www.pexels.com/video/walking-on-brooklyn-bridge-in-nyc-31704457/",
-      "author": "Daniela S\u00e1nchez",
+      "author": "Daniela Sánchez",
       "duration": 5.791667,
       "category": "Landmark walk",
       "feed_rank": 2

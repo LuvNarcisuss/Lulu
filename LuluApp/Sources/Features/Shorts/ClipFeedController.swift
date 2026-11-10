@@ -34,6 +34,9 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
     private var manuallyPaused = false
     private var busy = false
     private var requestID = UUID()
+    private let feedRefresh = UIRefreshControl()
+    private var refreshingFeed = false
+    private var discoveryOrder: [String] = []
     init(store: TravelStore, clips: [Record] = [], initialIndex: Int = 0, discovery: Bool = false) {
         let selectedID = clips.indices.contains(initialIndex) ? clips[initialIndex].id : clips.first?.id
         let visibleClips = discovery ? Self.discoveryClips(store: store) : clips.compactMap { Self.visibleClip($0, store: store) }
@@ -75,6 +78,12 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
         super.viewDidLoad()
         view.backgroundColor = .black
         paging.isPagingEnabled = true; paging.showsVerticalScrollIndicator = false; paging.delegate = self; paging.contentInsetAdjustmentBehavior = .never
+        paging.alwaysBounceVertical = true
+        if discovery {
+            feedRefresh.tintColor = .white
+            feedRefresh.addAction(UIAction { [weak self] _ in self?.refreshFeed() }, for: .valueChanged)
+            paging.refreshControl = feedRefresh
+        }
         pages.axis = .vertical; pages.spacing = 0
         paging.translatesAutoresizingMaskIntoConstraints = false; pages.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(paging); paging.addSubview(pages)
@@ -153,7 +162,7 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
             film.onShare = { [weak self] in self?.shareClip(clip) }
             film.onMore = { [weak self] in self?.showMore(clip) }
             film.onProfile = { [weak self] in guard let self else { return }; self.navigationController?.pushViewController(PublicProfileController(store: self.store, profileID: clip.string("publisher_id", fallback: clip.string("owner_id"))), animated: true) }
-            film.onPlace = { [weak self] in guard let self, !clip.string("place_id").isEmpty else { return }; self.navigationController?.pushViewController(PlaceController(store: self.store, placeID: clip.string("place_id")), animated: true) }
+            film.onPlace = { [weak self] in guard let self, !clip.string("place_id").isEmpty else { return }; self.openPlaceGuide(clip.string("place_id"), store: self.store) }
             film.onSeek = { [weak self] fraction in
                 guard let self, self.activeIndex == index, let seconds = self.player.currentItem?.duration.seconds, seconds.isFinite else { return }
                 self.player.seek(to: CMTime(seconds: seconds * Double(fraction), preferredTimescale: 600))
@@ -163,9 +172,31 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
         films.forEach { $0.updateCounts(store: store) }
     }
 
-    private func reloadDiscovery() {
-        let updated = Self.discoveryClips(store: store)
-        guard updated != clips else { return }
+    private func refreshFeed() {
+        guard !refreshingFeed else { return }
+        refreshingFeed = true
+        player.pause()
+        let previous = clips.indices.contains(activeIndex) ? clips[activeIndex].id : clips.first?.id
+        Task { [weak self] in
+            guard let self else { return }
+            defer {
+                self.refreshingFeed = false
+                self.feedRefresh.endRefreshing()
+                self.resumeIfAllowed()
+            }
+            do {
+                try await self.store.refresh()
+                self.discoveryOrder = nextDiscoveryOrder(Self.discoveryClips(store: self.store), after: previous)
+                self.manuallyPaused = false
+                self.reloadDiscovery(startAtFirst: true)
+            } catch is CancellationError { }
+            catch { self.showNotice(error.localizedDescription) }
+        }
+    }
+
+    private func reloadDiscovery(startAtFirst: Bool = false) {
+        let updated = orderedDiscovery(Self.discoveryClips(store: store), order: discoveryOrder)
+        guard startAtFirst || updated != clips else { return }
         let previousIndex = max(activeIndex, initialIndex)
         let selectedID = clips.indices.contains(activeIndex) ? clips[activeIndex].id : nil
         stopCurrentItem()
@@ -174,7 +205,7 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
         emptyState?.removeFromSuperview()
         emptyState = nil
         clips = updated
-        initialIndex = updated.firstIndex { $0.id == selectedID } ?? min(previousIndex, max(0, updated.count - 1))
+        initialIndex = startAtFirst ? 0 : (updated.firstIndex { $0.id == selectedID } ?? min(previousIndex, max(0, updated.count - 1)))
         activeIndex = -1
         didPosition = false
         buildPages()
@@ -215,7 +246,7 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) { player.pause() }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { if !decelerate { selectVisiblePage() } }
     private func selectVisiblePage() {
-        guard !clips.isEmpty, paging.bounds.height > 0 else { return }
+        guard !refreshingFeed, !clips.isEmpty, paging.bounds.height > 0 else { return }
         let index = min(max(0, Int((paging.contentOffset.y / paging.bounds.height).rounded())), clips.count - 1)
         if index == activeIndex { resumeIfAllowed() } else { activate(index) }
     }
@@ -283,7 +314,7 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
     }
 
     private func resumeIfAllowed() {
-        guard isActive, !covered, !readFailed, !manuallyPaused, UIApplication.shared.applicationState == .active, player.currentItem?.status == .readyToPlay else { return }
+        guard isActive, !covered, !readFailed, !manuallyPaused, !refreshingFeed, UIApplication.shared.applicationState == .active, player.currentItem?.status == .readyToPlay else { return }
         player.playImmediately(atRate: 1)
         if films.indices.contains(activeIndex) { films[activeIndex].pauseLabel.isHidden = true }
     }
@@ -302,6 +333,7 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
         }
     }
     private func refreshInteractions() {
+        guard !refreshingFeed else { return }
         if discovery { reloadDiscovery() }
         for film in films { film.updateCounts(store: store) }
         _ = closeHiddenClip()
@@ -492,6 +524,10 @@ private final class FilmPage: UIView {
             if let count { container.addArrangedSubview(count) }
             rail.addArrangedSubview(container)
         }
+        let avatar = publisherAvatar(clip.string("publisher_id", fallback: clip.string("owner_id")), store: store) { [weak self] in self?.onProfile?() }
+        let avatarContainer = column([avatar], spacing: 0)
+        avatarContainer.alignment = .center
+        rail.addArrangedSubview(avatarContainer)
         railItem("icon-heart", "Like video", likeCount) { [weak self] in self?.onLike?() }
         railItem("icon-comment", "Open comments", commentCount) { [weak self] in self?.onComments?() }
         railItem("icon-save", "Save video", saveCount) { [weak self] in self?.onSave?() }
@@ -599,7 +635,8 @@ private final class FilmPage: UIView {
     func updateCounts(store: TravelStore) {
         let liked = store.rows("likes").contains { $0.string("clip_id") == clip.id }
         let saved = store.rows("saved_clips").contains { $0.string("clip_id") == clip.id }
-        likeCount.text = liked ? "Liked" : "Like"
+        likeCount.text = store.contentLikeCount(kind: "clips", id: clip.id).map { $0.formatted() } ?? "—"
+        likeCount.accessibilityLabel = liked ? "Liked" : "Like"
         saveCount.text = saved ? "Saved" : "Save"
         commentCount.text = "\(store.rows("comments").filter { $0.string("clip_id") == clip.id }.count)"
     }

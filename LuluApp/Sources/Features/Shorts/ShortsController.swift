@@ -12,6 +12,7 @@ final class ShortsSearchController: TravelScreen {
     private var query = ""
     private var region = "All places"
     private let gallery = column(spacing: 14)
+    private var discoveryOrder: [String] = []
     override func viewDidLoad() {
         title = "Search videos"
         super.viewDidLoad()
@@ -19,7 +20,13 @@ final class ShortsSearchController: TravelScreen {
         refresh.tintColor = Palette.teal
         refresh.addAction(UIAction { [weak self, weak refresh] _ in
             guard let self else { return }
-            self.run { defer { refresh?.endRefreshing() }; try await self.store.refresh() }
+            let previous = self.clips.first?.id
+            self.run {
+                defer { refresh?.endRefreshing() }
+                try await self.store.refresh()
+                self.discoveryOrder = nextDiscoveryOrder(self.clips, after: previous)
+                self.renderGallery()
+            }
         }, for: .valueChanged)
         scroll.refreshControl = refresh
     }
@@ -40,12 +47,13 @@ final class ShortsSearchController: TravelScreen {
         let blocked = Set(store.rows("blocks").map { $0.string("blocked_id") })
         let reported = Set(store.rows("reports").filter { $0.string("target_kind") == "clip" }.map { $0.string("target_id") })
         let places = store.rows("places")
-        return store.rows("clips").filter { clip in
+        let matching = store.rows("clips").filter { clip in
             let place = places.first { $0.id == clip.string("place_id") }
             return !blocked.contains(clip.string("publisher_id")) && !reported.contains(clip.id) &&
             (region == "All places" || (region == "Saved" ? saved.contains(clip.id) : place?.string("region") == region)) &&
             (query.isEmpty || [clip.string("title"), clip.string("caption"), place?.string("name") ?? ""].joined(separator: " ").localizedCaseInsensitiveContains(query))
         }
+        return orderedDiscovery(matching, order: discoveryOrder)
     }
     private func renderGallery() {
         gallery.arrangedSubviews.forEach { $0.removeFromSuperview() }
@@ -67,6 +75,10 @@ final class ShortsSearchController: TravelScreen {
                 let place = store.rows("places").first { $0.id == clip.string("place_id") }
                 tile.addArrangedSubview(text(place?.string("city") ?? clip.string("category"), 13, color: Palette.muted))
                 let open = action("Watch film", icon: "icon-shorts", filled: false) { [weak self] in guard let self else { return }; self.push(ClipFeedController(store: self.store, clips: videos, initialIndex: index)) }
+                tile.addArrangedSubview(publisherAvatar(clip.string("publisher_id"), store: store) { [weak self] in
+                    guard let self else { return }
+                    self.push(PublicProfileController(store: self.store, profileID: clip.string("publisher_id")))
+                })
                 tile.addArrangedSubview(open)
                 row.addArrangedSubview(tile)
             }

@@ -196,7 +196,7 @@ final class MediaCreditsController: TravelScreen {
     override func render() {
         super.render(); title = "Media credits"
         content.addArrangedSubview(text("Stories have sources", 30, display: true))
-        content.addArrangedSubview(text("Destination descriptions are independently written. Footage and photographs retain their original source and author credits. Editorial publishers are not represented as registered members.", color: Palette.muted))
+        content.addArrangedSubview(text("Destination descriptions are independently written. Footage and photographs retain their original source and author credits. Editorial publishers use licensed illustrative portraits, not member identities or endorsements. Their display counts include fixed illustrative baselines; real member interactions are stored separately.", color: Palette.muted))
         for clip in store.rows("clips") {
             credit(clip.string("title"), author: clip.string("author"), source: clip.string("source_url"))
         }
@@ -205,7 +205,7 @@ final class MediaCreditsController: TravelScreen {
            let data = try? Data(contentsOf: file), let metadata = try? JSONDecoder().decode(Record.self, from: data) {
             content.addArrangedSubview(text("Photography credits", 26, display: true))
             for photo in metadata.records("photographs") {
-                credit(photo.string("path").split(separator: "/").last.map(String.init) ?? "Destination photograph", author: photo.string("author", fallback: "See source for creator credits"), source: photo.string("source_url"))
+                credit(photo.string("title", fallback: photo.string("path").split(separator: "/").last.map(String.init) ?? "Destination photograph"), author: photo.string("author", fallback: "See source for creator credits"), source: photo.string("source_url"))
                 if let license = URL(string: photo.string("license_url")), license.scheme == "https" {
                     content.addArrangedSubview(action(photo.string("license", fallback: "Photo license"), icon: "icon-globe", filled: false) { UIApplication.shared.open(license) })
                 }

@@ -33,6 +33,7 @@ func choiceStrip(_ titles: [String], selected: Int, changed: @escaping (Int) -> 
     let stack = line([], spacing: 8)
     for (index, title) in titles.enumerated() {
         let button = action(title, filled: index == selected) { changed(index) }
+        if index == selected { button.accessibilityTraits.insert(.selected) }
         stack.addArrangedSubview(button)
     }
     let scroll = UIScrollView()
@@ -175,4 +176,90 @@ func recentChatTime(_ timestamp: String) -> String {
     formatter.locale = Locale(identifier: "en_US_POSIX")
     formatter.dateFormat = Calendar.current.isDateInToday(date) ? "h:mm a" : "MMM d"
     return formatter.string(from: date)
+}
+
+@MainActor
+func orderedDiscovery(_ records: [Record], order: [String]) -> [Record] {
+    let positions = Dictionary(uniqueKeysWithValues: order.enumerated().map { ($0.element, $0.offset) })
+    return records.enumerated().sorted {
+        let left = positions[$0.element.id] ?? (order.count + $0.offset)
+        let right = positions[$1.element.id] ?? (order.count + $1.offset)
+        return left < right
+    }.map { $0.element }
+}
+
+@MainActor
+func nextDiscoveryOrder(_ records: [Record], after previousID: String?) -> [String] {
+    let ids = records.map(\.id)
+    guard ids.count > 1, let previousID, let previous = ids.firstIndex(of: previousID) else { return ids }
+    let start = (previous + 1) % ids.count
+    return Array(ids[start...]) + Array(ids[..<start])
+}
+
+@MainActor
+func publisherAvatar(_ profileID: String, store: TravelStore, size: CGFloat = 44, onOpen: @escaping () -> Void) -> UIButton {
+    let profile = profileID == store.userID ? store.profile : store.rows("profiles").first { $0.id == profileID }
+    let path = profile?.string("avatar_path") ?? ""
+    let avatar = remoteImage(path, store: store, height: size, radius: size / 2)
+    if path.isEmpty {
+        avatar.image = UIImage(named: profile?.bool("is_editorial") == true ? "logo-lulu" : "icon-profile")
+        avatar.contentMode = .scaleAspectFit
+    }
+    avatar.backgroundColor = Palette.cream
+    avatar.isUserInteractionEnabled = false
+    avatar.translatesAutoresizingMaskIntoConstraints = false
+    let button = UIButton(type: .custom)
+    button.addSubview(avatar)
+    NSLayoutConstraint.activate([
+        button.widthAnchor.constraint(equalToConstant: size), button.heightAnchor.constraint(equalToConstant: size),
+        avatar.leadingAnchor.constraint(equalTo: button.leadingAnchor), avatar.trailingAnchor.constraint(equalTo: button.trailingAnchor),
+        avatar.topAnchor.constraint(equalTo: button.topAnchor), avatar.bottomAnchor.constraint(equalTo: button.bottomAnchor)
+    ])
+    button.accessibilityLabel = "Open profile for " + (profile?.string("display_name") ?? "traveler")
+    button.addAction(UIAction { _ in onOpen() }, for: .touchUpInside)
+    return button
+}
+
+@MainActor
+func publisherIdentity(_ profileID: String, store: TravelStore, onOpen: @escaping () -> Void) -> UIView {
+    let name = action(memberName(profileID, store: store), filled: false, onOpen)
+    name.configuration?.background.backgroundColor = .clear
+    name.configuration?.contentInsets = .init(top: 4, leading: 0, bottom: 4, trailing: 0)
+    name.contentHorizontalAlignment = .leading
+    return line([publisherAvatar(profileID, store: store, onOpen: onOpen), name], spacing: 8)
+}
+
+/// A passive caption overlay; the enclosing cover remains the only tap target.
+@MainActor
+func attachWorkCaption(to cover: UIButton, location: String? = nil, likes: Int?) {
+    let heart = UIImageView(image: UIImage(named: "icon-heart")?.withRenderingMode(.alwaysTemplate))
+    heart.tintColor = UIColor(red: 1, green: 0.25, blue: 0.28, alpha: 1)
+    heart.contentMode = .scaleAspectFit
+    heart.widthAnchor.constraint(equalToConstant: 18).isActive = true
+    heart.heightAnchor.constraint(equalToConstant: 18).isActive = true
+    let count = text(likes.map { $0.formatted() } ?? "—", 14, color: .white)
+    count.numberOfLines = 1
+    let likesRow = line([heart, count, UIView()], spacing: 5)
+    var views: [UIView] = []
+    if let location {
+        let label = text(location, 12, color: .white)
+        label.numberOfLines = 2
+        label.lineBreakMode = .byTruncatingTail
+        views.append(label)
+    }
+    views.append(likesRow)
+    let caption = column(views, spacing: 2)
+    caption.isLayoutMarginsRelativeArrangement = true
+    caption.directionalLayoutMargins = .init(top: 7, leading: 9, bottom: 8, trailing: 9)
+    caption.backgroundColor = UIColor.black.withAlphaComponent(0.48)
+    caption.isUserInteractionEnabled = false
+    caption.accessibilityElementsHidden = true
+    caption.translatesAutoresizingMaskIntoConstraints = false
+    cover.addSubview(caption)
+    NSLayoutConstraint.activate([
+        caption.leadingAnchor.constraint(equalTo: cover.leadingAnchor),
+        caption.trailingAnchor.constraint(equalTo: cover.trailingAnchor),
+        caption.bottomAnchor.constraint(equalTo: cover.bottomAnchor)
+    ])
+    cover.accessibilityHint = likes.map { "\($0) likes" } ?? "Likes unavailable"
 }

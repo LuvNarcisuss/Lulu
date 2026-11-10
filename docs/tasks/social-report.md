@@ -36,7 +36,7 @@ These checks are source inspection only. No Swift compilation, typechecking, app
 - The requested server policy permits one greeting for a non-mutual direct pair and unlimited messages after mutual following; group messages remain unaffected. The UI explains that the server checks this limit. Backend enforcement was requested separately and must not be inferred from this UI implementation.
 - The coordinator must include camera permission text and the `travelapp` URL scheme. Optional incoming-scheme handling can reuse `TravelFriendCode.memberID(from:)` and must still resolve an actual non-editorial member. Camera permission outcomes, capture interruptions, QR detection and generated QR scanning have not been executed.
 - Private submission records are flagged for the coordinator-owned feed to suppress public reactions/sharing and display actual private review status.
-- Record-derived public counts depend on snapshot coverage supplied by the server; no invented base engagement is added.
+- Historical implementation note: counts originally depended on snapshot coverage. The November 10 authenticated aggregate RPCs supersede this behavior; owner-approved editorial display baselines are recorded in docs/backend/integration.md and kept separate from actual member interactions.
 - Actual Apple catalog availability, owned product IDs, registered bundle/team identity, production purchase verification and wallet delivery remain unavailable/unverified.
 - Published legal documents require owner-selected operator details and the coordinated backend/PDF configuration.
 - Runtime layout, keyboard behavior, Dynamic Type, VoiceOver, photo-provider failures, concurrent drafts/messages and actual device/network behavior remain unexecuted acceptance work.

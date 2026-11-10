@@ -33,9 +33,21 @@ final class MeController: TravelScreen {
             let placeIDs = Set(store.rows("saved_places").filter { $0.string("user_id") == store.userID }.map { $0.string("place_id") })
             let savedPlaces = store.visiblePlaces.filter { placeIDs.contains($0.id) }
             for place in savedPlaces {
-                content.addArrangedSubview(card([remoteImage(place.string("photo_path"), store: store, height: 150), action(place.string("name"), icon: "icon-location", filled: false) { [weak self] in
-                    guard let self else { return }; self.push(PlaceController(store: self.store, placeID: place.id))
-                }]))
+                let open = { [weak self] in
+                    guard let self else { return }
+                    self.openPlaceGuide(place.id, store: self.store)
+                }
+                var views: [UIView] = [
+                    destinationGuideCover(place, store: store, height: 150, onOpen: open),
+                    action(place.string("name"), icon: "icon-location", filled: false, open)
+                ]
+                if let publisherID = guidePublisherID(place: place, offer: nil, store: store) {
+                    views.append(publisherIdentity(publisherID, store: store) { [weak self] in
+                        guard let self else { return }
+                        self.push(PublicProfileController(store: self.store, profileID: publisherID))
+                    })
+                }
+                content.addArrangedSubview(destinationGuideCard(views, onOpen: open))
             }
             if clips.isEmpty && savedPlaces.isEmpty { empty("Keep places and stories close", "Save a destination or video to find it here.") }
         case 3:
@@ -123,7 +135,8 @@ final class MeController: TravelScreen {
         let details = card([
             line([avatar, identity]),
             text(stats, 14, color: Palette.teal)
-        ])
+        ], color: Palette.paper.withAlphaComponent(0.60))
+        details.layer.borderColor = Palette.line.withAlphaComponent(0.25).cgColor
 
         let cover = UIView()
         cover.layer.cornerRadius = 24
@@ -155,55 +168,197 @@ final class MeController: TravelScreen {
 @MainActor
 final class PublicProfileController: TravelScreen {
     private let profileID: String
+    private var selectedWorks = 0
+    private var statistics: Record?
+    private var statisticsFailed = false
+    private var loadingStatistics = false
     init(store: TravelStore, profileID: String) { self.profileID = profileID; super.init(store: store) }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Task { [weak self] in await self?.loadStatistics() }
+    }
+
+    private func loadStatistics() async {
+        guard !loadingStatistics else { return }
+        loadingStatistics = true
+        defer { loadingStatistics = false }
+        do {
+            statistics = try await store.profileStatistics(profileID)
+            statisticsFailed = false
+        } catch is CancellationError { return }
+        catch { statistics = nil; statisticsFailed = true }
+        render()
+    }
+
     override func render() {
         super.render(); title = "Traveler profile"
         guard let profile = profileID == store.userID ? store.profile : store.rows("profiles").first(where: { $0.id == profileID }) else {
+            navigationItem.rightBarButtonItem = nil
             content.addArrangedSubview(text("This profile is unavailable.", color: Palette.muted)); return
         }
-        if !profile.string("avatar_path").isEmpty { content.addArrangedSubview(remoteImage(profile.string("avatar_path"), store: store, height: 200)) }
-        content.addArrangedSubview(text(profile.string("display_name", fallback: "Traveler"), 32, display: true))
-        content.addArrangedSubview(text(profile.string("bio"), color: Palette.muted))
-        if profile.bool("is_editorial") { content.addArrangedSubview(text("Editorial publisher · not a member account", 14, color: Palette.teal)) }
-        let published = store.rows("clips").filter { $0.string("publisher_id") == profileID }
-        let followers = store.rows("follows").filter { $0.string("following_id") == profileID }.count
-        let following = store.rows("follows").filter { $0.string("follower_id") == profileID }.count
-        content.addArrangedSubview(text("\(published.count) works · \(followers) followers · \(following) following", 14, color: Palette.teal))
-        if profileID != store.userID {
-            let follows = store.rows("follows").contains { $0.string("following_id") == profileID && $0.string("follower_id") == store.userID }
-            let blocked = store.rows("blocks").contains { $0.string("blocked_id") == profileID && $0.string("blocker_id") == store.userID }
-            let followButton = action(follows ? "Unfollow" : "Follow", icon: "icon-heart") { [weak self] in
-                guard let self else { return }
-                self.run { try await self.store.perform("relationship.follow", ["profile_id": .string(self.profileID), "enabled": .bool(!follows)]) }
-            }
-            followButton.isEnabled = follows || !isBlocked(profileID, store: store)
-            content.addArrangedSubview(followButton)
-            if !profile.bool("is_editorial") {
-                let message = action("Message", icon: "icon-chats", filled: false) { [weak self] in
-                    guard let self else { return }
-                    self.run {
-                        let result = try await self.store.perform("chat.direct", ["profile_id": .string(self.profileID)])
-                        let id = result.string("conversation_id")
-                        guard !id.isEmpty else { throw SocialError.missingConversation }
-                        self.push(ConversationController(store: self.store, conversationID: id))
-                    }
-                }
-                message.isEnabled = !isBlocked(profileID, store: store)
-                content.addArrangedSubview(message)
-            }
-            content.addArrangedSubview(action(blocked ? "Unblock" : "Block", icon: "icon-block", filled: false) { [weak self] in
-                guard let self else { return }
-                self.confirm(blocked ? "Unblock traveler?" : "Block traveler?", message: blocked ? "They may interact with you again." : "Messaging and social interactions with this profile will be restricted.", destructive: !blocked) {
-                    self.run { try await self.store.perform("safety.block", ["profile_id": .string(self.profileID), "enabled": .bool(!blocked)]) }
-                }
+        let avatar = remoteImage(profile.string("avatar_path"), store: store, height: 76, radius: 38)
+        avatar.widthAnchor.constraint(equalToConstant: 76).isActive = true
+        if profile.string("avatar_path").isEmpty {
+            avatar.image = UIImage(named: profile.bool("is_editorial") ? "logo-lulu" : "icon-profile")
+            avatar.contentMode = .scaleAspectFit
+        }
+        avatar.accessibilityLabel = "Profile photo"
+        let name = text(profile.string("display_name", fallback: "Traveler"), 27, display: true)
+        let bio = text(profile.string("bio", fallback: "A new travel story begins here."), 16, color: Palette.muted)
+        var identity: [UIView] = [line([avatar, column([name, bio], spacing: 6)])]
+        if profile.bool("is_editorial") { identity.append(text(profile.bool("avatar_is_illustrative") ? "Editorial collection · Illustrative portrait" : "Editorial collection", 13, color: Palette.teal)) }
+        content.addArrangedSubview(card(identity))
+
+        let metrics = line([], spacing: 4)
+        metrics.distribution = .fillEqually
+        for (key, label) in [("likes", "Likes"), ("saves", "Saves"), ("following", "Following"), ("followers", "Followers")] {
+            let value = text(statistics.map { $0.int(key).formatted() } ?? "—", 28, display: true)
+            let caption = text(label, 12, color: Palette.muted)
+            value.textAlignment = .center; caption.textAlignment = .center
+            let item = column([value, caption], spacing: 4)
+            item.isAccessibilityElement = true
+            item.accessibilityLabel = label
+            item.accessibilityValue = statistics.map { String($0.int(key)) } ?? "Unavailable"
+            if key == "likes" || key == "saves" { item.accessibilityHint = "Received on published short videos" }
+            metrics.addArrangedSubview(item)
+        }
+        content.addArrangedSubview(metrics)
+        if statisticsFailed {
+            content.addArrangedSubview(action("Retry statistics", filled: false) { [weak self] in
+                Task { await self?.loadStatistics() }
             })
-            content.addArrangedSubview(action("Report profile", icon: "icon-report", filled: false) { [weak self] in guard let self else { return }; self.push(ReportController(store: self.store, kind: "profile", targetID: self.profileID)) })
         }
-        for (index, clip) in published.enumerated() {
-            content.addArrangedSubview(card([remoteImage(clip.string("cover_path"), store: store, height: 170), action(clip.string("title"), filled: false) { [weak self] in
-                guard let self else { return }; self.push(ClipFeedController(store: self.store, clips: published, initialIndex: index))
-            }]))
+        if profileID != store.userID { addRelationshipActions(profile) }
+        else { navigationItem.rightBarButtonItem = nil }
+
+        let categories = line([], spacing: 24)
+        for (index, title) in ["Shorts", "Guides"].enumerated() {
+            let heading = UIButton(type: .custom)
+            heading.setTitle(title, for: .normal)
+            heading.setTitleColor(selectedWorks == index ? Palette.ink : Palette.muted, for: .normal)
+            heading.titleLabel?.font = FontBook.font(25, display: true)
+            heading.titleLabel?.adjustsFontForContentSizeCategory = true
+            heading.contentHorizontalAlignment = .leading
+            heading.setContentHuggingPriority(.required, for: .horizontal)
+            heading.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+            heading.accessibilityLabel = title
+            if selectedWorks == index { heading.accessibilityTraits.insert(.selected) }
+            heading.addAction(UIAction { [weak self] _ in
+                guard let self, self.selectedWorks != index else { return }
+                self.selectedWorks = index
+                self.render()
+            }, for: .touchUpInside)
+            categories.addArrangedSubview(heading)
         }
+        categories.addArrangedSubview(UIView())
+        content.addArrangedSubview(categories)
+        let blocked = isBlocked(profileID, store: store)
+        if selectedWorks == 0 {
+            let published = blocked ? [] : store.rows("clips").filter { $0.string("publisher_id") == profileID }
+            if published.isEmpty { content.addArrangedSubview(text("No published videos to show.", color: Palette.muted)) }
+            let videos = published.enumerated().map { index, clip -> UIView in
+                let open = { [weak self] in
+                    guard let self else { return }
+                    self.push(ClipFeedController(store: self.store, clips: published, initialIndex: index))
+                }
+                let cover = UIButton(type: .custom)
+                cover.layer.cornerRadius = 18
+                cover.clipsToBounds = true
+                cover.accessibilityLabel = "Play " + clip.string("title")
+                let photo = remoteImage(clip.string("cover_path"), store: store, height: 1, radius: 0)
+                photo.constraints.filter { $0.firstAttribute == .height }.forEach { $0.isActive = false }
+                photo.contentMode = .scaleAspectFill
+                photo.isUserInteractionEnabled = false
+                photo.isAccessibilityElement = false
+                photo.translatesAutoresizingMaskIntoConstraints = false
+                cover.addSubview(photo)
+                NSLayoutConstraint.activate([
+                    cover.heightAnchor.constraint(equalTo: cover.widthAnchor, multiplier: 4.0 / 3.0),
+                    photo.leadingAnchor.constraint(equalTo: cover.leadingAnchor),
+                    photo.trailingAnchor.constraint(equalTo: cover.trailingAnchor),
+                    photo.topAnchor.constraint(equalTo: cover.topAnchor),
+                    photo.bottomAnchor.constraint(equalTo: cover.bottomAnchor)
+                ])
+                attachWorkCaption(to: cover, likes: store.contentLikeCount(kind: "clips", id: clip.id))
+                cover.addAction(UIAction { _ in open() }, for: .touchUpInside)
+                return cover
+            }
+            appendGrid(videos)
+            return
+        }
+
+        let reported = Set(store.rows("reports").filter { $0.string("target_kind") == "guide" }.map { $0.string("target_id") })
+        let guides = store.guideOffers.filter { offer in
+            guard !blocked, offer.string("status") == "published", !reported.contains(offer.string("guide_id")),
+                  let place = store.visiblePlaces.first(where: { $0.id == offer.string("place_id") }) else { return false }
+            return guidePublisherID(place: place, offer: offer, store: store) == profileID
+        }
+        if !store.hasCoinState {
+            content.addArrangedSubview(action("Load guides", icon: "icon-refresh", filled: false) { [weak self] in
+                guard let self else { return }; self.run { try await self.store.refreshCoinState() }
+            })
+        } else if guides.isEmpty { content.addArrangedSubview(text("No published guides to show.", color: Palette.muted)) }
+        appendGrid(guides.compactMap { offer in
+            guard let place = store.visiblePlaces.first(where: { $0.id == offer.string("place_id") }) else { return nil }
+            let open = { [weak self] in
+                guard let self else { return }
+                self.openPlaceGuide(place.id, store: self.store, guideID: offer.string("guide_id"))
+            }
+            return destinationGuideCard([
+                destinationGuideCover(place, store: store, height: 160, offer: offer, showsWorkCaption: true, onOpen: open)
+            ], onOpen: open)
+        })
+    }
+
+    private func appendGrid(_ tiles: [UIView]) {
+        let columns = traitCollection.preferredContentSizeCategory.isAccessibilityCategory ? 1 : 2
+        for start in stride(from: 0, to: tiles.count, by: columns) {
+            let row = line(Array(tiles[start..<min(start + columns, tiles.count)]), spacing: 12)
+            row.alignment = .top; row.distribution = .fillEqually
+            if row.arrangedSubviews.count < columns { row.addArrangedSubview(UIView()) }
+            content.addArrangedSubview(row)
+        }
+    }
+
+    private func addRelationshipActions(_ profile: Record) {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: iconButton("icon-report", label: "Report profile") { [weak self] in
+            guard let self else { return }; self.push(ReportController(store: self.store, kind: "profile", targetID: self.profileID))
+        })
+        let follows = store.rows("follows").contains { $0.string("following_id") == profileID && $0.string("follower_id") == store.userID }
+        let blocked = store.rows("blocks").contains { $0.string("blocked_id") == profileID && $0.string("blocker_id") == store.userID }
+        let follow = action(follows ? "Following" : "Follow", icon: follows ? "icon-check" : "icon-add", filled: !follows) { [weak self] in
+            guard let self else { return }
+            self.run {
+                try await self.store.perform("relationship.follow", ["profile_id": .string(self.profileID), "enabled": .bool(!follows)])
+                await self.loadStatistics()
+            }
+        }
+        follow.isEnabled = follows || !isBlocked(profileID, store: store)
+        let message = action("Message", icon: "icon-chats", filled: false) { [weak self] in
+            guard let self else { return }
+            self.run {
+                let result = try await self.store.perform("chat.direct", ["profile_id": .string(self.profileID)])
+                let id = result.string("conversation_id")
+                guard !id.isEmpty else { throw SocialError.missingConversation }
+                self.push(ConversationController(store: self.store, conversationID: id))
+            }
+        }
+        message.isEnabled = !profile.bool("is_editorial") && !isBlocked(profileID, store: store)
+        if profile.bool("is_editorial") { message.accessibilityHint = "This editorial collection does not accept private messages" }
+        let block = iconButton("icon-block", label: blocked ? "Unblock traveler" : "Block traveler") { [weak self] in
+            guard let self else { return }
+            self.confirm(blocked ? "Unblock traveler?" : "Block traveler?", message: blocked ? "They may interact with you again." : "Messaging and social interactions with this profile will be restricted.", destructive: !blocked) {
+                self.run {
+                    try await self.store.perform("safety.block", ["profile_id": .string(self.profileID), "enabled": .bool(!blocked)])
+                    try await self.store.refreshCoinState()
+                    await self.loadStatistics()
+                }
+            }
+        }
+        let primary = line([follow, message], spacing: 8)
+        primary.distribution = .fillEqually
+        content.addArrangedSubview(line([primary, block], spacing: 8))
     }
 }

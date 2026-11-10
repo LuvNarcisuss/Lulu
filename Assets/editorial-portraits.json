@@ -1,0 +1,26 @@
+{
+  "delivery": "Exact allowlisted Pexels HTTPS CDN URLs, separate from the Supabase Storage manifest. Inspection copies are not bundled.",
+  "license_restriction": "No claim that depicted people endorse Lulu or are registered users.",
+  "portraits": [
+    {
+      "path": "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=512&h=512&fit=crop",
+      "author": "Simon Robben",
+      "source_url": "https://www.pexels.com/photo/man-in-brown-polo-shirt-614810/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "sha256": "3a07235be46d4c4a3472f88a975d0e291e9a15ebf8db0f5df23d1c941614befa",
+      "bytes": 20400,
+      "inspection": "Inspected 512 x 512 photographic portrait. Face is clear in the square crop; no visible text. Used illustratively for an editorial collection; no nationality, membership or endorsement claim."
+    },
+    {
+      "path": "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=512&h=512&fit=crop",
+      "author": "Andrea Piacquadio",
+      "source_url": "https://www.pexels.com/photo/733872/",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "sha256": "df84fc9b9fe037e2d70b0165f2f171728cbd8880481aef2c4e7982c08a07dd02",
+      "bytes": 37768,
+      "inspection": "Inspected 512 x 512 photographic portrait. Face is clear in the square crop; no visible text. Used illustratively for an editorial collection; no nationality, membership or endorsement claim."
+    }
+  ]
+}
