@@ -9,7 +9,7 @@ import sys
 import xml.etree.ElementTree as ET
 
 root = Path(__file__).resolve().parents[1]
-app = root / 'TravelApp'
+app = root / 'LuluApp'
 errors = []
 checks = []
 
@@ -21,9 +21,17 @@ def require(condition, message):
 
 info = plistlib.loads((app / 'Support/Info.plist').read_bytes())
 identity = json.loads((app / 'Configuration/Identity.json').read_text())
-project = (app / 'TravelApp.xcodeproj/project.pbxproj').read_text()
+project = (app / 'Lulu.xcodeproj/project.pbxproj').read_text()
 source_config = (app / 'project.yml').read_text()
-require(info['CFBundleDisplayName'] == identity['displayName'] == '', 'App display name remains owner-unconfigured')
+name = identity['displayName']
+require(bool(name) and info['CFBundleDisplayName'] == info['CFBundleName'] == name,
+        'App display and bundle names agree with the selected identity')
+scheme_path = app / f"{identity['scheme']}.xcodeproj/xcshareddata/xcschemes/{identity['scheme']}.xcscheme"
+buildables = ET.parse(scheme_path).findall('.//BuildableReference')
+product = identity['productName']
+require(bool(buildables) and all(ref.get('BuildableName') == f'{product}.app' for ref in buildables)
+        and f'path = {product}.app;' in project and f'PRODUCT_NAME: {product}\n' in source_config,
+        'Shared scheme points to the configured engineering product')
 require(info['UIDeviceFamily'] == [1], 'Info.plist supports iPhone only')
 require(info['UISupportedInterfaceOrientations'] == ['UIInterfaceOrientationPortrait'], 'App orientation is portrait')
 for setting in ['SUPPORTS_MACCATALYST', 'SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD', 'SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD']:
@@ -60,7 +68,9 @@ for route in ['ShortsController', 'ExploreController', 'JourneysController', 'Ch
     require(route + '(store: store)' in core, f'Five-tab root route exists: {route}')
 require('dock.distribution = .fillEqually' in core and len(re.findall(r'"icon-(?:shorts|explore|journeys|chats|profile)"', core)) >= 5, 'Dock uses five equal destinations')
 payment = json.loads((app / 'Resources/PaymentCatalog.json').read_text())
-require(len(payment['tiers']) == 7 and all(offer['productID'] == '' for offer in payment['tiers']), 'Seven wallet tiers have no inherited product IDs')
+tiers = payment['tiers']
+require(len(tiers) == 9 and len({offer['productID'] for offer in tiers}) == 9, 'Nine unique wallet tiers')
+require(all(re.fullmatch(r'[a-z]{16}', offer['productID']) and offer['coins'] > 0 for offer in tiers), 'Wallet product IDs and coin amounts match the configured format')
 require('storeKitConfiguration' not in source_config, 'Scheme has no local StoreKit catalog masquerading as Apple availability')
 require(not any(s in project for s in ['catalog/videos/', 'catalog/places/', 'catalog/covers/']), 'Business media is excluded from the application bundle')
 for file in (app / 'Resources/Legal').glob('*.pdf'):
@@ -71,7 +81,7 @@ summary = {
     'swift_files': len(list((app / 'Sources').rglob('*.swift'))),
     'passed_assertions': len(checks),
     'errors': errors,
-    'identity_pending': ['app display name', 'registered Bundle ID', 'development team', 'owned IAP product IDs', 'operator details'],
+    'identity_pending': ['registered Bundle ID', 'development team', 'owned IAP product IDs', 'operator details'],
     'runtime_performed': False,
     'limitations': ['No compilation or typechecking', 'No dependency resolution', 'No app, Simulator or Preview launch', 'No UI or StoreKit runtime tests', 'APNs signing capability remains unconfigured'],
 }

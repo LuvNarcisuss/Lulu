@@ -15,3 +15,13 @@ xcuserdata/
 # Local design originals and media inspection images
 /Assets/generated/*.png
 /docs/media/inspection/
+
+# Shared Xcode scheme
+!/LuluApp/Lulu.xcodeproj/xcshareddata/xcschemes/Lulu.xcscheme
+
+# Shared Swift package lockfile
+!/LuluApp/Lulu.xcodeproj/project.xcworkspace/
+/LuluApp/Lulu.xcodeproj/project.xcworkspace/**
+!/LuluApp/Lulu.xcodeproj/project.xcworkspace/xcshareddata/
+!/LuluApp/Lulu.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+!/LuluApp/Lulu.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved

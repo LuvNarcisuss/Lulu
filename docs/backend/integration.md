@@ -1,5 +1,7 @@
 # Backend Integration
 
+Lulu returned to anonymous one-tap entry on November 9. See [One-Tap Sign-In](sign-in.md) for the current client flow and hosted settings. The original deployment evidence remains recorded here.
+
 Status: stage A deployed and finite backend verification passed for the implemented application data, media and IM paths. Account-deletion deployment requires explicit owner approval. The owner subsequently approved cleanup of the three isolated Auth verification identities, which were removed through the official dashboard. Application build and device acceptance are not authorized and have not been performed. This is not a claim that every stage A release prerequisite is complete.
 
 ## Dedicated project
@@ -9,7 +11,7 @@ Status: stage A deployed and finite backend verification passed for the implemen
 - Created specifically for this application: `travel-social-20261103`, ref `dlbaneeshycwmhgfeokx`, region `eu-west-1`, Free plan, observed `ACTIVE_HEALTHY`.
 - Origin: `https://dlbaneeshycwmhgfeokx.supabase.co`.
 - Creation attempt was recorded before creating the project in `supabase-plan.json`. No other application's project, identity, credits, products, contacts, credentials or data was copied. The creation tool did not request a cost confirmation.
-- App brand, registered Bundle ID, team, operator, contact channel and owned StoreKit product IDs remain unspecified. `TravelApp` is an engineering identifier.
+- The app is named Lulu, and its selected Bundle ID is `com.lulu.travel`. Apple registration, team, operator, and contact channel remain unconfirmed. See [Coins and paid guides](coins-and-guides.md) for the current product mapping and verification requirements.
 
 ## Deployed contract
 
@@ -17,13 +19,21 @@ Status: stage A deployed and finite backend verification passed for the implemen
 
 `travel-entry` Edge Function is ACTIVE version 1 (ID `e9b05213-0fa1-49ed-9f6c-1b4687b38926`, source SHA-256 `249e31d79252726fff0b2cf1bb778b2a9a95b376908e667c1bbceabb85f6ff2c`). Its handler validates the user's token with Supabase Auth, invokes `travel_bootstrap` in that user's context and returns exactly the A response `{"code":0,"message":"ok","data":{}}`. It does not use a service-role client or contact an external authentication system. The gateway's JWT switch is disabled because the handler performs actual Auth validation; anonymous and malformed-token requests were verified as HTTP 401.
 
-Anonymous Sign-Ins were enabled and saved in this project's dashboard. `TravelStore` uses official Supabase Swift exactly 2.55.6, whose tag archive manifest requires Swift tools 6.1; the development machine's compiler is 6.2. SDK package resolution and compilation have not been executed. Authentication uses the SDK's project-scoped Keychain storage. A login explicitly waits for `LaunchServices.prepareForLogin`, restores/refreshed sessions through `auth.session`, creates an anonymous account only on `AuthError.sessionMissing`, calls the authenticated entry function, validates the snapshot and starts realtime listeners. HTTP/SDK transport errors invalidate the shared network gate without automatic reauthentication.
+During the original stage A deployment, Anonymous Sign-Ins were enabled and saved in this project's dashboard. `TravelStore` uses official Supabase Swift exactly 2.55.6, whose tag archive manifest requires Swift tools 6.1; the development machine's compiler is 6.2. SDK package resolution and compilation have not been executed. Authentication uses the SDK's project-scoped Keychain storage. The original login waited for `LaunchServices.prepareForLogin`, restores/refreshed sessions through `auth.session`, creates an anonymous account only on `AuthError.sessionMissing`, calls the authenticated entry function, validates the snapshot and starts realtime listeners. HTTP/SDK transport errors invalidate the shared network gate without automatic reauthentication.
 
-Explicit sign-out uses the SDK's local sign-out, matching the inspected Toti reference: it removes guest credentials and visible owned state, leaving the separate device identifier intact. It does not promise guest recovery afterward. Only an eventual external-session expiry in stage B would have different semantics; stage B is absent here.
+Explicit sign-out uses the SDK's local sign-out. It removes saved credentials and visible account state while preserving the separate device identifier. It does not promise guest recovery afterward. Only an eventual external-session expiry in stage B would have different semantics; stage B is absent here.
 
 Writes are serialized. Owner IDs, status, balance and creation timestamps are server controlled; personal state is published only after successful persistence. A committed action remains successful if its subsequent refresh fails, with `lastRefreshError` exposed independently. Snapshots are retained only during in-flight requests and replaced atomically; the shell masks server content with a retry error after actual read failure. Generation/request checks reject stale completions. No bundle catalog, seeded private data, offline business fallback, fabricated responses, fake delivery or client balance minting is used.
 
+## Guide safety
+
+The hosted `20261110014316_guide_visibility` migration adds the account-owned `guide_visibility` table and `travel_guide_visibility` RPC. Hide and restore update the viewer's preference without changing the public catalog, saved places, trips, or reports. The existing report RPC accepts the place ID, and video safety uses the existing clip-report and publisher-block routes. The hosted function definitions for `travel_action` and `travel_snapshot` retained their previous hashes.
+
+Remote inspection confirmed row-level security, three owner policies, caller-context execution, and authenticated-only RPC access. A read-only request with an isolated test claim returned an empty hidden-guide list. No account or guide preference was written during that check. App runtime acceptance remains pending.
+
 ## Catalog and media
+
+On November 9, three portrait films and their covers were added under `catalog/shorts-2026-11-09/`. The current catalog has 14 films and 42 media files. Westminster, Brooklyn Bridge, and the Colosseum are the first three Shorts in that order. Anonymous readback verified all six new objects against the media manifest, and each MP4 supported HTTP 206 range reads. The original import and verification follow.
 
 Source `Assets/catalog.json` was imported once through `supabase/seed.sql`: 2 editorial publishers without Auth identities, 11 clips, 12 places and 12 guides. Every ID and source field, including nested guide sections, was compared through the same authenticated snapshot used by the app. Source object-key ordering was normalized for JSON object comparison; arrays preserve order. The Iceland waterfall clip deliberately has no specific place association because its source does not identify the waterfall.
 
@@ -53,6 +63,10 @@ Security advisors were reviewed after deployment. Guest-policy and authenticated
 
 ## Agreements
 
+The current [Lulu revision](legal/2026-11-09-lulu/README.md) was published on November 9, 2026. Both public downloads match the bundled offline PDFs byte for byte. The consent identifier is `travel-f37d7cbb470d9d8dd3869568`. [Public verification](legal/2026-11-09-lulu/public-verification.json) records the exact URLs, response status, sizes and hashes.
+
+### Original November 3 publication
+
 The source Markdown and rendered, searchable, embedded-font PDFs are in `docs/backend/legal/`. Both final PDFs have two pages; rendered pages were visually checked and public-download text was extracted. Neither brand/operator/contact nor a staffed support address was invented. Current private development status and public-release identity dependencies are stated accurately.
 
 - Terms: `https://dlbaneeshycwmhgfeokx.supabase.co/storage/v1/object/public/legal/terms.pdf` — HTTP 200, `application/pdf`, 36,876 bytes, SHA-256 `b4f353127f392497f7066116e15122fa45115f5f3f70ab4c03cba60c8872c921`.
@@ -68,4 +82,4 @@ An initial attempt to open their deletion was rejected by automatic approval rev
 
 Separately, the `travel-account` Edge deployment was rejected by automatic approval review because it creates a persistent privileged account-deletion capability. The source is reviewable at `supabase/functions/travel-account/index.ts`, but the function is not deployed and in-app account deletion is not currently available. The user has not approved that deployment, and it has not been retried. These are two separate approvals.
 
-Release also requires the selected brand, owned registered Bundle ID/team, legal operator/contact, APNs signing/capability configuration and actual push delivery infrastructure. Wallet products remain disabled and zero credit is truthful; no Apple sandbox or production purchase was attempted. External authentication, Socket forwarding and stage B remain unrequested. No app build, typecheck, Preview, app launch, simulator or runtime tests were performed.
+Release also requires the owned registered Bundle ID/team, legal operator/contact, APNs signing/capability configuration and actual push delivery infrastructure. Apple checkout remains gated on verification configuration and storefront availability. The hosted coin and guide APIs are recorded in [Coins and paid guides](coins-and-guides.md). External authentication, Socket forwarding and stage B remain unrequested. No app build, typecheck, Preview, app launch, simulator or runtime tests were performed.

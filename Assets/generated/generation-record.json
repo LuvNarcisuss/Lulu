@@ -32,11 +32,24 @@
       "transparent_background": false,
       "source_file": "/Users/apple/.codex/generated_images/01a1a0a5-f4d2-7ae2-a315-34c759f1a632/exec-1e216449-25bc-4735-8276-1aca6c40674b.png",
       "project_file": "Assets/generated/app-icon-original.png",
-      "packaged_file": "TravelApp/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+      "packaged_file": "LuluApp/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
       "processing": "Independently generated 1254x1254 RGB full-icon original; Lanczos downsample to opaque RGB 1024x1024. No tile enlargement or baked corner mask.",
       "review": "Human visual review confirmed centered travel compass, opaque cream background, no lettering, no baked rounded corners.",
       "engine": "Built-in image_gen.imagegen; model version not exposed.",
       "created_on": "2026-11-03"
+    },
+    {
+      "name": "icon-filter",
+      "created_on": "2026-11-09",
+      "prompt": "Create one finished raster icon asset for the Lulu travel journal iPhone app, on a genuinely transparent RGBA background. The FIRST reference image specifies the exact icon geometry: three HORIZONTAL PARALLEL STROKES of equal length, each stroke has one small outlined round slider knob set in the stroke, and the centers of the knobs are staggered from top to bottom at roughly 25%, 70%, 40% along the stroke. All three strokes start and end at the same horizontal position. The horizontal ink stops cleanly at the edges of each knob, leaving the hollow interior legible. The SECOND reference provides the aesthetic, a hand-painted travel-journal deep teal ink with a quiet warm-ochre accent. Use strong deep teal for all strokes and knob outlines, and a restrained cream or pale ochre center in the knobs, lightly textured watercolor ink with clean readable shapes. Center the whole 3-line symbol in a square, with even clear margin and the symbol spanning approximately 72% of the canvas width. Bold enough to render clearly at 27pt; rounded stroke caps. Exactly three circular knobs, one per line. No exterior outline, no gear, no tapered funnel bars, no words, no numbers, no labels, no shadows, no paper rectangle. Keep background transparent.",
+      "transparent_background": true,
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-6c2e45a7-a42d-4ab8-8492-49110c139257.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-filter.imageset/icon-filter.png",
+      "processing": "Resized the generated transparent source to 162 pixels with sips.",
+      "references": [
+        "Owner-supplied slider control screenshot",
+        "LuluApp/Resources/Assets.xcassets/icon-explore.imageset/icon-explore.png"
+      ]
     }
   ],
   "review": "All selected originals visually inspected. Icon ordering matches the shared contract. Backgrounds contain no app name or intentional lettering."

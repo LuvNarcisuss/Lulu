@@ -4,7 +4,7 @@
   "transparent_background": false,
   "source_file": "/Users/apple/.codex/generated_images/01a1a0a5-f4d2-7ae2-a315-34c759f1a632/exec-1e216449-25bc-4735-8276-1aca6c40674b.png",
   "project_file": "Assets/generated/app-icon-original.png",
-  "packaged_file": "TravelApp/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+  "packaged_file": "LuluApp/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
   "processing": "Independently generated 1254x1254 RGB full-icon original; Lanczos downsample to opaque RGB 1024x1024. No tile enlargement or baked corner mask.",
   "review": "Human visual review confirmed centered travel compass, opaque cream background, no lettering, no baked rounded corners.",
   "engine": "Built-in image_gen.imagegen; model version not exposed.",

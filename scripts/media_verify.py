@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Validate local media integrity and the public catalog without building the app."""
+from datetime import date
 from pathlib import Path
 import hashlib
 import json
@@ -18,7 +19,7 @@ for entry in manifest['files']:
     assert hashlib.sha256(local.read_bytes()).hexdigest() == entry['sha256'], entry['local_file']
     assert local.stat().st_size == entry['bytes'], entry['local_file']
     assert entry['source_url'].startswith('https://') and entry['license_url'].startswith('https://')
-    assert entry['inspection']['reviewed_on'] == '2026-11-03'
+    assert date.fromisoformat(entry['inspection']['reviewed_on']) >= date.fromisoformat(manifest['created_on'])
     if entry['kind'] == 'video':
         assert entry['source_sha256'], entry['path']
         assert all(0 <= t < entry['duration'] for t in entry['inspection']['times_seconds'])
@@ -37,7 +38,11 @@ for key,rows in catalog.items():
     assert len(ids[key]) == len(rows), key
     for row in rows:
         uuid.UUID(row['id'])
-        assert set(row) == required[key], (key, set(row)^required[key])
+        fields = set(row)
+        if key == 'clips' and 'feed_rank' in fields:
+            assert type(row['feed_rank']) is int and row['feed_rank'] > 0
+            fields.remove('feed_rank')
+        assert fields == required[key], (key, fields^required[key])
         for field in ['photo_path','video_path','cover_path']:
             if field in row:
                 assert row[field] in paths, row[field]
@@ -48,7 +53,7 @@ for key,rows in catalog.items():
 assert all(row['is_editorial'] for row in catalog['profiles'])
 assert {row['region'] for row in catalog['places']} == {'Europe','North America'}
 icons='shorts explore journeys chats profile search add back close heart comment save share more location map calendar check wallet diamond settings edit camera photo send group pin mute trash report block phone video refresh route globe'.split()
-asset_root=ROOT/'TravelApp/Resources/Assets.xcassets'
+asset_root=ROOT/'LuluApp/Resources/Assets.xcassets'
 for name in icons:
     path=asset_root/('icon-'+name+'.imageset')/('icon-'+name+'.png')
     im=Image.open(path)
@@ -59,5 +64,5 @@ for name in ['background-paper','background-welcome']:
     assert Image.open(path).size == (1024,1536)
 app_icon=Image.open(asset_root/'AppIcon.appiconset/AppIcon.png')
 assert app_icon.mode == 'RGB' and app_icon.size == (1024,1024)
-assert not list((ROOT/'TravelApp/Resources').rglob('*.mp4'))
+assert not list((ROOT/'LuluApp/Resources').rglob('*.mp4'))
 print(json.dumps({'result':'Static asset inspection passed','profiles':len(catalog['profiles']),'clips':len(catalog['clips']),'places':len(catalog['places']),'guides':len(catalog['guides']),'business_files':len(manifest['files']),'generated_icons':len(icons),'generated_backgrounds':2,'generated_app_icon':1,'checks':'UUIDs, flat DTO fields, references, bytes, SHA-256, dimensions, provenance, generated alpha and bundle separation','not_performed':'No app compilation, typecheck, launch, simulator, Preview or runtime acceptance.'},indent=2))

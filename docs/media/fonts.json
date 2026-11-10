@@ -27,7 +27,7 @@
   ],
   "registration": "Register file paths in UIAppFonts. FontBook must use actual PostScript names. No system-font fallback is part of this asset delivery.",
   "licenses": [
-    "TravelApp/Resources/Fonts/Kalam-OFL.txt",
-    "TravelApp/Resources/Fonts/Fraunces-OFL.txt"
+    "LuluApp/Resources/Fonts/Kalam-OFL.txt",
+    "LuluApp/Resources/Fonts/Fraunces-OFL.txt"
   ]
 }

@@ -129,19 +129,44 @@ reviews = {
 'swiss-alpine-train':'Snowy Alps, a mountain train and recognizable Matterhorn. Source identifies Switzerland. No added text or watermark.',
 'yosemite-waterfall':'Yosemite waterfall and granite landscape. Public-domain NPS source; selected ten-second segment, reviewed independently.'}
 for source in sources:
-    slug=source['slug']
-    path=ASSETS/'catalog/videos'/f'{slug}.mp4'
-    meta=probe(path)
-    cover=ASSETS/'catalog/covers'/f'{slug}.jpg'
-    cover_time=meta['duration']/2
+    slug = source['slug']
+    storage_folder = source.get('storage_folder')
+    video_path = f'catalog/{storage_folder or "videos"}/{slug}.mp4'
+    cover_path = f'catalog/{storage_folder or "covers"}/{slug}.jpg'
+    path, cover = ASSETS/video_path, ASSETS/cover_path
+    meta = probe(path)
+    cover_time = source.get('processing', {}).get('cover_time_seconds', meta['duration']/2)
     subprocess.run(['ffmpeg','-y','-v','error','-ss',str(cover_time),'-i',str(path),'-frames:v','1','-q:v','2',str(cover)],check=True)
-    title,caption,place_slug,category=CLIP_DATA[slug]
-    clips.append(dict(id=stable('clip',slug), title=title, caption=caption, place_id=None if slug == 'iceland-waterfall' else stable('place',place_slug), publisher_id=stable('publisher','north-america' if place_slug in ['new-york','yosemite'] else 'europe'), video_path=f'catalog/videos/{slug}.mp4', cover_path=f'catalog/covers/{slug}.jpg',source_url=source['@id'].replace('#video',''),author=source.get('author'),duration=meta['duration'],category=category))
-    review_times=[0.15,round(meta['duration']/2,3),round(meta['duration']-.3,3)]
-    common=dict(source_url=source['@id'].replace('#video',''), download_url=source['contentUrl'], author=source.get('author'), license='Mixkit Stock Video Free License' if source['copyrightNotice'] == 'Free' else source['copyrightNotice'], license_url=source['license'], inspection={'reviewed_on':'2026-11-03','times_seconds':review_times,'scene':reviews[slug],'method':'Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit.'})
-    files.append(dict(path=f'catalog/videos/{slug}.mp4',local_file=str(path.relative_to(ROOT)),kind='video',sha256=digest(path),source_sha256=source.get('source_sha256'),bytes=path.stat().st_size,**meta,processing={'resize':'Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.','source_start_seconds':source.get('source_start_seconds',0),'excerpt_seconds':source.get('excerpt_seconds'),'audio':'Preserved when present, encoded to AAC.','cover_time_seconds':cover_time},**common))
-    im=Image.open(cover)
-    files.append(dict(path=f'catalog/covers/{slug}.jpg',local_file=str(cover.relative_to(ROOT)),kind='video_cover',sha256=digest(cover),bytes=cover.stat().st_size,width=im.width,height=im.height,derived_from=f'catalog/videos/{slug}.mp4',**common))
+
+    clip = source.get('clip')
+    if clip is None:
+        title, caption, place_slug, category = CLIP_DATA[slug]
+    else:
+        title, caption, place_slug, category = (clip[key] for key in ('title', 'caption', 'place_slug', 'category'))
+    entry = dict(id=stable('clip',slug), title=title, caption=caption,
+                 place_id=None if slug == 'iceland-waterfall' else stable('place',place_slug),
+                 publisher_id=stable('publisher','north-america' if place_slug in ['new-york','yosemite'] else 'europe'),
+                 video_path=video_path, cover_path=cover_path, source_url=source['@id'].replace('#video',''),
+                 author=source.get('author'), duration=meta['duration'], category=category)
+    if clip is not None and 'feed_rank' in clip:
+        entry['feed_rank'] = clip['feed_rank']
+    clips.append(entry)
+
+    inspection = source.get('inspection')
+    if inspection is None:
+        inspection = {'reviewed_on':'2026-11-03','times_seconds':[0.15,round(meta['duration']/2,3),round(meta['duration']-.3,3)],
+                      'scene':reviews[slug],'method':'Human visual review of extracted start, midpoint and end representative frames; not a full-frame audit.'}
+    processing = source.get('processing', {'resize':'Aspect-preserving fit within 1280x720; H.264 CRF 24; original playback speed and frame rate.',
+                                           'source_start_seconds':source.get('source_start_seconds',0),'excerpt_seconds':source.get('excerpt_seconds'),
+                                           'audio':'Preserved when present, encoded to AAC.','cover_time_seconds':cover_time})
+    common = dict(source_url=entry['source_url'], download_url=source['contentUrl'], author=source.get('author'),
+                  license='Mixkit Stock Video Free License' if source['copyrightNotice'] == 'Free' else source['copyrightNotice'],
+                  license_url=source['license'], inspection=inspection)
+    files.append(dict(path=video_path,local_file=str(path.relative_to(ROOT)),kind='video',sha256=digest(path),
+                      source_sha256=source.get('source_sha256'),bytes=path.stat().st_size,**meta,processing=processing,**common))
+    with Image.open(cover) as image:
+        files.append(dict(path=cover_path,local_file=str(cover.relative_to(ROOT)),kind='video_cover',sha256=digest(cover),
+                          bytes=cover.stat().st_size,width=image.width,height=image.height,derived_from=video_path,**common))
 
 photo_reviews={'paris':'Daytime Eiffel Tower seen from the Seine.','paris-skyline':'Daytime Eiffel Tower above Paris rooftops.','rome':'Colosseum arches with foreground greenery.','venice':'Narrow Venetian canal and historic facades.','lisbon':'Red historic tram turning through a tiled Lisbon street; incidental local signage is part of the real scene.','swiss-alps':'Rugged Swiss Alpine slopes; exact mountain not claimed.','london':'Close view of Tower Bridge stone towers and blue suspension elements.','barcelona':'Distinctive entrance building at Park Guell with Barcelona beyond.','santorini':'Blue church dome and whitewashed Santorini roof, sea beyond.','iceland':'Distinctive broad Dynjandi waterfall, supported by the source description.','new-york':'New York skyline and waterfront at sunset.','yosemite':'Yosemite Valley granite walls and river reflection.','banff':'Moraine Lake turquoise water and mountain backdrop.','banff-shore':'A distinct portrait view of Moraine Lake through trees.'}
 for source in json.loads((ASSETS/'photo-sources.json').read_text()):

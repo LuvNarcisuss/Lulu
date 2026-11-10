@@ -114,5 +114,113 @@
     "source_start_seconds": 114,
     "excerpt_seconds": 10,
     "source_sha256": "79e9e8d59ef051c093752f931fd33662f90f2481a2ecb303113942497dd986b3"
+  },
+  {
+    "slug": "westminster-walk",
+    "id_number": "13986779",
+    "name": "Westminster on Foot",
+    "contentUrl": "https://videos.pexels.com/video-files/13986779/13986779-hd_1080_1920_60fps.mp4",
+    "@id": "https://www.pexels.com/video/people-walking-near-big-ben-13986779/",
+    "copyrightNotice": "Pexels License",
+    "license": "https://www.pexels.com/license/",
+    "source_sha256": "25067ded586b79a9f28488735e73ceae292611c7d287bf53c47741d214a4a09e",
+    "author": "Boyan Minchev",
+    "storage_folder": "shorts-2026-11-09",
+    "processing": {
+      "resize": "720x1280; H.264 CRF 23 with fast start.",
+      "source_start_seconds": 2,
+      "excerpt_seconds": 12,
+      "audio": "Removed the source audio.",
+      "cover_time_seconds": 6
+    },
+    "inspection": {
+      "reviewed_on": "2026-11-09",
+      "times_seconds": [
+        0.25,
+        6,
+        11.5
+      ],
+      "scene": "Daylight view of Elizabeth Tower and Parliament with pedestrians crossing and waiting at Westminster. No added captions or watermark.",
+      "method": "Visual review of representative opening, middle and closing frames from the encoded video. Full video decoded without error."
+    },
+    "clip": {
+      "title": "Westminster on Foot",
+      "caption": "Pedestrians gather in front of Elizabeth Tower and the Houses of Parliament on a sunny London afternoon.",
+      "place_slug": "london",
+      "category": "Landmark walk",
+      "feed_rank": 1
+    }
+  },
+  {
+    "slug": "brooklyn-bridge-walk",
+    "id_number": "31704457",
+    "name": "Across the Brooklyn Bridge",
+    "contentUrl": "https://videos.pexels.com/video-files/31704457/13509023_1080_1920_24fps.mp4",
+    "@id": "https://www.pexels.com/video/walking-on-brooklyn-bridge-in-nyc-31704457/",
+    "copyrightNotice": "Pexels License",
+    "license": "https://www.pexels.com/license/",
+    "source_sha256": "615cba71407279d6183f374236fd1ab1b0e6257415d0458d1cb399368ab5bd7a",
+    "author": "Daniela S\u00e1nchez",
+    "storage_folder": "shorts-2026-11-09",
+    "processing": {
+      "resize": "720x1280; H.264 CRF 23 with fast start.",
+      "source_start_seconds": 0,
+      "excerpt_seconds": 5.8,
+      "audio": "Removed the source audio.",
+      "cover_time_seconds": 2.9
+    },
+    "inspection": {
+      "reviewed_on": "2026-11-09",
+      "times_seconds": [
+        0.25,
+        2.9,
+        5.4
+      ],
+      "scene": "Pedestrians moving in both directions beneath the Brooklyn Bridge cable spans and stone arches. No added captions or watermark.",
+      "method": "Visual review of representative opening, middle and closing frames from the encoded video. Full video decoded without error."
+    },
+    "clip": {
+      "title": "Across the Brooklyn Bridge",
+      "caption": "Walk the wooden pedestrian promenade past the bridge cables and stone arches in New York City.",
+      "place_slug": "new-york",
+      "category": "Landmark walk",
+      "feed_rank": 2
+    }
+  },
+  {
+    "slug": "colosseum-visitors",
+    "id_number": "36582031",
+    "name": "A Walk Past the Colosseum",
+    "contentUrl": "https://videos.pexels.com/video-files/36582031/15510121_1080_1920_30fps.mp4",
+    "@id": "https://www.pexels.com/video/visitors-walking-near-the-iconic-colosseum-36582031/",
+    "copyrightNotice": "Pexels License",
+    "license": "https://www.pexels.com/license/",
+    "source_sha256": "29032a418fa7cb27a7262ed3716a4e292a46ccc32f13a38109ef38c695c497e8",
+    "author": "Hanna M",
+    "storage_folder": "shorts-2026-11-09",
+    "processing": {
+      "resize": "720x1280; H.264 CRF 23 with fast start.",
+      "source_start_seconds": 0,
+      "excerpt_seconds": 8,
+      "audio": "Removed the source audio.",
+      "cover_time_seconds": 4
+    },
+    "inspection": {
+      "reviewed_on": "2026-11-09",
+      "times_seconds": [
+        0.25,
+        4,
+        7.5
+      ],
+      "scene": "Recognizable Colosseum arches, the adjacent stone pavement and visitors passing by. No added captions or watermark.",
+      "method": "Visual review of representative opening, middle and closing frames from the encoded video. Full video decoded without error."
+    },
+    "clip": {
+      "title": "A Walk Past the Colosseum",
+      "caption": "Visitors cross the plaza outside the Roman amphitheater as daylight breaks through the clouds.",
+      "place_slug": "rome",
+      "category": "Landmark walk",
+      "feed_rank": 3
+    }
   }
 ]

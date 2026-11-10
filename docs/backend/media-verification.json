@@ -289,6 +289,54 @@
       "sha256": "588bd0ea156d99d6d62c8033ed132f675b956b0b799638e7a9a1b923d49fb739",
       "contentType": "image/jpeg",
       "verified": true
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/westminster-walk.mp4",
+      "status": 200,
+      "bytes": 6324000,
+      "sha256": "d85a3966111594f0edbe7449d7839588e0ce01223d5ba92bbf2f520596a84d6b",
+      "contentType": "video/mp4",
+      "verified": true
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/westminster-walk.jpg",
+      "status": 200,
+      "bytes": 212093,
+      "sha256": "23cc19e9b259f208f5981c6cd79702a103adbab0b09e8879292979e4ee737416",
+      "contentType": "image/jpeg",
+      "verified": true
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/brooklyn-bridge-walk.mp4",
+      "status": 200,
+      "bytes": 1538744,
+      "sha256": "fdaea576d9dcb61894611fe74317f338eb1e58726ea5af7c3259a2fa2f5752db",
+      "contentType": "video/mp4",
+      "verified": true
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/brooklyn-bridge-walk.jpg",
+      "status": 200,
+      "bytes": 161188,
+      "sha256": "54b9af147a65e7dfd10a3dcd6fe1eb78f1e85f56b70de3ce5fe46da0de91e3fe",
+      "contentType": "image/jpeg",
+      "verified": true
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/colosseum-visitors.mp4",
+      "status": 200,
+      "bytes": 2391364,
+      "sha256": "61548058bf305980763ce8dba2851cd7bf64d6fed63181aa8f3f070f2b89b245",
+      "contentType": "video/mp4",
+      "verified": true
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/colosseum-visitors.jpg",
+      "status": 200,
+      "bytes": 129482,
+      "sha256": "3540650bf154277ce3fb6015cb08185c8e7ded2b259e958fcbf632ae1945c15a",
+      "contentType": "image/jpeg",
+      "verified": true
     }
   ]
 }

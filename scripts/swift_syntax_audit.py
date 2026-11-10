@@ -9,7 +9,7 @@ import tree_sitter_swift
 root = pathlib.Path(__file__).resolve().parents[1]
 parser = tree_sitter.Parser(tree_sitter.Language(tree_sitter_swift.language()))
 failures = []
-files = sorted((root / "TravelApp/Sources").rglob("*.swift"))
+files = sorted((root / "LuluApp/Sources").rglob("*.swift"))
 for path in files:
     data = path.read_bytes()
     tree = parser.parse(data)

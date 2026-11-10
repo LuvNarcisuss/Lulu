@@ -162,6 +162,48 @@
       "author": "National Park Service",
       "duration": 10.01,
       "category": "National Park"
+    },
+    {
+      "id": "36aeba40-bcc7-5b77-b46d-40c752da41e3",
+      "title": "Westminster on Foot",
+      "caption": "Pedestrians gather in front of Elizabeth Tower and the Houses of Parliament on a sunny London afternoon.",
+      "place_id": "7117c66f-51a0-5b19-94dc-ebb4a4841f28",
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/shorts-2026-11-09/westminster-walk.mp4",
+      "cover_path": "catalog/shorts-2026-11-09/westminster-walk.jpg",
+      "source_url": "https://www.pexels.com/video/people-walking-near-big-ben-13986779/",
+      "author": "Boyan Minchev",
+      "duration": 12.0,
+      "category": "Landmark walk",
+      "feed_rank": 1
+    },
+    {
+      "id": "f70c2836-512e-58ee-b4a4-a88abf11e0c8",
+      "title": "Across the Brooklyn Bridge",
+      "caption": "Walk the wooden pedestrian promenade past the bridge cables and stone arches in New York City.",
+      "place_id": "ea21d48f-af5a-5cf1-9435-5690e8edd4fc",
+      "publisher_id": "ae1fe04b-4e55-5710-b478-aa2a6f32f7d4",
+      "video_path": "catalog/shorts-2026-11-09/brooklyn-bridge-walk.mp4",
+      "cover_path": "catalog/shorts-2026-11-09/brooklyn-bridge-walk.jpg",
+      "source_url": "https://www.pexels.com/video/walking-on-brooklyn-bridge-in-nyc-31704457/",
+      "author": "Daniela S\u00e1nchez",
+      "duration": 5.791667,
+      "category": "Landmark walk",
+      "feed_rank": 2
+    },
+    {
+      "id": "a7647473-1256-5bcf-aea0-9f3d033435c4",
+      "title": "A Walk Past the Colosseum",
+      "caption": "Visitors cross the plaza outside the Roman amphitheater as daylight breaks through the clouds.",
+      "place_id": "a42c1b6c-7fcc-51b7-837d-0ee7e3375fbe",
+      "publisher_id": "470f3e27-4b1c-5a4c-ae90-c3d0fe9cb291",
+      "video_path": "catalog/shorts-2026-11-09/colosseum-visitors.mp4",
+      "cover_path": "catalog/shorts-2026-11-09/colosseum-visitors.jpg",
+      "source_url": "https://www.pexels.com/video/visitors-walking-near-the-iconic-colosseum-36582031/",
+      "author": "Hanna M",
+      "duration": 8.0,
+      "category": "Landmark walk",
+      "feed_rank": 3
     }
   ],
   "places": [

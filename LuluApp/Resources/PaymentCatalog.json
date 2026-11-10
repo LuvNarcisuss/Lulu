@@ -1,0 +1,49 @@
+{
+  "tiers": [
+    {
+      "coins": 400,
+      "productID": "iltpkpefqtjskxel",
+      "referenceUSD": "0.99"
+    },
+    {
+      "coins": 800,
+      "productID": "eweerqrczkwsjyjn",
+      "referenceUSD": "1.99"
+    },
+    {
+      "coins": 2450,
+      "productID": "bfktecvbuyjzwxtp",
+      "referenceUSD": "4.99"
+    },
+    {
+      "coins": 5150,
+      "productID": "zsadvhodvgamjqqp",
+      "referenceUSD": "9.99"
+    },
+    {
+      "coins": 10800,
+      "productID": "qtqrufubdpyvzjzs",
+      "referenceUSD": "19.99"
+    },
+    {
+      "coins": 17000,
+      "productID": "ipcijraguygtcpsa",
+      "referenceUSD": "29.99"
+    },
+    {
+      "coins": 29400,
+      "productID": "azjrhiwubtjsrbzh",
+      "referenceUSD": "49.99"
+    },
+    {
+      "coins": 42700,
+      "productID": "qjcdfljcmzajynnd",
+      "referenceUSD": "69.99"
+    },
+    {
+      "coins": 63700,
+      "productID": "rzeethasxinmprew",
+      "referenceUSD": "99.99"
+    }
+  ]
+}

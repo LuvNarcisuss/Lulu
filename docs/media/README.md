@@ -2,14 +2,14 @@
 
 ## Delivery
 
-The public catalog contains 11 recorded travel films, 11 matching covers, 12 destination records, 12 original-English guides, and two explicitly editorial publishers. There are 14 destination photographs, including two optional alternate views. No engagement, member accounts, private collections or online status is seeded.
+The public catalog contains 14 recorded travel films, 14 matching covers, 12 destination records, 12 original-English guides, and two explicitly editorial publishers. There are 14 destination photographs, including two optional alternate views. No engagement, member accounts, private collections or online status is seeded.
 
 - `Assets/catalog.json`: flat records matching `docs/tasks/interfaces.md`; UUIDv5 identifiers remain stable when regenerated.
 - `Assets/media-manifest.json`: every business-media object path, local file, SHA-256, byte count, dimensions, video duration/frame rate, source, creator where identified, license, processing and actual scene review.
 - `Assets/video-sources.json` and `Assets/photo-sources.json`: selected upstream source metadata. An uncredited Mixkit creator remains null instead of being invented.
-- The 36 catalog media files (49,924,918 bytes) are served from the dedicated Supabase project. The manifest `path` identifies each bucket and object, and `local_file` identifies its ignored staging path under `Assets/catalog/`. Keep catalog binaries out of the checkout, Git, and the application target.
-- `TravelApp/Resources/Assets.xcassets/`: 36 generated transparent raster icons, two generated portrait backgrounds and one independently generated opaque AppIcon. These are bundled shell resources.
-- `TravelApp/Resources/Fonts/`: licensed custom typography and OFL licenses. Exact font names and registration paths are recorded in `fonts.json`.
+- The 42 catalog media files (60,681,789 bytes) are served from the dedicated Supabase project. The manifest `path` identifies each bucket and object, and `local_file` identifies its ignored staging path under `Assets/catalog/`. Keep catalog binaries out of the checkout, Git, and the application target.
+- `LuluApp/Resources/Assets.xcassets/`: 37 generated transparent raster icons, two generated portrait backgrounds, one independently generated opaque AppIcon, and its toolbar logo derivative. These are bundled shell resources.
+- `LuluApp/Resources/Fonts/`: licensed custom typography and OFL licenses. Exact font names and registration paths are recorded in `fonts.json`.
 
 ## Actual scene review
 
@@ -21,9 +21,11 @@ Three initially considered Mixkit films were excluded: a desert scene whose sour
 
 No generated image substitutes for real destination photography or footage. Real-world signage in the Times Square and Lisbon scenes is incidental location content, not app-owned copy or an endorsement. The Eiffel Tower film is daytime footage; nighttime illumination footage was excluded.
 
+The November 9 additions show pedestrians and landmarks in the same portrait frames. Westminster and the Colosseum link to the existing London and Rome guides. The Brooklyn Bridge clip links to the New York City guide. All three encoded videos were decoded through the end and reviewed at three representative timestamps.
+
 ## Sources and licenses
 
-The item-level source and license links in the manifest are authoritative provenance records. The sources were accessed on 2026-11-03.
+The item-level source and license links in the manifest are authoritative provenance records. The initial sources were accessed on November 3, 2026. The Westminster, Colosseum, and Brooklyn Bridge additions were accessed and reviewed on November 9, 2026.
 
 - [Pexels License](https://www.pexels.com/license/) allows use and modification in applications. Media is used here within editorial travel discovery and planning, with creator credits and primary planning links. It is not sold as unaltered stock, offered as a wallpaper library, or used to imply creator/brand endorsement.
 - [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree) applies only to the seven selected Mixkit items whose source metadata and item pages explicitly mark the Free License. Restricted-license items were excluded. The full Free License modal response is preserved in `mixkit-video-free-license.html`; [Mixkit User Terms](https://mixkit.co/terms/) also apply.
@@ -36,7 +38,11 @@ The built-in `image_gen.imagegen` tool generated the icons and backgrounds. The 
 
 The 6x6 icon sheet follows the exact shared row-major contract. Each cell was alpha-cropped, fitted proportionally within 144x144 and centered on a transparent 160x160 PNG. The sheet's generated alpha is preserved; no icons were drawn in code. The AppIcon is a separate 1254x1254 model original downsampled to 1024x1024 RGB, with no baked corner mask. The two 1024x1536 background originals are copied without pixel changes. All selected originals were visually inspected, including their actual alpha, absence of app-name text and the icon ordering.
 
-The welcome illustration is a watercolor collage, not a geographically literal destination photograph. It deliberately has no selected app brand or name. A separate opaque 1024x1024 travel-compass AppIcon is generated for this unnamed application. It carries no name or final brand; the owner-selected app name remains a release dependency.
+The welcome illustration is a watercolor collage, not a geographically literal destination photograph. The illustration has no lettering. The separate opaque 1024x1024 AppIcon for Lulu depicts a travel compass without lettering. The `logo-lulu` toolbar asset is a 96x96 copy resized from the packaged AppIcon for display at 32 points.
+
+## Street map
+
+Explore bundles a modified [OpenFreeMap Liberty style](https://tiles.openfreemap.org/styles/liberty). Its vector data, attribution, sprites and glyphs come from [OpenFreeMap](https://openfreemap.org/), OpenMapTiles and OpenStreetMap. The bundled license is in `LuluApp/Resources/Maps/OpenFreeMapStyleLicense.txt`. Lulu's changes restrict place labels to explicit English names and omit original road shield text. Streets and other geometry remain visible when an English label is absent. The map style has no API key and fetches live tiles. Apple Maps is only opened by the separate directions action.
 
 ## Fonts
 

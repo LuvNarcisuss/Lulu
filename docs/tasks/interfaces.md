@@ -14,7 +14,9 @@ This contract is binding across independent feature work. Contact the coordinato
     var balance: Int { get }
     init()
     func rows(_ key: String) -> [Record]
-    func login() async throws
+    var hasSavedSession: Bool { get }
+    var savedSessionIsGuest: Bool { get }
+    func signInWithOneTap() async throws
     func refresh() async throws
     @discardableResult func perform(_ action: String, _ payload: [String: JSONValue]) async throws -> Record
     func upload(data: Data, contentType: String, purpose: String) async throws -> String
@@ -31,7 +33,7 @@ Snapshot keys: `clips`, `places`, `guides`, `profiles`, `likes`, `saved_clips`, 
 ## Record fields
 
 - profile: id, display_name, bio, avatar_path, is_editorial, source_url, consent_version. `profiles` includes editorial publishers (never auth users) and discoverable real members. Only actual members support chat. Profile lookup uses id.
-- clip: id, title, caption, place_id, publisher_id, video_path, cover_path, source_url, author, duration, category. No invented base likes/comments.
+- clip: id, title, caption, place_id, publisher_id, video_path, cover_path, source_url, author, duration, category, optional positive feed_rank for discovery order. No invented base likes/comments.
 - place: id, name, city, country, region (`Europe` or `North America`), category, latitude, longitude, summary, photo_path, source_url, best_time, practical_tip.
 - guide: id, place_id, title, intro, sections (array of {title,body}), source_name, source_url, reading_minutes.
 - likes/saved_clips: id, clip_id, user_id. saved_places: id, place_id, user_id.
@@ -51,6 +53,7 @@ All payload keys below are snake_case. Optional IDs use null when absent. Every 
 - `profile.update`: display_name, bio, avatar_path (optional), consent_version (optional).
 - `clip.like` / `clip.save`: clip_id, enabled (bool).
 - `place.save`: place_id, enabled.
+- `safety.hide_place`: place_id, enabled. The store routes this action to the separate `travel_guide_visibility` RPC. Calling that RPC without arguments returns the viewer's `hidden_place_ids`.
 - `comment.add`: clip_id, body, parent_id (nullable); `comment.delete`: comment_id.
 - `relationship.follow`: profile_id, enabled.
 - `safety.block`: profile_id, enabled; `safety.report`: target_kind, target_id, reason, details; `safety.unreport`: report_id.
@@ -60,7 +63,7 @@ All payload keys below are snake_case. Optional IDs use null when absent. Every 
 - `chat.send`: id (client-generated stable UUID idempotency key), conversation_id, body, attachment_path (nullable), attachment_type (nullable), reply_to (nullable).
 - `chat.preferences`: conversation_id, pinned/muted/archived/draft/last_read_at (partial keys preserve unspecified fields).
 - `submission.create`: id, title, caption, video_path, cover_path, place_id (nullable); `submission.delete`: submission_id.
-- No purchase credit action exposed until owner product IDs and verified delivery are implemented. Wallet UI remains accurately unavailable.
+- `guide.submit`, `guide.price` and `guide.unlock` route to isolated authenticated guide RPCs. `travel_coin_state` returns the wallet balance, activity and available guide offers. Apple delivery uses `travel-coin-purchase`. Its service-only credit RPC is unavailable to app clients.
 
 ## Shared UIKit design (coordinator owns implementation)
 

@@ -944,6 +944,186 @@
         "scene": "A distinct portrait view of Moraine Lake through trees. No added caption or watermark.",
         "method": "Human visual review of the actual downloaded image."
       }
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/westminster-walk.mp4",
+      "local_file": "Assets/catalog/shorts-2026-11-09/westminster-walk.mp4",
+      "kind": "video",
+      "sha256": "d85a3966111594f0edbe7449d7839588e0ce01223d5ba92bbf2f520596a84d6b",
+      "source_sha256": "25067ded586b79a9f28488735e73ceae292611c7d287bf53c47741d214a4a09e",
+      "bytes": 6324000,
+      "width": 720,
+      "height": 1280,
+      "duration": 12.0,
+      "codec": "h264",
+      "frame_rate": "30/1",
+      "processing": {
+        "resize": "720x1280; H.264 CRF 23 with fast start.",
+        "source_start_seconds": 2,
+        "excerpt_seconds": 12,
+        "audio": "Removed the source audio.",
+        "cover_time_seconds": 6
+      },
+      "source_url": "https://www.pexels.com/video/people-walking-near-big-ben-13986779/",
+      "download_url": "https://videos.pexels.com/video-files/13986779/13986779-hd_1080_1920_60fps.mp4",
+      "author": "Boyan Minchev",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-09",
+        "times_seconds": [
+          0.25,
+          6,
+          11.5
+        ],
+        "scene": "Daylight view of Elizabeth Tower and Parliament with pedestrians crossing and waiting at Westminster. No added captions or watermark.",
+        "method": "Visual review of representative opening, middle and closing frames from the encoded video. Full video decoded without error."
+      }
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/westminster-walk.jpg",
+      "local_file": "Assets/catalog/shorts-2026-11-09/westminster-walk.jpg",
+      "kind": "video_cover",
+      "sha256": "23cc19e9b259f208f5981c6cd79702a103adbab0b09e8879292979e4ee737416",
+      "bytes": 212093,
+      "width": 720,
+      "height": 1280,
+      "derived_from": "catalog/shorts-2026-11-09/westminster-walk.mp4",
+      "source_url": "https://www.pexels.com/video/people-walking-near-big-ben-13986779/",
+      "download_url": "https://videos.pexels.com/video-files/13986779/13986779-hd_1080_1920_60fps.mp4",
+      "author": "Boyan Minchev",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-09",
+        "times_seconds": [
+          0.25,
+          6,
+          11.5
+        ],
+        "scene": "Daylight view of Elizabeth Tower and Parliament with pedestrians crossing and waiting at Westminster. No added captions or watermark.",
+        "method": "Visual review of representative opening, middle and closing frames from the encoded video. Full video decoded without error."
+      }
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/brooklyn-bridge-walk.mp4",
+      "local_file": "Assets/catalog/shorts-2026-11-09/brooklyn-bridge-walk.mp4",
+      "kind": "video",
+      "sha256": "fdaea576d9dcb61894611fe74317f338eb1e58726ea5af7c3259a2fa2f5752db",
+      "source_sha256": "615cba71407279d6183f374236fd1ab1b0e6257415d0458d1cb399368ab5bd7a",
+      "bytes": 1538744,
+      "width": 720,
+      "height": 1280,
+      "duration": 5.791667,
+      "codec": "h264",
+      "frame_rate": "24/1",
+      "processing": {
+        "resize": "720x1280; H.264 CRF 23 with fast start.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": 5.8,
+        "audio": "Removed the source audio.",
+        "cover_time_seconds": 2.9
+      },
+      "source_url": "https://www.pexels.com/video/walking-on-brooklyn-bridge-in-nyc-31704457/",
+      "download_url": "https://videos.pexels.com/video-files/31704457/13509023_1080_1920_24fps.mp4",
+      "author": "Daniela S\u00e1nchez",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-09",
+        "times_seconds": [
+          0.25,
+          2.9,
+          5.4
+        ],
+        "scene": "Pedestrians moving in both directions beneath the Brooklyn Bridge cable spans and stone arches. No added captions or watermark.",
+        "method": "Visual review of representative opening, middle and closing frames from the encoded video. Full video decoded without error."
+      }
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/brooklyn-bridge-walk.jpg",
+      "local_file": "Assets/catalog/shorts-2026-11-09/brooklyn-bridge-walk.jpg",
+      "kind": "video_cover",
+      "sha256": "54b9af147a65e7dfd10a3dcd6fe1eb78f1e85f56b70de3ce5fe46da0de91e3fe",
+      "bytes": 161188,
+      "width": 720,
+      "height": 1280,
+      "derived_from": "catalog/shorts-2026-11-09/brooklyn-bridge-walk.mp4",
+      "source_url": "https://www.pexels.com/video/walking-on-brooklyn-bridge-in-nyc-31704457/",
+      "download_url": "https://videos.pexels.com/video-files/31704457/13509023_1080_1920_24fps.mp4",
+      "author": "Daniela S\u00e1nchez",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-09",
+        "times_seconds": [
+          0.25,
+          2.9,
+          5.4
+        ],
+        "scene": "Pedestrians moving in both directions beneath the Brooklyn Bridge cable spans and stone arches. No added captions or watermark.",
+        "method": "Visual review of representative opening, middle and closing frames from the encoded video. Full video decoded without error."
+      }
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/colosseum-visitors.mp4",
+      "local_file": "Assets/catalog/shorts-2026-11-09/colosseum-visitors.mp4",
+      "kind": "video",
+      "sha256": "61548058bf305980763ce8dba2851cd7bf64d6fed63181aa8f3f070f2b89b245",
+      "source_sha256": "29032a418fa7cb27a7262ed3716a4e292a46ccc32f13a38109ef38c695c497e8",
+      "bytes": 2391364,
+      "width": 720,
+      "height": 1280,
+      "duration": 8.0,
+      "codec": "h264",
+      "frame_rate": "30/1",
+      "processing": {
+        "resize": "720x1280; H.264 CRF 23 with fast start.",
+        "source_start_seconds": 0,
+        "excerpt_seconds": 8,
+        "audio": "Removed the source audio.",
+        "cover_time_seconds": 4
+      },
+      "source_url": "https://www.pexels.com/video/visitors-walking-near-the-iconic-colosseum-36582031/",
+      "download_url": "https://videos.pexels.com/video-files/36582031/15510121_1080_1920_30fps.mp4",
+      "author": "Hanna M",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-09",
+        "times_seconds": [
+          0.25,
+          4,
+          7.5
+        ],
+        "scene": "Recognizable Colosseum arches, the adjacent stone pavement and visitors passing by. No added captions or watermark.",
+        "method": "Visual review of representative opening, middle and closing frames from the encoded video. Full video decoded without error."
+      }
+    },
+    {
+      "path": "catalog/shorts-2026-11-09/colosseum-visitors.jpg",
+      "local_file": "Assets/catalog/shorts-2026-11-09/colosseum-visitors.jpg",
+      "kind": "video_cover",
+      "sha256": "3540650bf154277ce3fb6015cb08185c8e7ded2b259e958fcbf632ae1945c15a",
+      "bytes": 129482,
+      "width": 720,
+      "height": 1280,
+      "derived_from": "catalog/shorts-2026-11-09/colosseum-visitors.mp4",
+      "source_url": "https://www.pexels.com/video/visitors-walking-near-the-iconic-colosseum-36582031/",
+      "download_url": "https://videos.pexels.com/video-files/36582031/15510121_1080_1920_30fps.mp4",
+      "author": "Hanna M",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "inspection": {
+        "reviewed_on": "2026-11-09",
+        "times_seconds": [
+          0.25,
+          4,
+          7.5
+        ],
+        "scene": "Recognizable Colosseum arches, the adjacent stone pavement and visitors passing by. No added captions or watermark.",
+        "method": "Visual review of representative opening, middle and closing frames from the encoded video. Full video decoded without error."
+      }
     }
   ],
   "rejected": [
