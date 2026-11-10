@@ -7,93 +7,170 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		88A0D2BEC0021252B7269183 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = 1B396E2555E0C78E55699EE8 /* MapLibre */; };
-		CEC28FC3CB9E9845F9DE697B /* ExploreMapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = 126C398598DC977E953AF4FA /* ExploreMapStyle.json */; };
+		04E844829C4C464459C3BD7E /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E8D61184C3E4E00BC680EB /* Record.swift */; };
+		080951B91C1ACF529444A98D /* PrivacyPolicy.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9C786AEF81A4894CFE7DB169 /* PrivacyPolicy.pdf */; };
+		0ABFB7AC74DBBA5479719E08 /* ProfileControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7CEBCA93B333303F227F322 /* ProfileControllers.swift */; };
+		0B36185B095E3F564029A3C2 /* BackendConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 9EBBDC7AA0E742CC254ADB20 /* BackendConfig.json */; };
+		0EBDE66BF0C08773786B48C2 /* LocalPurchaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF34A77FB58150C39436D4E3 /* LocalPurchaseTests.swift */; };
+		13CEAD33F6A9D76237567934 /* ExploreControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8D87EA615B9E677248A556 /* ExploreControllers.swift */; };
+		14B2F463378013A954F0CB1C /* TravelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925BCCD20057E59ACCC11380 /* TravelStore.swift */; };
+		1AC129056DD4A7FC814F476B /* ClipFeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFB7E23BEFC455FF34A1434 /* ClipFeedController.swift */; };
+		1C34DD5166A9B0F79F1446ED /* PaymentCatalog.json in Resources */ = {isa = PBXBuildFile; fileRef = C66F9A5B12ACE45AE903A34D /* PaymentCatalog.json */; };
 		284F0793380D3495790E836A /* OpenFreeMapStyleLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4ADBA5787201EB1C1B2DB667 /* OpenFreeMapStyleLicense.txt */; };
-		2810FCAD54BDE58F9CE15CBC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68B92D57B105F8A38F523519 /* LaunchScreen.storyboard */; };
-		2A78EC812BC741708A461B60 /* PaymentCatalog.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B183409FB50B305EC00554 /* PaymentCatalog.json */; };
-		2B7D33D85C27A0A804A8FC54 /* ProfileControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1020B0C38FC0EA383484CA07 /* ProfileControllers.swift */; };
-		2D55007B7B7B8A8D9BEFF68D /* ConversationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046DF126925B96A2CC1F4540 /* ConversationController.swift */; };
-		320F9A546404EE599987746C /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 908523CF8E3A8013985D95D8 /* Supabase */; };
-		3BD32B34AA526A20778E9F63 /* LaunchServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAE4720F0925C6BC2D1C2FE /* LaunchServices.swift */; };
-		3DE674099C088EF536450A1A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40C945BBED76871BCE3C75EF /* Assets.xcassets */; };
-		564C6428CB5EDF94DDA9E2CD /* TravelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E77EE71860218724DEE445 /* TravelStore.swift */; };
-		5A3AF27385187B6035C8B86D /* WalletController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9683BDE6EAAA718B8632BDF /* WalletController.swift */; };
-		5E341F3FA9DED89C93720305 /* BackendConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B938AEDE2523D7000A1C8A7 /* BackendConfiguration.swift */; };
-		684DA518D288820541452584 /* TermsOfService.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 1E93943EBA9E60A38165FB88 /* TermsOfService.pdf */; };
-		6EA337E7CB98384EED531AF9 /* TravelerCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E9D79A7E25E69CB05ACCBE /* TravelerCodeController.swift */; };
-		70F5E08E88323E852C83B9C3 /* MediaCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 50654214D2C3AFC023D8C4AF /* MediaCredits.json */; };
-		722D0DD60B153F9F75970472 /* BackendConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A6AB132149548D2D13F4068 /* BackendConfig.json */; };
-		7C5608770FE56AD1D3B2ADD1 /* ChatsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FC5F262097FF7733110ADE /* ChatsController.swift */; };
-		80389604E16C08753EB378C8 /* PrivacyPolicy.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F0476B27AF64DFB883167EFC /* PrivacyPolicy.pdf */; };
-		983DD1131EC0095DA4DA8264 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5863BC118911651CAD59C7 /* Application.swift */; };
-		9E39EDC557066D5B66D7E9DB /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E9EAE7E89414A36F5FBB2D /* Record.swift */; };
-		A2B5C632121DA0E8BDA87CBA /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = CB632F3B0149A297F86BE103 /* Fonts */; };
-		A6F83D50FC6387AF446CFE4F /* ReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2061C297C55B9F49CF3906 /* ReportController.swift */; };
-		B45D802C8DF4577CEBC576EC /* TravelDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3EAF77BEA6DD75195264CDC /* TravelDesign.swift */; };
-		C790A2D9D694318A37FDADE8 /* CreationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D3E863CD6E83FE5A2174B7 /* CreationController.swift */; };
-		C85FD2C5638C587EB6A5F989 /* ClipFeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A44215A390E2D8A431A135E /* ClipFeedController.swift */; };
-		CA1BC03E343AFEB9F39471F5 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9735792D0CA0BE5E83BD5F65 /* SettingsController.swift */; };
-		D76AD24E88380D83EF9F2ACF /* ExploreControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386B58661466404B7B4194BC /* ExploreControllers.swift */; };
-		E377EF7C4A61F9141090CDA0 /* PaymentCatalogAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAED3E7E2BBDB8B77B51C2EB /* PaymentCatalogAdapter.swift */; };
-		E4632DA6B4B107EEFA001C1D /* CommentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709660D334CFA850AD177370 /* CommentsController.swift */; };
-		E9D9F5B8C8A9C15612B86698 /* SocialSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB6A30AA6F1923EF523F354 /* SocialSupport.swift */; };
-		F187CB003F9AB4F886CF3F78 /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406309FFD62BB6B7405076B8 /* EditProfileController.swift */; };
-		F48FFFB65E65410C21C5FFC5 /* ShortsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557EEC157E6C8C68BE4A55AA /* ShortsController.swift */; };
-		F7FF1179B1A14C2483559254 /* JourneyControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF12D09710CB6AAD5451363 /* JourneyControllers.swift */; };
-		FE67EA8E9E19588643765741 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 4A1028466122BB29BBBB142C /* Alamofire */; };
+		34D55AABB6AE6FAE79683654 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708798C5BDCB582A476CAA86 /* Application.swift */; };
+		3CD92C2293E10849390EBED4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 310AAD4CD0F591E31D75B256 /* Alamofire */; };
+		3DFE01781D2F479876BB9E3A /* ConversationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43AB8E30F2FE8ED1EDBEC7F /* ConversationController.swift */; };
+		465DE5AFC4134348C7FDCAF7 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 3198532D502CB56CD0B2344F /* Supabase */; };
+		6559A5863FEF44AFD7043144 /* PaymentCatalogAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB6E00D6EEED56D31D10E63 /* PaymentCatalogAdapter.swift */; };
+		743D923A6C1616F8AC6414A5 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 127B1073E58EE0BCF1AF2EA0 /* Fonts */; };
+		7C10A2903E7E299ED18655B2 /* JourneyControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7512C9240ACB4C22D079C45 /* JourneyControllers.swift */; };
+		8136DBC09D96E782E19274FD /* BackendConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B9FA1D174EFD4401984F14 /* BackendConfiguration.swift */; };
+		88A0D2BEC0021252B7269183 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = 1B396E2555E0C78E55699EE8 /* MapLibre */; };
+		90AA49BFAD12D4DE51CBCD4B /* ShortsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC5E43F153F0E6F7284A586 /* ShortsController.swift */; };
+		A384A9575F5278A137BD05D8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 553BEBA321D69E06109E0AAE /* LaunchScreen.storyboard */; };
+		A7CE8C62AF565B4AE019F551 /* ReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EABB56A1FF68DCE381048C1 /* ReportController.swift */; };
+		A8210AABC2A88055FC8FFAC8 /* SocialSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D36FE358E1CC05B4968474 /* SocialSupport.swift */; };
+		AC8D9372A3A052D3767A0AEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE69874CC43C1311BBB8B1F6 /* Assets.xcassets */; };
+		AF8B13116EDC287DF1B3EF5F /* TermsOfService.pdf in Resources */ = {isa = PBXBuildFile; fileRef = BFD247E11898F4555025484E /* TermsOfService.pdf */; };
+		AFB246D049CD87986F7596BE /* LaunchServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF4A1604499C4D84814F9C7 /* LaunchServices.swift */; };
+		AFD801ADBF084BDD86FF4E45 /* MediaCredits.json in Resources */ = {isa = PBXBuildFile; fileRef = 8859A8BD5D345D5C6363DB32 /* MediaCredits.json */; };
+		C7FFE706D1CBDF142B3EF6BF /* TravelerCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A41495E50F9093F27484A99 /* TravelerCodeController.swift */; };
+		CB4B554869706910B1B5D9EB /* ChatsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CEFCF9BF8133E6F9290FF9B /* ChatsController.swift */; };
+		CEC28FC3CB9E9845F9DE697B /* ExploreMapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = 126C398598DC977E953AF4FA /* ExploreMapStyle.json */; };
+		CF2AB94A5D2F8A4FB6A71E12 /* LuluCoins.storekit in Resources */ = {isa = PBXBuildFile; fileRef = EB86D55DBE36376521E9262B /* LuluCoins.storekit */; };
+		D3A2CFC9C9C4CCFA30DC3160 /* CreationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B503E0115CCE40D79B0C57F /* CreationController.swift */; };
+		D879A4EFAAB80B22EC16B7DC /* LocalStoreKitWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1E57D69E3DA12AC4833E84 /* LocalStoreKitWallet.swift */; };
+		DCA03627FCD2677CBBA35A85 /* WalletController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A0075BC15AF26AEDA8A5A7 /* WalletController.swift */; };
+		DD4AB96C40884ABF547D13DA /* CommentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088411F5861CCEAE9DAD30D0 /* CommentsController.swift */; };
+		E253126C5002EAA9BF84D257 /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CB1A55F3C531BFE9465D1B /* EditProfileController.swift */; };
+		E73CF64D56CC4788E8C2F782 /* TravelDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8BD4AFEF5272B7B5BF584 /* TravelDesign.swift */; };
+		F99E046D430246871104DB12 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5416A4E1EF5E353CE7BB7F /* SettingsController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		051948AC2A145FFF81B1F5BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7785FD9D52AFD01B7DBEE06B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2D8B4B89FFAE1AB314CE025C;
+			remoteInfo = TravelApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		088411F5861CCEAE9DAD30D0 /* CommentsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsController.swift; sourceTree = "<group>"; };
+		0A41495E50F9093F27484A99 /* TravelerCodeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelerCodeController.swift; sourceTree = "<group>"; };
 		126C398598DC977E953AF4FA /* ExploreMapStyle.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ExploreMapStyle.json; sourceTree = "<group>"; };
+		127B1073E58EE0BCF1AF2EA0 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = Resources/Fonts; sourceTree = SOURCE_ROOT; };
+		1CEFCF9BF8133E6F9290FF9B /* ChatsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsController.swift; sourceTree = "<group>"; };
+		26896DDA98E3B3474DEB95C7 /* TravelApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TravelApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F8D87EA615B9E677248A556 /* ExploreControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreControllers.swift; sourceTree = "<group>"; };
 		4ADBA5787201EB1C1B2DB667 /* OpenFreeMapStyleLicense.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OpenFreeMapStyleLicense.txt; sourceTree = "<group>"; };
-		046DF126925B96A2CC1F4540 /* ConversationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationController.swift; sourceTree = "<group>"; };
-		1020B0C38FC0EA383484CA07 /* ProfileControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileControllers.swift; sourceTree = "<group>"; };
-		1A6AB132149548D2D13F4068 /* BackendConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BackendConfig.json; sourceTree = "<group>"; };
-		1E93943EBA9E60A38165FB88 /* TermsOfService.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = TermsOfService.pdf; sourceTree = "<group>"; };
-		21FC5F262097FF7733110ADE /* ChatsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsController.swift; sourceTree = "<group>"; };
-		36D3E863CD6E83FE5A2174B7 /* CreationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreationController.swift; sourceTree = "<group>"; };
-		386B58661466404B7B4194BC /* ExploreControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreControllers.swift; sourceTree = "<group>"; };
-		406309FFD62BB6B7405076B8 /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
-		40C945BBED76871BCE3C75EF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		43E77EE71860218724DEE445 /* TravelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelStore.swift; sourceTree = "<group>"; };
-		50654214D2C3AFC023D8C4AF /* MediaCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MediaCredits.json; sourceTree = "<group>"; };
-		557EEC157E6C8C68BE4A55AA /* ShortsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortsController.swift; sourceTree = "<group>"; };
-		68B92D57B105F8A38F523519 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		6A44215A390E2D8A431A135E /* ClipFeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipFeedController.swift; sourceTree = "<group>"; };
-		6B5863BC118911651CAD59C7 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
-		709660D334CFA850AD177370 /* CommentsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsController.swift; sourceTree = "<group>"; };
-		9735792D0CA0BE5E83BD5F65 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
-		9B938AEDE2523D7000A1C8A7 /* BackendConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendConfiguration.swift; sourceTree = "<group>"; };
-		9F2061C297C55B9F49CF3906 /* ReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportController.swift; sourceTree = "<group>"; };
-		A1B183409FB50B305EC00554 /* PaymentCatalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PaymentCatalog.json; sourceTree = "<group>"; };
-		BAB6A30AA6F1923EF523F354 /* SocialSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSupport.swift; sourceTree = "<group>"; };
-		C3E9D79A7E25E69CB05ACCBE /* TravelerCodeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelerCodeController.swift; sourceTree = "<group>"; };
-		C9683BDE6EAAA718B8632BDF /* WalletController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletController.swift; sourceTree = "<group>"; };
-		CB632F3B0149A297F86BE103 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = Resources/Fonts; sourceTree = SOURCE_ROOT; };
-		CDAE4720F0925C6BC2D1C2FE /* LaunchServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchServices.swift; sourceTree = "<group>"; };
-		CE3F761B1F181C1CB71B7C94 /* TravelApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E3EAF77BEA6DD75195264CDC /* TravelDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDesign.swift; sourceTree = "<group>"; };
-		F0476B27AF64DFB883167EFC /* PrivacyPolicy.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PrivacyPolicy.pdf; sourceTree = "<group>"; };
-		F9E9EAE7E89414A36F5FBB2D /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
-		FAED3E7E2BBDB8B77B51C2EB /* PaymentCatalogAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCatalogAdapter.swift; sourceTree = "<group>"; };
-		FFF12D09710CB6AAD5451363 /* JourneyControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyControllers.swift; sourceTree = "<group>"; };
+		51CB1A55F3C531BFE9465D1B /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
+		553BEBA321D69E06109E0AAE /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5F1E57D69E3DA12AC4833E84 /* LocalStoreKitWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStoreKitWallet.swift; sourceTree = "<group>"; };
+		64A0075BC15AF26AEDA8A5A7 /* WalletController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletController.swift; sourceTree = "<group>"; };
+		6D5416A4E1EF5E353CE7BB7F /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		708798C5BDCB582A476CAA86 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		7B503E0115CCE40D79B0C57F /* CreationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreationController.swift; sourceTree = "<group>"; };
+		7E4CD6FEBB442BA4F9BA0AFE /* LuluPurchaseTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LuluPurchaseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EABB56A1FF68DCE381048C1 /* ReportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportController.swift; sourceTree = "<group>"; };
+		81B9FA1D174EFD4401984F14 /* BackendConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendConfiguration.swift; sourceTree = "<group>"; };
+		8859A8BD5D345D5C6363DB32 /* MediaCredits.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MediaCredits.json; sourceTree = "<group>"; };
+		925BCCD20057E59ACCC11380 /* TravelStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelStore.swift; sourceTree = "<group>"; };
+		92E8D61184C3E4E00BC680EB /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
+		9ACC177BC588DC9C9D9DAC51 /* Identity.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Identity.json; sourceTree = "<group>"; };
+		9AFB7E23BEFC455FF34A1434 /* ClipFeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipFeedController.swift; sourceTree = "<group>"; };
+		9C786AEF81A4894CFE7DB169 /* PrivacyPolicy.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PrivacyPolicy.pdf; sourceTree = "<group>"; };
+		9EBBDC7AA0E742CC254ADB20 /* BackendConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BackendConfig.json; sourceTree = "<group>"; };
+		ADF8BD4AFEF5272B7B5BF584 /* TravelDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDesign.swift; sourceTree = "<group>"; };
+		BEF4A1604499C4D84814F9C7 /* LaunchServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchServices.swift; sourceTree = "<group>"; };
+		BFD247E11898F4555025484E /* TermsOfService.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = TermsOfService.pdf; sourceTree = "<group>"; };
+		C43AB8E30F2FE8ED1EDBEC7F /* ConversationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationController.swift; sourceTree = "<group>"; };
+		C66F9A5B12ACE45AE903A34D /* PaymentCatalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PaymentCatalog.json; sourceTree = "<group>"; };
+		CBB6E00D6EEED56D31D10E63 /* PaymentCatalogAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCatalogAdapter.swift; sourceTree = "<group>"; };
+		CE69874CC43C1311BBB8B1F6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D7512C9240ACB4C22D079C45 /* JourneyControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyControllers.swift; sourceTree = "<group>"; };
+		DDC5E43F153F0E6F7284A586 /* ShortsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortsController.swift; sourceTree = "<group>"; };
+		E7CEBCA93B333303F227F322 /* ProfileControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileControllers.swift; sourceTree = "<group>"; };
+		EB86D55DBE36376521E9262B /* LuluCoins.storekit */ = {isa = PBXFileReference; path = LuluCoins.storekit; sourceTree = "<group>"; };
+		EF34A77FB58150C39436D4E3 /* LocalPurchaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalPurchaseTests.swift; sourceTree = "<group>"; };
+		F1D36FE358E1CC05B4968474 /* SocialSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSupport.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		1AAF180C56874CBAEAFE719B /* Frameworks */ = {
+		66C0154122466C8061CB3769 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE67EA8E9E19588643765741 /* Alamofire in Frameworks */,
+				3CD92C2293E10849390EBED4 /* Alamofire in Frameworks */,
 				88A0D2BEC0021252B7269183 /* MapLibre in Frameworks */,
-				320F9A546404EE599987746C /* Supabase in Frameworks */,
+				465DE5AFC4134348C7FDCAF7 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		06968ED6BCFB5A220F29E096 /* Backend */ = {
+			isa = PBXGroup;
+			children = (
+				81B9FA1D174EFD4401984F14 /* BackendConfiguration.swift */,
+				925BCCD20057E59ACCC11380 /* TravelStore.swift */,
+			);
+			path = Backend;
+			sourceTree = "<group>";
+		};
+		18F7964B66AD4AE43806222F /* Journeys */ = {
+			isa = PBXGroup;
+			children = (
+				D7512C9240ACB4C22D079C45 /* JourneyControllers.swift */,
+			);
+			path = Journeys;
+			sourceTree = "<group>";
+		};
+		341068E220BD7AEB6CDD020A /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				553BEBA321D69E06109E0AAE /* LaunchScreen.storyboard */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		36BD8AB0B7DA13200B644BBC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CE69874CC43C1311BBB8B1F6 /* Assets.xcassets */,
+				9EBBDC7AA0E742CC254ADB20 /* BackendConfig.json */,
+				127B1073E58EE0BCF1AF2EA0 /* Fonts */,
+				8859A8BD5D345D5C6363DB32 /* MediaCredits.json */,
+				C66F9A5B12ACE45AE903A34D /* PaymentCatalog.json */,
+				3CE554DB5F6CE14D7B60F5DD /* Legal */,
+				526E7761F847FF5396D3C849 /* Maps */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		3CE554DB5F6CE14D7B60F5DD /* Legal */ = {
+			isa = PBXGroup;
+			children = (
+				9C786AEF81A4894CFE7DB169 /* PrivacyPolicy.pdf */,
+				BFD247E11898F4555025484E /* TermsOfService.pdf */,
+			);
+			path = Legal;
+			sourceTree = "<group>";
+		};
+		4B467C56BC5C036BB5678E49 /* Shorts */ = {
+			isa = PBXGroup;
+			children = (
+				9AFB7E23BEFC455FF34A1434 /* ClipFeedController.swift */,
+				088411F5861CCEAE9DAD30D0 /* CommentsController.swift */,
+				7B503E0115CCE40D79B0C57F /* CreationController.swift */,
+				DDC5E43F153F0E6F7284A586 /* ShortsController.swift */,
+			);
+			path = Shorts;
+			sourceTree = "<group>";
+		};
 		526E7761F847FF5396D3C849 /* Maps */ = {
 			isa = PBXGroup;
 			children = (
@@ -103,166 +180,136 @@
 			path = Maps;
 			sourceTree = "<group>";
 		};
-		1142CB63CCF3F4597C3FCC12 /* Profile */ = {
+		589BA95B69F09D28A9FEEC97 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				406309FFD62BB6B7405076B8 /* EditProfileController.swift */,
-				FAED3E7E2BBDB8B77B51C2EB /* PaymentCatalogAdapter.swift */,
-				1020B0C38FC0EA383484CA07 /* ProfileControllers.swift */,
-				9F2061C297C55B9F49CF3906 /* ReportController.swift */,
-				9735792D0CA0BE5E83BD5F65 /* SettingsController.swift */,
-				C9683BDE6EAAA718B8632BDF /* WalletController.swift */,
-			);
-			path = Profile;
-			sourceTree = "<group>";
-		};
-		2036D0E3D8675C5628564BEF /* Legal */ = {
-			isa = PBXGroup;
-			children = (
-				F0476B27AF64DFB883167EFC /* PrivacyPolicy.pdf */,
-				1E93943EBA9E60A38165FB88 /* TermsOfService.pdf */,
-			);
-			path = Legal;
-			sourceTree = "<group>";
-		};
-		491D88B605C6D4B3D19B89C7 /* Journeys */ = {
-			isa = PBXGroup;
-			children = (
-				FFF12D09710CB6AAD5451363 /* JourneyControllers.swift */,
-			);
-			path = Journeys;
-			sourceTree = "<group>";
-		};
-		5EA8ECF9C80C7A40D30E9581 /* Features */ = {
-			isa = PBXGroup;
-			children = (
-				B554C7490519BA017DB417FA /* Explore */,
-				491D88B605C6D4B3D19B89C7 /* Journeys */,
-				1142CB63CCF3F4597C3FCC12 /* Profile */,
-				B0E425D2762F5306A74110BD /* Shorts */,
-				9BD461075C60E54CDFE32B93 /* Social */,
-			);
-			path = Features;
-			sourceTree = "<group>";
-		};
-		85610892901C25759C4EC424 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CE3F761B1F181C1CB71B7C94 /* TravelApp.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		96FA24AE1EC6049228A50AF0 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				6B5863BC118911651CAD59C7 /* Application.swift */,
-				CDAE4720F0925C6BC2D1C2FE /* LaunchServices.swift */,
-				F9E9EAE7E89414A36F5FBB2D /* Record.swift */,
-			);
-			path = Core;
-			sourceTree = "<group>";
-		};
-		9BD461075C60E54CDFE32B93 /* Social */ = {
-			isa = PBXGroup;
-			children = (
-				21FC5F262097FF7733110ADE /* ChatsController.swift */,
-				046DF126925B96A2CC1F4540 /* ConversationController.swift */,
-				BAB6A30AA6F1923EF523F354 /* SocialSupport.swift */,
-				C3E9D79A7E25E69CB05ACCBE /* TravelerCodeController.swift */,
-			);
-			path = Social;
-			sourceTree = "<group>";
-		};
-		A315F6E1BAEABED7B842FDE6 = {
-			isa = PBXGroup;
-			children = (
-				85610892901C25759C4EC424 /* Products */,
-				CC6952248748EF3D2D775252 /* Resources */,
-				A69F0D449835C8958862B6D2 /* Sources */,
-				F334E71DB08A50BBBA9EFBAC /* Support */,
-			);
-			sourceTree = "<group>";
-		};
-		A69F0D449835C8958862B6D2 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				ABDB18B632D3AFBC3A70D22E /* Backend */,
-				96FA24AE1EC6049228A50AF0 /* Core */,
-				EBA96DFF75A60225743CECD2 /* Design */,
-				5EA8ECF9C80C7A40D30E9581 /* Features */,
+				06968ED6BCFB5A220F29E096 /* Backend */,
+				E4DC20FAC2F79E0557FAC503 /* Core */,
+				DE8E37B995C4377E27EB689F /* Design */,
+				E5D55FB346E77EF072F490BE /* Features */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		ABDB18B632D3AFBC3A70D22E /* Backend */ = {
+		77C9B70A20A05CFDE761C781 /* Social */ = {
 			isa = PBXGroup;
 			children = (
-				9B938AEDE2523D7000A1C8A7 /* BackendConfiguration.swift */,
-				43E77EE71860218724DEE445 /* TravelStore.swift */,
+				1CEFCF9BF8133E6F9290FF9B /* ChatsController.swift */,
+				C43AB8E30F2FE8ED1EDBEC7F /* ConversationController.swift */,
+				F1D36FE358E1CC05B4968474 /* SocialSupport.swift */,
+				0A41495E50F9093F27484A99 /* TravelerCodeController.swift */,
 			);
-			path = Backend;
+			path = Social;
 			sourceTree = "<group>";
 		};
-		B0E425D2762F5306A74110BD /* Shorts */ = {
+		86B6FE2583886977318311B9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6A44215A390E2D8A431A135E /* ClipFeedController.swift */,
-				709660D334CFA850AD177370 /* CommentsController.swift */,
-				36D3E863CD6E83FE5A2174B7 /* CreationController.swift */,
-				557EEC157E6C8C68BE4A55AA /* ShortsController.swift */,
+				7E4CD6FEBB442BA4F9BA0AFE /* LuluPurchaseTests.xctest */,
+				26896DDA98E3B3474DEB95C7 /* TravelApp.app */,
 			);
-			path = Shorts;
+			name = Products;
 			sourceTree = "<group>";
 		};
-		B554C7490519BA017DB417FA /* Explore */ = {
+		9B6C4004357CD156E0E6F331 /* Purchases */ = {
 			isa = PBXGroup;
 			children = (
-				386B58661466404B7B4194BC /* ExploreControllers.swift */,
+				EF34A77FB58150C39436D4E3 /* LocalPurchaseTests.swift */,
+			);
+			path = Purchases;
+			sourceTree = "<group>";
+		};
+		A137D314515637F2A8AC7224 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				9ACC177BC588DC9C9D9DAC51 /* Identity.json */,
+				EB86D55DBE36376521E9262B /* LuluCoins.storekit */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		A1CC11585867DFF7929D975A /* Explore */ = {
+			isa = PBXGroup;
+			children = (
+				2F8D87EA615B9E677248A556 /* ExploreControllers.swift */,
 			);
 			path = Explore;
 			sourceTree = "<group>";
 		};
-		CC6952248748EF3D2D775252 /* Resources */ = {
+		B0C228841D6FE91105A2DA90 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				40C945BBED76871BCE3C75EF /* Assets.xcassets */,
-				1A6AB132149548D2D13F4068 /* BackendConfig.json */,
-				CB632F3B0149A297F86BE103 /* Fonts */,
-				50654214D2C3AFC023D8C4AF /* MediaCredits.json */,
-				A1B183409FB50B305EC00554 /* PaymentCatalog.json */,
-				2036D0E3D8675C5628564BEF /* Legal */,
-				526E7761F847FF5396D3C849 /* Maps */,
+				51CB1A55F3C531BFE9465D1B /* EditProfileController.swift */,
+				5F1E57D69E3DA12AC4833E84 /* LocalStoreKitWallet.swift */,
+				CBB6E00D6EEED56D31D10E63 /* PaymentCatalogAdapter.swift */,
+				E7CEBCA93B333303F227F322 /* ProfileControllers.swift */,
+				7EABB56A1FF68DCE381048C1 /* ReportController.swift */,
+				6D5416A4E1EF5E353CE7BB7F /* SettingsController.swift */,
+				64A0075BC15AF26AEDA8A5A7 /* WalletController.swift */,
 			);
-			path = Resources;
+			path = Profile;
 			sourceTree = "<group>";
 		};
-		EBA96DFF75A60225743CECD2 /* Design */ = {
+		CCC18DCF4729402AF8FC4DDC = {
 			isa = PBXGroup;
 			children = (
-				E3EAF77BEA6DD75195264CDC /* TravelDesign.swift */,
+				A137D314515637F2A8AC7224 /* Configuration */,
+				36BD8AB0B7DA13200B644BBC /* Resources */,
+				589BA95B69F09D28A9FEEC97 /* Sources */,
+				341068E220BD7AEB6CDD020A /* Support */,
+				ECA08AA84FDCE3F72FFC7CC5 /* Tests */,
+				86B6FE2583886977318311B9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DE8E37B995C4377E27EB689F /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				ADF8BD4AFEF5272B7B5BF584 /* TravelDesign.swift */,
 			);
 			path = Design;
 			sourceTree = "<group>";
 		};
-		F334E71DB08A50BBBA9EFBAC /* Support */ = {
+		E4DC20FAC2F79E0557FAC503 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				68B92D57B105F8A38F523519 /* LaunchScreen.storyboard */,
+				708798C5BDCB582A476CAA86 /* Application.swift */,
+				BEF4A1604499C4D84814F9C7 /* LaunchServices.swift */,
+				92E8D61184C3E4E00BC680EB /* Record.swift */,
 			);
-			path = Support;
+			path = Core;
+			sourceTree = "<group>";
+		};
+		E5D55FB346E77EF072F490BE /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				A1CC11585867DFF7929D975A /* Explore */,
+				18F7964B66AD4AE43806222F /* Journeys */,
+				B0C228841D6FE91105A2DA90 /* Profile */,
+				4B467C56BC5C036BB5678E49 /* Shorts */,
+				77C9B70A20A05CFDE761C781 /* Social */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		ECA08AA84FDCE3F72FFC7CC5 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				9B6C4004357CD156E0E6F331 /* Purchases */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		61043DDAB339B4F787C0991C /* TravelApp */ = {
+		2D8B4B89FFAE1AB314CE025C /* TravelApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 75EF2A408579CAD82DFDB50F /* Build configuration list for PBXNativeTarget "TravelApp" */;
+			buildConfigurationList = F922509E3EF50A0CBD218F38 /* Build configuration list for PBXNativeTarget "TravelApp" */;
 			buildPhases = (
-				17D0488D74DC36ABDFD3DBF8 /* Sources */,
-				B3320B6CDE8C2172E6A9B6FC /* Resources */,
-				1AAF180C56874CBAEAFE719B /* Frameworks */,
+				5B7FA400EF01F9B00AE5A01F /* Sources */,
+				60430F2CCF7850C20C4DA1BE /* Resources */,
+				66C0154122466C8061CB3769 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -270,106 +317,266 @@
 			);
 			name = TravelApp;
 			packageProductDependencies = (
-				4A1028466122BB29BBBB142C /* Alamofire */,
+				310AAD4CD0F591E31D75B256 /* Alamofire */,
 				1B396E2555E0C78E55699EE8 /* MapLibre */,
-				908523CF8E3A8013985D95D8 /* Supabase */,
+				3198532D502CB56CD0B2344F /* Supabase */,
 			);
 			productName = TravelApp;
-			productReference = CE3F761B1F181C1CB71B7C94 /* TravelApp.app */;
+			productReference = 26896DDA98E3B3474DEB95C7 /* TravelApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		6C9D5FFD760319A6D4010C86 /* LuluPurchaseTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 975AE2FCB11F574C300F4811 /* Build configuration list for PBXNativeTarget "LuluPurchaseTests" */;
+			buildPhases = (
+				8C17A445E0EBC8CCE041831F /* Sources */,
+				807386110B5B114D9C3F66CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				088979C5CC8C40955B90553A /* PBXTargetDependency */,
+			);
+			name = LuluPurchaseTests;
+			packageProductDependencies = (
+			);
+			productName = LuluPurchaseTests;
+			productReference = 7E4CD6FEBB442BA4F9BA0AFE /* LuluPurchaseTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		2C11BC16AB02783632A15EB1 /* Project object */ = {
+		7785FD9D52AFD01B7DBEE06B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					61043DDAB339B4F787C0991C = {
+					2D8B4B89FFAE1AB314CE025C = {
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = "[\"com.apple.InAppPurchase\": [\"enabled\": 1]]";
+					};
+					6C9D5FFD760319A6D4010C86 = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = BB52133C686FCCDE82EC02D2 /* Build configuration list for PBXProject "Lulu" */;
+			buildConfigurationList = CD2FFA92F875EAD1124578D3 /* Build configuration list for PBXProject "Lulu" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
 				en,
 			);
-			mainGroup = A315F6E1BAEABED7B842FDE6;
+			mainGroup = CCC18DCF4729402AF8FC4DDC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E757AAFBB9332A4BFE9DBAE4 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				A87C52917DA4FC9F849A318C /* XCRemoteSwiftPackageReference "Alamofire" */,
 				78D542CF564A5BF69A42C9C3 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
-				6FB5AEEB3707E9548254A3F5 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				6144D3707EC3D0EAF791B757 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 85610892901C25759C4EC424 /* Products */;
+			productRefGroup = 86B6FE2583886977318311B9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				61043DDAB339B4F787C0991C /* TravelApp */,
+				6C9D5FFD760319A6D4010C86 /* LuluPurchaseTests */,
+				2D8B4B89FFAE1AB314CE025C /* TravelApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		B3320B6CDE8C2172E6A9B6FC /* Resources */ = {
+		60430F2CCF7850C20C4DA1BE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DE674099C088EF536450A1A /* Assets.xcassets in Resources */,
-				722D0DD60B153F9F75970472 /* BackendConfig.json in Resources */,
+				AC8D9372A3A052D3767A0AEE /* Assets.xcassets in Resources */,
+				0B36185B095E3F564029A3C2 /* BackendConfig.json in Resources */,
 				CEC28FC3CB9E9845F9DE697B /* ExploreMapStyle.json in Resources */,
+				743D923A6C1616F8AC6414A5 /* Fonts in Resources */,
+				A384A9575F5278A137BD05D8 /* LaunchScreen.storyboard in Resources */,
+				AFD801ADBF084BDD86FF4E45 /* MediaCredits.json in Resources */,
 				284F0793380D3495790E836A /* OpenFreeMapStyleLicense.txt in Resources */,
-				A2B5C632121DA0E8BDA87CBA /* Fonts in Resources */,
-				2810FCAD54BDE58F9CE15CBC /* LaunchScreen.storyboard in Resources */,
-				70F5E08E88323E852C83B9C3 /* MediaCredits.json in Resources */,
-				2A78EC812BC741708A461B60 /* PaymentCatalog.json in Resources */,
-				80389604E16C08753EB378C8 /* PrivacyPolicy.pdf in Resources */,
-				684DA518D288820541452584 /* TermsOfService.pdf in Resources */,
+				1C34DD5166A9B0F79F1446ED /* PaymentCatalog.json in Resources */,
+				080951B91C1ACF529444A98D /* PrivacyPolicy.pdf in Resources */,
+				AF8B13116EDC287DF1B3EF5F /* TermsOfService.pdf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		807386110B5B114D9C3F66CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF2AB94A5D2F8A4FB6A71E12 /* LuluCoins.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		17D0488D74DC36ABDFD3DBF8 /* Sources */ = {
+		5B7FA400EF01F9B00AE5A01F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				983DD1131EC0095DA4DA8264 /* Application.swift in Sources */,
-				5E341F3FA9DED89C93720305 /* BackendConfiguration.swift in Sources */,
-				7C5608770FE56AD1D3B2ADD1 /* ChatsController.swift in Sources */,
-				C85FD2C5638C587EB6A5F989 /* ClipFeedController.swift in Sources */,
-				E4632DA6B4B107EEFA001C1D /* CommentsController.swift in Sources */,
-				2D55007B7B7B8A8D9BEFF68D /* ConversationController.swift in Sources */,
-				C790A2D9D694318A37FDADE8 /* CreationController.swift in Sources */,
-				F187CB003F9AB4F886CF3F78 /* EditProfileController.swift in Sources */,
-				D76AD24E88380D83EF9F2ACF /* ExploreControllers.swift in Sources */,
-				F7FF1179B1A14C2483559254 /* JourneyControllers.swift in Sources */,
-				3BD32B34AA526A20778E9F63 /* LaunchServices.swift in Sources */,
-				E377EF7C4A61F9141090CDA0 /* PaymentCatalogAdapter.swift in Sources */,
-				2B7D33D85C27A0A804A8FC54 /* ProfileControllers.swift in Sources */,
-				9E39EDC557066D5B66D7E9DB /* Record.swift in Sources */,
-				A6F83D50FC6387AF446CFE4F /* ReportController.swift in Sources */,
-				CA1BC03E343AFEB9F39471F5 /* SettingsController.swift in Sources */,
-				F48FFFB65E65410C21C5FFC5 /* ShortsController.swift in Sources */,
-				E9D9F5B8C8A9C15612B86698 /* SocialSupport.swift in Sources */,
-				B45D802C8DF4577CEBC576EC /* TravelDesign.swift in Sources */,
-				564C6428CB5EDF94DDA9E2CD /* TravelStore.swift in Sources */,
-				6EA337E7CB98384EED531AF9 /* TravelerCodeController.swift in Sources */,
-				5A3AF27385187B6035C8B86D /* WalletController.swift in Sources */,
+				34D55AABB6AE6FAE79683654 /* Application.swift in Sources */,
+				8136DBC09D96E782E19274FD /* BackendConfiguration.swift in Sources */,
+				CB4B554869706910B1B5D9EB /* ChatsController.swift in Sources */,
+				1AC129056DD4A7FC814F476B /* ClipFeedController.swift in Sources */,
+				DD4AB96C40884ABF547D13DA /* CommentsController.swift in Sources */,
+				3DFE01781D2F479876BB9E3A /* ConversationController.swift in Sources */,
+				D3A2CFC9C9C4CCFA30DC3160 /* CreationController.swift in Sources */,
+				E253126C5002EAA9BF84D257 /* EditProfileController.swift in Sources */,
+				13CEAD33F6A9D76237567934 /* ExploreControllers.swift in Sources */,
+				7C10A2903E7E299ED18655B2 /* JourneyControllers.swift in Sources */,
+				AFB246D049CD87986F7596BE /* LaunchServices.swift in Sources */,
+				D879A4EFAAB80B22EC16B7DC /* LocalStoreKitWallet.swift in Sources */,
+				6559A5863FEF44AFD7043144 /* PaymentCatalogAdapter.swift in Sources */,
+				0ABFB7AC74DBBA5479719E08 /* ProfileControllers.swift in Sources */,
+				04E844829C4C464459C3BD7E /* Record.swift in Sources */,
+				A7CE8C62AF565B4AE019F551 /* ReportController.swift in Sources */,
+				F99E046D430246871104DB12 /* SettingsController.swift in Sources */,
+				90AA49BFAD12D4DE51CBCD4B /* ShortsController.swift in Sources */,
+				A8210AABC2A88055FC8FFAC8 /* SocialSupport.swift in Sources */,
+				E73CF64D56CC4788E8C2F782 /* TravelDesign.swift in Sources */,
+				14B2F463378013A954F0CB1C /* TravelStore.swift in Sources */,
+				C7FFE706D1CBDF142B3EF6BF /* TravelerCodeController.swift in Sources */,
+				DCA03627FCD2677CBBA35A85 /* WalletController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C17A445E0EBC8CCE041831F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0EBDE66BF0C08773786B48C2 /* LocalPurchaseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		088979C5CC8C40955B90553A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2D8B4B89FFAE1AB314CE025C /* TravelApp */;
+			targetProxy = 051948AC2A145FFF81B1F5BF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		1309DF9156D6CB7C229E2939 /* Debug */ = {
+		2999FFDE7DCD9F53EFAD58EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		4446F664DC4DAA65DC22B248 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = JPTS6M4T5B;
+				INFOPLIST_FILE = Support/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = im.seex.sao2;
+				PRODUCT_NAME = TravelApp;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		48474FA44B6E1B053639B5A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Support/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lulu.travel;
+				PRODUCT_NAME = TravelApp;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		6F2287C3F3762F128AFC31FD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -443,134 +650,66 @@
 			};
 			name = Debug;
 		};
-		16BB5AF90BB248835C281A5F /* Release */ = {
+		DFA389F531FF72989F06B02B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = Support/Info.plist;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.lulu.travel;
-				PRODUCT_NAME = TravelApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lulu.purchase-tests";
 				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		4C9382BA6545B23C1DA9CD33 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 1.0.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		906DEF4B1D3A0C4B96F535EB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = Support/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.lulu.travel;
-				PRODUCT_NAME = TravelApp;
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TravelApp.app/TravelApp";
 			};
 			name = Debug;
+		};
+		E6D383FD6164564E22CE930D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.lulu.purchase-tests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TravelApp.app/TravelApp";
+			};
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		75EF2A408579CAD82DFDB50F /* Build configuration list for PBXNativeTarget "TravelApp" */ = {
+		975AE2FCB11F574C300F4811 /* Build configuration list for PBXNativeTarget "LuluPurchaseTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				906DEF4B1D3A0C4B96F535EB /* Debug */,
-				16BB5AF90BB248835C281A5F /* Release */,
+				DFA389F531FF72989F06B02B /* Debug */,
+				E6D383FD6164564E22CE930D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		BB52133C686FCCDE82EC02D2 /* Build configuration list for PBXProject "Lulu" */ = {
+		CD2FFA92F875EAD1124578D3 /* Build configuration list for PBXProject "Lulu" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1309DF9156D6CB7C229E2939 /* Debug */,
-				4C9382BA6545B23C1DA9CD33 /* Release */,
+				6F2287C3F3762F128AFC31FD /* Debug */,
+				2999FFDE7DCD9F53EFAD58EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F922509E3EF50A0CBD218F38 /* Build configuration list for PBXNativeTarget "TravelApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4446F664DC4DAA65DC22B248 /* Debug */,
+				48474FA44B6E1B053639B5A4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -578,6 +717,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6144D3707EC3D0EAF791B757 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 2.55.6;
+			};
+		};
 		78D542CF564A5BF69A42C9C3 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maplibre/maplibre-gl-native-distribution";
@@ -586,15 +733,7 @@
 				version = 7.0.0;
 			};
 		};
-		6FB5AEEB3707E9548254A3F5 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/supabase/supabase-swift.git";
-			requirement = {
-				kind = exactVersion;
-				version = 2.55.6;
-			};
-		};
-		E757AAFBB9332A4BFE9DBAE4 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		A87C52917DA4FC9F849A318C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -610,17 +749,17 @@
 			package = 78D542CF564A5BF69A42C9C3 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */;
 			productName = MapLibre;
 		};
-		4A1028466122BB29BBBB142C /* Alamofire */ = {
+		310AAD4CD0F591E31D75B256 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E757AAFBB9332A4BFE9DBAE4 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = A87C52917DA4FC9F849A318C /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		908523CF8E3A8013985D95D8 /* Supabase */ = {
+		3198532D502CB56CD0B2344F /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FB5AEEB3707E9548254A3F5 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			package = 6144D3707EC3D0EAF791B757 /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 2C11BC16AB02783632A15EB1 /* Project object */;
+	rootObject = 7785FD9D52AFD01B7DBEE06B /* Project object */;
 }

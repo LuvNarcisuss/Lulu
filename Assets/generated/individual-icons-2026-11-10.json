@@ -1,0 +1,789 @@
+{
+  "engine": "Built-in image_gen.imagegen; model version is not exposed",
+  "created_on": "2026-11-10",
+  "style": "European watercolor travel journal: deep teal ink, golden ochre and ivory. Upright composition, independent transparent raster assets.",
+  "asset_count": 38,
+  "assets": [
+    {
+      "name": "icon-add",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one balanced upright plus sign with golden watercolor fill and deep teal edge, equal horizontal and vertical arms. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-dff6498d-e84a-4677-ac64-f0dca0617284.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-add.imageset/icon-add.png",
+      "source_sha256": "0bed0515c6dd31f479a7aeb9ac845febe004133888f2e44b1ab52e1e698f5dbb",
+      "sha256": "68e8c0dac59b56e988dc9dedc6232e5e867adad07a2a74db62306e967722f4ff",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        26,
+        29,
+        166,
+        163
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-back",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one straight horizontal left arrow, golden watercolor fill, bold teal edge, no enclosing shape. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-58eea3c3-b3d7-4e85-8e6a-0c2a0142f2c5.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-back.imageset/icon-back.png",
+      "source_sha256": "5984a568145e14a2e417ee6f16c1a4d906f4496b14eb846835936a4bf2d2d3df",
+      "sha256": "85e98b44c888c908bd5d3206ad91e6391cbc1c6ea896ff0f39efa33774b60747",
+      "size": [
+        192,
+        189
+      ],
+      "alpha_bounds": [
+        23,
+        52,
+        169,
+        147
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-block",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: upright golden person bust silhouette with an overlapping small cream prohibition circle and teal diagonal slash, simple readable blocking-user symbol. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-70277b32-55d4-4947-8df5-028d86965cc9.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-block.imageset/icon-block.png",
+      "source_sha256": "24ab3cea1deed0b19263f7d3dae29f7c4ecd9ad6b064de172dff4b93ddca71b4",
+      "sha256": "e7f2944d180f961945d4f03e4e4950ec444743acf7cd506783607ccbe1c8f2d0",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        34,
+        26,
+        154,
+        171
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-calendar",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: upright travel planner calendar with two gold binder rings, teal header, cream page and four simple gold date squares, no numbers. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-1187bdb9-70c0-4836-bf93-86b019c8a3a6.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-calendar.imageset/icon-calendar.png",
+      "source_sha256": "d3400d380731eebe7dbeb1219a626425b63a6a57945314316181972945bfac99",
+      "sha256": "14cc19c45d57bed9059daa52be0b3b085c44adafee80fa8d3753681bf7cf41ba",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        27,
+        18,
+        163,
+        177
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-camera",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: a front-facing vintage travel camera with level cream rectangular body, gold top panel and large circular teal lens with ivory highlight. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-bf461cc1-eaa5-48b2-9740-c0d69ecaf57f.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-camera.imageset/icon-camera.png",
+      "source_sha256": "4cf7aa3eb8583bda807e5ade81cb0c68d250de9473610eecc9538cc57cc9c233",
+      "sha256": "60b6e33d08fb58df052494a6890e8e6c30436850549807208b64e34dd4481323",
+      "size": [
+        192,
+        189
+      ],
+      "alpha_bounds": [
+        23,
+        43,
+        169,
+        156
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-chats",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: two overlapping level rounded speech bubbles like travel correspondence, foreground golden ochre with three teal dots, rear cream with teal outline. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-8ca0d706-e8e6-41cf-a029-4e3cd9480211.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-chats.imageset/icon-chats.png",
+      "source_sha256": "d0a42f883157dc29b80fc4f61c53f59a79e325d911978225bfecee9883a6cd40",
+      "sha256": "a0596083209c8fba258814da055fef79432eac7825b4e71edf81810c63244f69",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        26,
+        36,
+        164,
+        159
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-check",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one clean checkmark tick, short left arm and longer rising right arm, gold watercolor with bold teal outline, no enclosing tile. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-c74c043c-8aa0-49bc-aed0-f47b209378f5.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-check.imageset/icon-check.png",
+      "source_sha256": "13940fa554186a6003d9689f2159d3c4733d340adef605aeba0937b74efe1367",
+      "sha256": "506289570285263e26bdfa08fb30bac6d5a678c75ddd8a49ddc438c2ae61398b",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        25,
+        45,
+        168,
+        156
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-close",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one balanced symmetrical X with golden watercolor fill and deep teal edge, equal diagonal strokes. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-c897f7ea-aabc-42ab-b1ac-dc9ba9af6c54.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-close.imageset/icon-close.png",
+      "source_sha256": "9c1a924b5f64c843548028e7d9f246f709fd42979ec325d9a4c5f789a5ab090b",
+      "sha256": "bcd8d07e9321ac4a48cc2ac827bbf61a0234f19a7a237d0133de49c587db2a87",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        28,
+        35,
+        164,
+        157
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-coin",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one perfectly front-facing circular gold coin with an upright four-point compass star embossed in its center, NOT angled, no side perspective. Make it clearly themed, NOT a generic monochrome system symbol. Sophisticated small hand-painted travel keepsake: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-c8833ed1-e1ac-43f4-885f-efb3c9fe97b3.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-coin.imageset/icon-coin.png",
+      "source_sha256": "ec11487067e1b73c507ae0dbaad9b50d9d10db487f550ce08384db4c9c79bdf3",
+      "sha256": "48bb3fae64424f944a031e5266dcdc43bb23b3123647f98529a47eb386b1676e",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        23,
+        25,
+        168,
+        172
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-comment",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one level rounded golden speech bubble with a short bottom-left tail and three small teal dots inside. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-82b744e6-83f4-400c-9143-86875ee30a3e.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-comment.imageset/icon-comment.png",
+      "source_sha256": "6e4cd8ee00a2dd3c3a0e35f58272f602a64b381552e4451d3a89ba537f49b662",
+      "sha256": "ac7f106f2cd5712c471d9f68a68a7e6de2df3cc5219907f1f4c9fbbd13066b2c",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        27,
+        44,
+        164,
+        158
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-diamond",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one symmetrical upright faceted gemstone, golden and ivory facets with teal outlines, top edge perfectly horizontal point down. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-fe13b35d-e068-4995-acef-5e208373dab2.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-diamond.imageset/icon-diamond.png",
+      "source_sha256": "ea74ce1e1013a26c0bb90ad9c5be77ed1c89cf3c93c2e666b27cd60f4dec84f9",
+      "sha256": "725aaf8d0b55a15060fd7e223e26d77917d0088f37bdd8060aeab91d7f330f82",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        22,
+        37,
+        170,
+        162
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-edit",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one long golden travel-journal pencil aligned VERTICALLY tip DOWN, teal outlines and cream sharpened wood, no surrounding marks. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-03cbf2db-5740-419f-9f9e-4881e8561f94.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-edit.imageset/icon-edit.png",
+      "source_sha256": "f75af279a7d997794bd2967b1378da95e8c178e6ff44ce3e70baae2684adf1df",
+      "sha256": "7de86f4178acddc87af98846a7d10ec65482325b3a6d7dbbdaea5f9af18f0d92",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        74,
+        12,
+        118,
+        183
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-explore",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: upright circular travel compass, cream dial, four-point teal and gold compass rose, north at exact 12 oclock, no letters. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-09effc5b-7cae-4b98-8405-0c3d72c58e89.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-explore.imageset/icon-explore.png",
+      "source_sha256": "74d1d0166a86b9d76be9c0f60cd9578d25254b3a0f2d69b8d9767a64cc8b7938",
+      "sha256": "7b45b18b7571cef7fecc74fa2dcb60b6678e7b0b6e12b9fb5661e6876a069f7a",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        32,
+        15,
+        159,
+        176
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-filter",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: exactly three perfectly level parallel teal horizontal slider tracks equal length, each with ONE round golden knob at staggered positions 25%,70%,40%, no gear no extra marks. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-29d61d1a-8287-494b-bd71-81657767a901.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-filter.imageset/icon-filter.png",
+      "source_sha256": "243c79fec4db2908dadae57991443297313d4f8971bf3adb6d0772c944e2b679",
+      "sha256": "bd001ad005fe0a70f7e15e2486bf18bd5dcf260ae54a61c9ba821eb5331da522",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        22,
+        52,
+        170,
+        147
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-globe",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one perfect front-facing circular globe showing Europe and Atlantic with gold land and cream ocean, teal outer rim, no stand no tilted axis no labels. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-db6424d8-6957-4890-9967-8fa234b7f481.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-globe.imageset/icon-globe.png",
+      "source_sha256": "eef6b16582627ecb638b4f3d79ff276f02addb84b6d595b8b68b6bd8a0f14a0f",
+      "sha256": "f508eaaba3b1bccf247509e0181b56d69522efab96e884edc198eea75b4d8288",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        20,
+        21,
+        171,
+        175
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-group",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: three simple upright traveler bust silhouettes with round heads, central gold figure and two smaller cream figures behind, teal outlines, no faces. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-7ca495e4-da56-49a8-a712-87e3d6b9c8be.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-group.imageset/icon-group.png",
+      "source_sha256": "bc07b2d695662db9024258b00acf946fe64aa2438144d9c33bbb917b0dd8edfe",
+      "sha256": "928d06a59f1e484cd4032abdc18476914703155a06b54c683abe4f23d78e98ec",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        13,
+        34,
+        179,
+        168
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-heart",
+      "prompt": "Use case: precise-object-edit. Edit this Lulu travel-journal heart icon. REMOVE the entire top hanging ring, its stem and attachment cap. The outer silhouette must be ONLY a clean upright symmetrical HEART shape, with two rounded upper lobes, a clear centered notch, and a centered bottom point. Preserve the golden watercolor fill, dark teal outline, and small ivory/teal compass star inside the heart. Center the HEART alone in the square canvas occupying 72% width. True alpha transparency everywhere outside the heart, no ring, no pendant attachment, no halo, no shadow, no stray marks, no extra objects. Intended as a clearly recognizable like icon at 24 points.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-f046c0e3-932f-4176-a522-2256fdc282a3.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-heart.imageset/icon-heart.png",
+      "source_sha256": "943ba8cc209d128d44686e1af0048ef3f305c4246fd83fba1647e66364494bb0",
+      "sha256": "15e5859034443f71e7d1487ecbe9f3999c8ab9014bd07ae1b15bcfbeed5677f7",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        30,
+        45,
+        160,
+        163
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected upright heart silhouette; hanging ring removed with image model to preserve recognizable like semantics. Transparent margin and no stray elements.",
+      "original_generation_prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: an upright symmetrical heart-shaped golden travel keepsake, with a tiny four-point compass star embossed neatly INSIDE the heart. Make it clearly themed, NOT a generic monochrome system symbol. Sophisticated small hand-painted travel keepsake: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "reference": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-e286ad89-0b26-461a-bb43-c31a9173b958.png"
+    },
+    {
+      "name": "icon-journeys",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: an upright vintage golden carry-on suitcase with a centered handle and two straight teal luggage straps. Make it clearly themed, NOT a generic monochrome system symbol. Sophisticated small hand-painted travel keepsake: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-6f09b043-b7ca-40bc-b86f-3a6d03e9be69.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-journeys.imageset/icon-journeys.png",
+      "source_sha256": "6d095685cdb8356beeb03438daef937e721a3f0d9b4e9b403697b6ea3db6711a",
+      "sha256": "bb9d10b4dfbf8ffbcf5ec9a101eaeaf5d83c4071af9c19e6cff450a5c12c8fcb",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        31,
+        30,
+        161,
+        166
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-location",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one upright symmetrical golden teardrop map marker with a circular cream center and bold teal outline, point exactly down. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-55b7951e-0410-42bd-9eac-8ad1c518a87d.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-location.imageset/icon-location.png",
+      "source_sha256": "bbfd07aa91fee7a8d5ed3a96d5cdc08c83ee143ae393bfffaa97a6f1e5621dae",
+      "sha256": "403ce38e48655f16f1cc922355de2ae3e6cd30afc83eb4d4ceedc8d2ef3f6fb3",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        40,
+        17,
+        150,
+        177
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-map",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: a front-facing unfolded three-panel travel map, vertical folds, golden land patches, teal winding river, cream paper, no labels. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-337fb083-91a0-41c1-bbb0-38af04498dc1.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-map.imageset/icon-map.png",
+      "source_sha256": "1795b33681f449c3e57c888c720dbcd3e70500dacf782dc44944e58107f38433",
+      "sha256": "acf1d507b11b1b032b96950cc1a899989f127db766f29dd9f9cc8f88352ecc98",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        25,
+        36,
+        167,
+        157
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-more",
+      "prompt": "Use case: background-extraction. Correct this single Lulu icon asset. KEEP the golden watercolor object and its crisp deep teal outlines exactly. REMOVE ALL surrounding teal glow, halo, fog, shadows and ALL background pixels. Outside the hard outline must be completely alpha transparent. No aura. No blur. No backdrop. Place the unchanged object centered on a SQUARE transparent canvas with generous empty margins, occupying about 72% of canvas width. Preserve horizontal level alignment and watercolor colors. This is a production transparent iOS icon, no text, no new objects.",
+      "reference": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-a12ee797-a7d9-46bd-821c-cae6a42452f1.png",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-1afdd9d4-0c10-41a8-8cb9-7207278ae295.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-more.imageset/icon-more.png",
+      "source_sha256": "ea8e25bd3235562977344f6a5ecef6f964854e745911c9264adf75fa1333f641",
+      "sha256": "eb99e3083dfdb09cd15c4d9f291b3f93a168f12b62f68d048515455b5bfafce6",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        24,
+        75,
+        168,
+        120
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow.",
+      "original_generation_prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: exactly THREE small equal golden watercolor circles with teal outlines aligned on one perfectly horizontal row, equal gaps; one ellipsis icon. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "rejected_source": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-a12ee797-a7d9-46bd-821c-cae6a42452f1.png",
+      "rejection_reason": "Unwanted surrounding glow; corrected separately using image model."
+    },
+    {
+      "name": "icon-mute",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one upright golden bell with a single clear diagonal teal slash THROUGH the bell, cream highlight, no sound marks. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-5eaa63a0-3135-4f9c-ad84-f2fa34a18804.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-mute.imageset/icon-mute.png",
+      "source_sha256": "718fc97a0b46375110676ae1cd6df79b2094490433ffcd4da8e9f6e204e9df12",
+      "sha256": "bf3ba2aa0541f96dfd3b17ebdf77ba9feef84323470c0b2ef804562b814adb48",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        29,
+        17,
+        163,
+        177
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-phone",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one classic golden telephone receiver oriented VERTICALLY, ear and mouthpiece at top and bottom facing right, teal outline, no sound marks. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-b34cc45b-5c1b-40fb-9659-1a2e453223d3.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-phone.imageset/icon-phone.png",
+      "source_sha256": "eea161f7e48ee64120c65242554cc09f6c299b38ed782d5f813cb0283ecbfb97",
+      "sha256": "1aa556234392aacf883d46cd77206a1fd719eab2e87a5c9dd23134b747b8d40f",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        55,
+        18,
+        131,
+        174
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-photo",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one upright level landscape photograph frame, cream border, simple golden Alpine mountain and teal lake inside. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-10beb5e7-1de4-4047-99fe-81c695324eb3.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-photo.imageset/icon-photo.png",
+      "source_sha256": "7f272999ad0afda2db536784336e8dd650cceabf4b01ceea699f73192334eff8",
+      "sha256": "135adc4c872b619cb46d3bc77142727d81dc8cfa2548021d5d911e46d722c685",
+      "size": [
+        192,
+        181
+      ],
+      "alpha_bounds": [
+        22,
+        32,
+        169,
+        151
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-pin",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one simple golden pushpin oriented perfectly VERTICAL point down, cream highlight and teal outline. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-7660a1d6-b27d-4d79-aa4b-a396c78160eb.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-pin.imageset/icon-pin.png",
+      "source_sha256": "fbef6e3a92deeab342b613d2e3ea5ee84f2a2d017623a197fa43b46ff0764615",
+      "sha256": "23baaf080b1bdd199253795a5179b6f11f3370d7923021dc74756f02f46d3733",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        51,
+        20,
+        140,
+        173
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-profile",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: upright centered traveler bust silhouette, round head, cream scarf and gold jacket, simple teal outline, no facial features. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-10ea683a-7636-41a4-a1b2-4dc4f1626c6d.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-profile.imageset/icon-profile.png",
+      "source_sha256": "b154784060357e650754f234153cc6e349307c25f96b5e5ae915148200d3d11e",
+      "sha256": "d5d8dcb295c99c7d0841f43cc4c56a31506134b2967f7ee9a28e1119abfc5925",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        34,
+        21,
+        157,
+        173
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-refresh",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: two bold curved arrows forming a balanced circular refresh symbol, gold watercolor with teal outline, no extra objects. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-b37393d7-5b0f-4631-9dc3-e6e8c9b13bab.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-refresh.imageset/icon-refresh.png",
+      "source_sha256": "e858dbb053974bee87216a0779c71d69ba1f438a87b9a65389b3b73e63a70124",
+      "sha256": "96a725378a1fb51d7dd4249cf30207ffc138f0a6acf194e531f6f43e24757146",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        36,
+        34,
+        154,
+        159
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-report",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: upright travel pennant flag on straight vertical teal pole, small golden flag extends right, no wind tilt. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-71a29dbb-f7a7-4119-b179-f5ca9c9cfabc.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-report.imageset/icon-report.png",
+      "source_sha256": "390d5f8a7af2b6891b2fd9b0b9d3501c0d4d0d6985fb4c4979c8023bc11edfd1",
+      "sha256": "0e494a0f62a79b01734b6da6ead22e44e045de7a79476f947cd6d09021315c05",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        52,
+        28,
+        146,
+        167
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-route",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: two upright small gold map markers connected by a single winding teal dotted travel route, balanced centered composition, no extra background. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-72cc3657-e649-436c-a92b-7c9b2aaf20be.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-route.imageset/icon-route.png",
+      "source_sha256": "f62b4585473de69c0fe694a82f9efa484e883c8e36d4a13430927c17d5d660df",
+      "sha256": "dc5afa3677bff07f8520465e218e4db18b246cab3c1ddf03bce7af2a74383523",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        35,
+        34,
+        157,
+        161
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-save",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: upright golden ribbon bookmark with a crisp V notch bottom and one small teal compass star inside. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-5bb11582-ee5f-46a9-82f4-71975bafb487.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-save.imageset/icon-save.png",
+      "source_sha256": "2a9475267946bcd3cf047b738cd2fad12f96c0516e42e9844bff841a1eca2187",
+      "sha256": "a583cdd79d6ef10104f20f14aa5c355065aa579042510d807f9e70958b88e271",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        51,
+        25,
+        140,
+        169
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-search",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: a circular cream magnifier with gold rim and short teal handle diagonally down right, balanced standard magnifying glass silhouette. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-742dd7e2-5c8c-4679-83db-7a0109b245d5.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-search.imageset/icon-search.png",
+      "source_sha256": "d444c7926d5b68ca876cdfa4ee5ae75bba1836a77859a1627e7b4fd14c2fb19a",
+      "sha256": "d048e0f05e0d9d3e096505c5996f8dddaeb511c543c79a2f8e28952cc2374220",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        29,
+        25,
+        159,
+        172
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-send",
+      "prompt": "Use case: background-extraction. Correct this single Lulu icon asset. KEEP the golden watercolor object and its crisp deep teal outlines exactly. REMOVE ALL surrounding teal glow, halo, fog, shadows and ALL background pixels. Outside the hard outline must be completely alpha transparent. No aura. No blur. No backdrop. Place the unchanged object centered on a SQUARE transparent canvas with generous empty margins, occupying about 72% of canvas width. Preserve horizontal level alignment and watercolor colors. This is a production transparent iOS icon, no text, no new objects.",
+      "reference": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-50960ae3-7764-4741-9f32-fd0046c479fb.png",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-f4365f1b-f7ce-4812-86dc-ec0960538982.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-send.imageset/icon-send.png",
+      "source_sha256": "3024ec51f94928ef6abfe134f03ecc871909dde8bfc6fa2bae0aeca2e1b6c25d",
+      "sha256": "f42d4a0a3e6b57de03d1e22808c4d8e73645f5206981b813ed5892be04620b28",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        26,
+        58,
+        166,
+        142
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow.",
+      "original_generation_prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one simple cream and golden folded paper airplane pointing straight RIGHT, horizontal central axis, teal fold lines, no trailing marks. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "rejected_source": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-50960ae3-7764-4741-9f32-fd0046c479fb.png",
+      "rejection_reason": "Unwanted surrounding glow; corrected separately using image model."
+    },
+    {
+      "name": "icon-settings",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one upright symmetrical eight-tooth golden gear with cream central hole and teal outline, small classic travel-equipment brass cog. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-361325ed-2b47-475f-b402-d4670f9a23e3.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-settings.imageset/icon-settings.png",
+      "source_sha256": "ecca8e98d343fd6b866513530fa337509c6122b2396bd66054566adf8620425f",
+      "sha256": "6c931e7f2b43b70addbfe1d107a940770d16972431b89fb493cfb8b6a21eb337",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        23,
+        25,
+        169,
+        168
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-share",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: a straight upward golden arrow rising from a level cream tray, teal outlines, no extra symbols. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-7ade4e55-fdcb-4e43-bd19-27acb448b9c5.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-share.imageset/icon-share.png",
+      "source_sha256": "d71d89eb85cb8542d3a4cdd7c464293f9cd70a0fd4d60425bc380794fd74698b",
+      "sha256": "e7a38ef1def5036baa89b7773b919285d6ab81585cf18c0655bc27a34cac1a54",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        27,
+        25,
+        165,
+        167
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-shorts",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: a level rounded travel-video frame, cream interior with a small warm-gold mountain silhouette along its lower interior edge, and one clear teal right-pointing play triangle in the center. Make it clearly themed, NOT a generic monochrome system symbol. Sophisticated small hand-painted travel keepsake: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-b0e7192e-fdc3-4db1-a423-8f6d68dec9ee.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-shorts.imageset/icon-shorts.png",
+      "source_sha256": "3e29a06c8d74a5966e4537a90b143a94bf6b79cb80565b110a6925c5188a64a7",
+      "sha256": "866b276ee6ca494147b2ab9fd4c31a737249cd6de3b2c8f5216651fa2086711a",
+      "size": [
+        192,
+        175
+      ],
+      "alpha_bounds": [
+        34,
+        31,
+        157,
+        145
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-trash",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: one upright golden trash bin with a level cream lid and centered handle, two straight teal grooves. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-a1ce218e-891d-4bed-8f39-f222359f3142.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-trash.imageset/icon-trash.png",
+      "source_sha256": "90e707359406300daa18eab5371d0b59d3e89329f52954c6c3777918fad5eb4c",
+      "sha256": "304082e10a8c377def2395d9a2a61e1c6a80ed3bd05379b5f13c4bd6fab4a1bb",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        35,
+        22,
+        156,
+        171
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-video",
+      "prompt": "Use case: background-extraction. Correct this single Lulu icon asset. KEEP the golden watercolor object and its crisp deep teal outlines exactly. REMOVE ALL surrounding teal glow, halo, fog, shadows and ALL background pixels. Outside the hard outline must be completely alpha transparent. No aura. No blur. No backdrop. Place the unchanged object centered on a SQUARE transparent canvas with generous empty margins, occupying about 72% of canvas width. Preserve horizontal level alignment and watercolor colors. This is a production transparent iOS icon, no text, no new objects.",
+      "reference": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-54ed8471-c267-4f5d-af1d-1d1800aa729b.png",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-330e7d3c-2a67-4d02-9fdb-8e07b7f793d2.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-video.imageset/icon-video.png",
+      "source_sha256": "2272605a7538b98ca6df5da7cbe12f9987d4909af59190a370cd022f8a22ab14",
+      "sha256": "cb8dfcf47abe2605522b2d9c048bfd704b4bf8bb32d0fabddab15cdccc843334",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        17,
+        50,
+        175,
+        141
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow.",
+      "original_generation_prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: level rectangular golden video-call camera with cream side lens wedge on right, teal outline, no film reels. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "rejected_source": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-54ed8471-c267-4f5d-af1d-1d1800aa729b.png",
+      "rejection_reason": "Unwanted surrounding glow; corrected separately using image model."
+    },
+    {
+      "name": "icon-wallet",
+      "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: level closed golden travel wallet, cream top lining and teal flap with gold button, front-facing, no money protruding. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
+      "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-c8b0424e-e582-424b-b96b-89c1a9911ff7.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-wallet.imageset/icon-wallet.png",
+      "source_sha256": "dfbcd38be3152663300396d03cd8d11c27ff6a5ccc6497bf12db095b13094d45",
+      "sha256": "28f01ab4da4faefd308a41cbeb355abf15af775e3e3095cdd262c87aac8ca921",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        25,
+        45,
+        167,
+        151
+      ],
+      "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
+      "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    }
+  ],
+  "preserved_assets": [
+    "logo-lulu",
+    "AppIcon",
+    "background-paper",
+    "background-welcome"
+  ],
+  "verification": "Individual output visual inspection, alpha and clear-margin checks, asset-reference inspection. No app compilation, typecheck, simulator launch or runtime UI acceptance for this icon change."
+}

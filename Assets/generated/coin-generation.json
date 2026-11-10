@@ -1,0 +1,13 @@
+{
+  "engine": "Built-in image_gen.imagegen",
+  "created_on": "2026-11-10",
+  "name": "icon-coin",
+  "prompt": "Use case: stylized-concept. Create a single production-ready transparent PNG coin icon for Lulu, a European travel journal iPhone app. One large warm golden coin, slightly tilted for subtle visible thickness, with a simple embossed four-point compass star on its face. Hand-painted watercolor/gouache texture, softly uneven but crisp deep teal outline (#105859), warm ochre and honey gold, small cream highlights. Calm sophisticated travel stationery aesthetic, clear silhouette readable at 32 points. Centered square composition, coin occupies 85% of canvas. Actual transparent background with clean alpha, no paper rectangle, no shadow outside the coin, no surrounding marks or sparkles. No text, numbers, currency symbols, letters, watermark, or mockup. This is a standalone app icon asset, not an app screen.",
+  "transparent_background": true,
+  "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-1506fa3b-b098-45b8-871a-6f1e0926ceb6.png",
+  "project_file": "LuluApp/Resources/Assets.xcassets/icon-coin.imageset/icon-coin.png",
+  "sha256": "074532e0b6d945cfb18785ebae7dbfbbce92ed4481c798f95f62e3d84f3105b5",
+  "processing": "Original generated pixels and alpha retained. UIKit aspect-fit displays at 56 points for balance and 28 points for packages.",
+  "inspection": "Inspected golden watercolor coin with teal compass motif, clean transparent surround and no text. No app runtime acceptance performed.",
+  "status": "Superseded by front-facing icon-coin in individual-icons-2026-11-10.json; historical source only."
+}

@@ -1,0 +1,10 @@
+Test Case '-[LuluPurchaseTests.LocalPurchaseTests testCancellationDoesNotCredit]' started.
+Test Case '-[LuluPurchaseTests.LocalPurchaseTests testCancellationDoesNotCredit]' passed (11.084 seconds).
+Test Case '-[LuluPurchaseTests.LocalPurchaseTests testNineProductsCreditOnceAndPersist]' started.
+Test Case '-[LuluPurchaseTests.LocalPurchaseTests testNineProductsCreditOnceAndPersist]' passed (11.350 seconds).
+Test Case '-[LuluPurchaseTests.LocalPurchaseTests testWrongAccountCannotReceivePurchase]' started.
+Test Case '-[LuluPurchaseTests.LocalPurchaseTests testWrongAccountCannotReceivePurchase]' passed (0.990 seconds).
+	 Executed 3 tests, with 0 failures (0 unexpected) in 23.424 (23.433) seconds
+	 Executed 3 tests, with 0 failures (0 unexpected) in 23.424 (23.436) seconds
+	 Executed 3 tests, with 0 failures (0 unexpected) in 23.424 (23.440) seconds
+** TEST SUCCEEDED **

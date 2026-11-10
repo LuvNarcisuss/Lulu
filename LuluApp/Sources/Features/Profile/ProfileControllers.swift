@@ -18,7 +18,7 @@ final class MeController: TravelScreen {
         let works = store.rows("clips").filter { $0.string("publisher_id") == store.userID }
         let stats = "\(works.count) works · \(following) following · \(followers) followers"
         content.addArrangedSubview(profileCover(profile, stats: stats))
-        let walletTitle = store.hasCoinState ? "Wallet · \(store.balance.formatted()) coins" : "Wallet"
+        let walletTitle = store.payments.walletBalance.map { "Wallet · \($0.formatted()) coins" } ?? "Wallet"
         content.addArrangedSubview(action(walletTitle, icon: "icon-wallet") { [weak self] in guard let self else { return }; self.push(WalletController(store: self.store)) })
         content.addArrangedSubview(collectionTabs())
         var clips: [Record] = []

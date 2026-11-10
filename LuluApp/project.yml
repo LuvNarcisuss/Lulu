@@ -1,4 +1,6 @@
 name: Lulu
+fileGroups:
+  - Configuration
 options:
   minimumXcodeGenVersion: 2.38.0
   deploymentTarget:
@@ -33,6 +35,10 @@ settings:
     GENERATE_INFOPLIST_FILE: NO
 targets:
   TravelApp:
+    attributes:
+      SystemCapabilities:
+        com.apple.InAppPurchase:
+          enabled: 1
     type: application
     platform: iOS
     supportedDestinations: [iOS]
@@ -66,6 +72,12 @@ targets:
         TARGETED_DEVICE_FAMILY: "1"
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
         SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
+      configs:
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: im.seex.sao2
+          DEVELOPMENT_TEAM: JPTS6M4T5B
+        Release:
+          PRODUCT_BUNDLE_IDENTIFIER: com.lulu.travel
     dependencies:
       - package: Alamofire
         product: Alamofire
@@ -73,6 +85,19 @@ targets:
         product: MapLibre
       - package: Supabase
         product: Supabase
+  LuluPurchaseTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests/Purchases
+      - path: Configuration/LuluCoins.storekit
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.lulu.purchase-tests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: TravelApp
 schemes:
   Lulu:
     build:
@@ -80,5 +105,13 @@ schemes:
         TravelApp: all
     run:
       config: Debug
+      storeKitConfiguration: Configuration/LuluCoins.storekit
+      environmentVariables:
+        LULU_LOCAL_STOREKIT: "1"
+    test:
+      config: Debug
+      targets:
+        - name: LuluPurchaseTests
+          skipped: false
     archive:
       config: Release

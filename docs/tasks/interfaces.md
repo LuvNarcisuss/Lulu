@@ -92,3 +92,7 @@ Generated image asset names: `icon-shorts`, `icon-explore`, `icon-journeys`, `ic
 - Profile worker may route saved/personal clips through ClipFeedController; places through PlaceController; journey records through JourneyDetailController.
 
 Keep file ownership boundaries. Do not compile/typecheck/run an app or simulator. Static inspection only; backend worker may run finite API checks under the authorized stage A skill.
+
+## Active guide checkout interface
+
+Guide entry points call UIViewController.openPlaceGuide, which delegates confirmed payment to PaymentCatalogAdapter.unlockGuide(_:expectedPrice:). Use PaymentCatalogAdapter.walletBalance for user-visible balances and hasGuideAccess(to:) for access badges. Production guide.unlock remains a server operation; DEBUG-only Xcode test debits and editorial content copies stay inside the local wallet path. See docs/backend/local-storekit.md for the isolation and unexecuted regression cases.

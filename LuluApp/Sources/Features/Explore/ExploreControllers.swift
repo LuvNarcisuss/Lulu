@@ -560,19 +560,19 @@ final class PlaceController: TravelScreen {
         if mine {
             views.append(text("Status: " + offer.string("status").capitalized, 14, color: Palette.muted))
         }
-        let priceLabel = price == 0 ? "Free" : (offer.bool("unlocked") ? "Unlocked" : "\(price) coins")
+        let priceLabel = price == 0 ? "Free" : (store.payments.hasGuideAccess(to: offer) ? "Unlocked" : "\(price) coins")
         views.append(text(priceLabel, 14, color: Palette.teal))
-        if let guide {
+        if let guide = guide ?? store.payments.localGuideContent(for: offer) {
             views += guideContent(guide)
         } else {
             views.append(text(offer.string("title"), 24, display: true))
             views.append(text(offer.string("preview"), 16))
-            if price > 0 && !offer.bool("unlocked") && !mine {
-                let afford = store.balance >= price
-                views.append(action(afford ? "Unlock for \(price) coins" : "Get coins to unlock", icon: "icon-wallet") { [weak self] in
+            if price > 0 && !store.payments.hasGuideAccess(to: offer) && !mine {
+                views.append(action("Unlock for \(price) coins", icon: "icon-wallet") { [weak self] in
                     guard let self else { return }
-                    if afford { self.unlockGuide(guideID, price: price) }
-                    else { self.push(WalletController(store: self.store)) }
+                    self.openPlaceGuide(self.placeID, store: self.store, guideID: guideID) { [weak self] in
+                        self?.render()
+                    }
                 })
             } else {
                 views.append(action("Refresh guide", icon: "icon-refresh", filled: false) { [weak self] in
@@ -606,15 +606,6 @@ final class PlaceController: TravelScreen {
             views.append(action("Read the official guide", icon: "icon-globe", filled: false) { [weak self] in self?.openSource(source) })
         }
         return views
-    }
-
-    private func unlockGuide(_ id: String, price: Int) {
-        confirm("Unlock this guide?", message: "This will spend \(price) coins from your wallet.", actionTitle: "Unlock guide") { [weak self] in
-            guard let self else { return }
-            self.run {
-                try await self.store.perform("guide.unlock", ["target_guide": .string(id), "expected_price": .number(Double(price))])
-            }
-        }
     }
 
     private func showGuideSafety(guideID: String, author: String) {
@@ -845,7 +836,7 @@ func destinationGuideCover(_ place: Record, store: TravelStore, height: CGFloat,
     cover.accessibilityLabel = "Open guide for " + place.string("name")
     cover.addAction(UIAction { _ in onOpen() }, for: .touchUpInside)
     if let offer = offer ?? destinationGuideOffer(place.id, store: store), offer.int("price_coins") > 0 {
-        let label = (showsWorkCaption ? "" : "Paid · ") + "\(offer.int("price_coins")) coins" + (offer.bool("unlocked") ? " · Unlocked" : "")
+        let label = (showsWorkCaption ? "" : "Paid · ") + "\(offer.int("price_coins")) coins" + (store.payments.hasGuideAccess(to: offer) ? " · Unlocked" : "")
         let badge = line([], spacing: 5)
         let icon = UIImageView(image: UIImage(named: "icon-wallet"))
         icon.contentMode = .scaleAspectFit
@@ -872,46 +863,44 @@ func destinationGuideCover(_ place: Record, store: TravelStore, height: CGFloat,
 
 @MainActor
 extension UIViewController {
-    func openPlaceGuide(_ placeID: String, store: TravelStore, guideID: String? = nil) {
-        guard presentedViewController == nil else { return }
-        performGuideRequest {
+    func openPlaceGuide(_ placeID: String, store: TravelStore, guideID: String? = nil,
+                        onUnlocked: (() -> Void)? = nil) {
+        guard presentedViewController == nil, store.isAuthenticated else { return }
+        let accountID = store.userID
+        let showGuide: (Record) -> Void = { [weak self] offer in
+            guard let self, store.isAuthenticated, store.userID == accountID,
+                  self.navigationController?.topViewController === self else { return }
+            if let onUnlocked { onUnlocked() }
+            else {
+                self.navigationController?.pushViewController(
+                    PlaceController(store: store, placeID: placeID, preferredGuideID: offer.string("guide_id")), animated: true)
+            }
+        }
+        performGuideRequest(store: store) {
             try await store.refreshCoinState()
-            guard self.navigationController?.topViewController === self else { return }
+            guard store.isAuthenticated, store.userID == accountID,
+                  self.navigationController?.topViewController === self else { return }
             guard store.visiblePlaces.contains(where: { $0.id == placeID }),
                   let offer = destinationGuideOffer(placeID, store: store, guideID: guideID) else {
                 throw GuideAccessError.message("This guide is unavailable.")
             }
             let price = offer.int("price_coins")
-            if price == 0 || offer.bool("unlocked") || offer.string("author_id") == store.userID {
+            if store.payments.hasGuideAccess(to: offer) {
                 try await store.refresh()
-                guard self.navigationController?.topViewController === self else { return }
-                self.navigationController?.pushViewController(PlaceController(store: store, placeID: placeID, preferredGuideID: offer.string("guide_id")), animated: true)
+                showGuide(offer)
                 return
             }
-            let enough = store.balance >= price
-            let message = "\(offer.string("title"))\n\nPrice: \(price) coins\nYour balance: \(store.balance) coins\n\n" +
-                (enough ? "Confirm payment to unlock this guide." : "You need \(price - store.balance) more coins to unlock this guide.")
-            let dialog = TravelDialogController(title: "Unlock guide", message: message, choices: [
+            guard let balance = store.payments.walletBalance else {
+                throw GuideAccessError.message("Your coin balance could not be loaded. Please try again.")
+            }
+            let message = "\(offer.string("title"))\n\nPrice: \(price) coins\nYour balance: \(balance) coins\n\nConfirm payment to unlock this guide."
+            let dialog = TravelDialogController(title: "Confirm payment", message: message, choices: [
                 ("Cancel", false, {}),
-                (enough ? "Pay \(price) coins" : "Get coins", false, { [weak self] in
-                    guard let self else { return }
-                    if !enough {
-                        self.navigationController?.pushViewController(WalletController(store: store), animated: true)
-                        return
-                    }
-                    self.performGuideRequest {
-                        try await store.perform("guide.unlock", [
-                            "target_guide": .string(offer.string("guide_id")),
-                            "expected_price": .number(Double(price))
-                        ])
-                        do {
-                            try await store.refreshCoinState()
-                            try await store.refresh()
-                        } catch {
-                            throw GuideAccessError.message("Your payment was saved. Open this guide again to load it without paying twice.")
-                        }
-                        guard self.navigationController?.topViewController === self else { return }
-                        self.navigationController?.pushViewController(PlaceController(store: store, placeID: placeID, preferredGuideID: offer.string("guide_id")), animated: true)
+                ("Pay \(price) coins", false, { [weak self] in
+                    guard let self, store.isAuthenticated, store.userID == accountID else { return }
+                    self.performGuideRequest(store: store) {
+                        try await store.payments.unlockGuide(offer.string("guide_id"), expectedPrice: price)
+                        showGuide(offer)
                     }
                 })
             ])
@@ -919,7 +908,7 @@ extension UIViewController {
         }
     }
 
-    private func performGuideRequest(_ operation: @escaping () async throws -> Void) {
+    private func performGuideRequest(store: TravelStore, _ operation: @escaping () async throws -> Void) {
         guard view.isUserInteractionEnabled else { return }
         view.isUserInteractionEnabled = false
         let spinner = UIActivityIndicatorView(style: .large)
@@ -939,6 +928,16 @@ extension UIViewController {
             }
             do { try await operation() }
             catch is CancellationError { }
+            catch GuidePurchaseFailure.insufficientCoins(let balance, let price) {
+                guard self.navigationController?.topViewController === self, self.presentedViewController == nil else { return }
+                let message = "Your balance is \(balance) coins. This guide costs \(price) coins. Add \(max(0, price - balance)) more coins to continue."
+                self.present(TravelDialogController(title: "Insufficient coins", message: message, choices: [
+                    ("Cancel", false, {}),
+                    ("Buy coins", false, { [weak self] in
+                        self?.navigationController?.pushViewController(WalletController(store: store), animated: true)
+                    })
+                ]), animated: true)
+            }
             catch {
                 guard self.navigationController?.topViewController === self, self.presentedViewController == nil else { return }
                 self.present(TravelDialogController(title: "Guide unavailable", message: error.localizedDescription,

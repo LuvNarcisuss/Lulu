@@ -1,6 +1,6 @@
 # Coins and paid guides
 
-The wallet uses StoreKit 2 consumable products. The values below are the US reference mapping. The app displays Apple's returned storefront price and only offers checkout when Apple returns the product and the verifier is configured.
+The wallet uses StoreKit 2 consumable products. Current owner-selected Debug testing uses the isolated local StoreKit wallet described in [Local StoreKit verification](local-storekit.md); the production flow below remains unchanged. The values below are the US reference mapping. The app displays Apple's returned storefront price and only offers checkout when Apple returns the product and the verifier is configured.
 
 | Reference USD | Coins | Product ID |
 | ---: | ---: | --- |
@@ -27,3 +27,25 @@ To submit a guide, open a destination and select **Write a guide for this place*
 The Supabase project applied migrations `20261110020657_lulu_coin_guides` and `20261110020907_scope_guide_author_visibility`. The second migration scopes the author-block check to the current account. Hosted checks found nine coin products, eight free guides, four paid guides and no ledger entries. An authenticated zero-balance test claim could read all 12 previews and only the eight free bodies through the existing snapshot or direct guide read. The same claim was denied an unlock for insufficient coins. The service-only credit RPC is denied to authenticated app clients. The Edge Function `travel-coin-purchase` version 1 is active and rejected an unsigned-in request with HTTP 401.
 
 The numeric Apple ID and Apple storefront acceptance are pending. No real transaction, sandbox transaction, app build or simulator run was performed. Apple refund notifications and automated refund reconciliation are outside the initial delivery path.
+
+## November 10 catalog diagnosis and client completion
+
+All nine supplied/generated Lulu identifiers match the hosted `coin_products` rows and their quantities. No product IDs were missing from the app. The reported screenshot corresponds to a successful StoreKit response with no consumable products. This identifies the failing stage, not the Apple-side cause: App Store Connect registration, availability and agreement status remain unverified because no Apple administration access is connected.
+
+The client now distinguishes loading, full/partial catalog, empty response, failure and a 20-second timeout. Requests are generation-scoped; sign-out and timeout invalidate stale callbacks. A returned partial catalog keeps eligible products usable. Purchase confirmation uses the actual localized StoreKit price, then rechecks the account, device restrictions and verifier before Apple's sheet. Pending/cancelled/failed purchases never credit coins. Signed transactions remain unfinished until authoritative ledger acknowledgment; explicit pending-purchase recovery and account-scoped update handling preserve this rule. Debug builds provide sanitized copyable diagnostics with requested/returned/missing IDs, catalog phase and bounded error domain/code. StoreKit 2 missing IDs are not mislabeled as explicit Apple invalid-ID responses.
+
+`LuluApp/Configuration/LuluCoins.storekit` contains all nine matching consumables and reference prices and is an Xcode file-group reference only, excluded from app resources. The existing Lulu scheme keeps StoreKit Configuration unset (Apple catalog mode). Select this file manually in the same scheme only for authorized local catalog checks; select None to return to Apple's catalog. The local fixture neither registers products in App Store Connect nor enables production ledger credit. Local Xcode and Apple sandbox transactions remain rejected by the production-only verifier. Full local/sandbox payment acceptance therefore requires a separate isolated test delivery design; it has not been claimed complete.
+
+`lulu-product-comparison.csv` is a comparison sheet, not an App Store Connect import format. Release retains `com.lulu.travel` with its signing team unassigned; numeric App Store Connect Apple ID is still required for `APPLE_APP_ID` in the existing verifier. No Apple identifier, team, account agreement, payment or secret was invented or changed. In-App Purchase capability metadata is recorded in the generator and project; it does not create the Apple catalog.
+
+Read-only hosted inspection confirmed the nine mappings and authenticated denial of direct credit RPC execution. Source inspection confirmed unique transaction-ID delivery, account/product matching on duplicates, atomic ledger writes and finish-after-acknowledgment. Runtime purchase acceptance is pending. No app build, typecheck, simulator run, local StoreKit transaction, sandbox transaction or production transaction was performed for this change.
+
+## Owner-selected test signing
+
+The owner selected `im.seex.sao2` and Yu Sun for testing. Debug now uses that Bundle ID and Team ID `JPTS6M4T5B`, verified from the public subject of the installed Apple Development certificate (organization Yu Sun). Release keeps `com.lulu.travel` and requires its own confirmed signing configuration. The existing Lulu scheme still runs Debug and archives Release. No certificate private key was read or exported. A test identity does not create StoreKit products or provide the numeric production Apple ID. The owner is selecting local StoreKit versus Apple sandbox delivery; no testing environment has been silently enabled.
+
+Static validation after metadata generation passed: the nine fixture IDs/prices match PaymentCatalog.json, all products are consumables, Debug identity/team and Release identity match the source configuration, the Lulu scheme runs Debug and archives Release, and the fixture is excluded from app resources. The two changed payment Swift files passed syntax parsing, the Xcode project passed plist lint, and whitespace checks passed. No compilation or runtime acceptance is implied by these checks.
+
+## Local testing selected and verified
+
+The prior pending test-mode notes are superseded: the owner selected Xcode local StoreKit. The Lulu Debug Run action now selects the nine-product fixture and the Debug-only local ledger. The full [local StoreKit verification report](local-storekit.md) records the successful build and three passing runtime tests, including nine purchases totaling 172,400 local coins. This does not establish Apple sandbox or production readiness.

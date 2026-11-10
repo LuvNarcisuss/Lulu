@@ -8,7 +8,8 @@
       "transparent_background": true,
       "source_file": "/Users/apple/.codex/generated_images/01a1a0a5-f4d2-7ae2-a315-34c759f1a632/exec-8a7bc34c-8659-41a8-8f35-316b1ba33c84.png",
       "project_file": "Assets/generated/travel-icons-sheet.png",
-      "processing": "Six by six row-major equal-cell crop; alpha-bounds crop; aspect fit 144 by 144; centered on transparent 160 by 160 canvas. No icons redrawn."
+      "processing": "Six by six row-major equal-cell crop; alpha-bounds crop; aspect fit 144 by 144; centered on transparent 160 by 160 canvas. No icons redrawn.",
+      "status": "Superseded by individual-icons-2026-11-10.json; historical source only."
     },
     {
       "name": "background-paper",
@@ -49,8 +50,9 @@
       "references": [
         "Owner-supplied slider control screenshot",
         "LuluApp/Resources/Assets.xcassets/icon-explore.imageset/icon-explore.png"
-      ]
+      ],
+      "status": "Superseded by individual-icons-2026-11-10.json; historical source only."
     }
   ],
-  "review": "All selected originals visually inspected. Icon ordering matches the shared contract. Backgrounds contain no app name or intentional lettering."
+  "review": "Historical generation record. Active UI icons are independently generated; see individual-icons-2026-11-10.json. Original backgrounds and app logo are retained."
 }
