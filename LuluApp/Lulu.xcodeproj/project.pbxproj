@@ -45,6 +45,7 @@
 		E253126C5002EAA9BF84D257 /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CB1A55F3C531BFE9465D1B /* EditProfileController.swift */; };
 		E73CF64D56CC4788E8C2F782 /* TravelDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF8BD4AFEF5272B7B5BF584 /* TravelDesign.swift */; };
 		F99E046D430246871104DB12 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5416A4E1EF5E353CE7BB7F /* SettingsController.swift */; };
+		6AA04B02ABAD4437BFD47152 /* LocalVideoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA04B02ABAD4437BFD47151 /* LocalVideoPreviewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		EB86D55DBE36376521E9262B /* LuluCoins.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = LuluCoins.storekit; sourceTree = "<group>"; };
 		EF34A77FB58150C39436D4E3 /* LocalPurchaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalPurchaseTests.swift; sourceTree = "<group>"; };
 		F1D36FE358E1CC05B4968474 /* SocialSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSupport.swift; sourceTree = "<group>"; };
+		6AA04B02ABAD4437BFD47151 /* LocalVideoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalVideoPreviewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +198,7 @@
 			children = (
 				1CEFCF9BF8133E6F9290FF9B /* ChatsController.swift */,
 				C43AB8E30F2FE8ED1EDBEC7F /* ConversationController.swift */,
+				6AA04B02ABAD4437BFD47151 /* LocalVideoPreviewController.swift */,
 				F1D36FE358E1CC05B4968474 /* SocialSupport.swift */,
 				0A41495E50F9093F27484A99 /* TravelerCodeController.swift */,
 			);
@@ -433,6 +436,7 @@
 				7C10A2903E7E299ED18655B2 /* JourneyControllers.swift in Sources */,
 				AFB246D049CD87986F7596BE /* LaunchServices.swift in Sources */,
 				D879A4EFAAB80B22EC16B7DC /* LocalStoreKitWallet.swift in Sources */,
+				6AA04B02ABAD4437BFD47152 /* LocalVideoPreviewController.swift in Sources */,
 				6559A5863FEF44AFD7043144 /* PaymentCatalogAdapter.swift in Sources */,
 				0ABFB7AC74DBBA5479719E08 /* ProfileControllers.swift in Sources */,
 				04E844829C4C464459C3BD7E /* Record.swift in Sources */,

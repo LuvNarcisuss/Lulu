@@ -33,7 +33,7 @@ Stage B external authentication, external Socket, WebView and purchase forwardin
 - Apple registration for the selected Bundle ID `com.lulu.travel`, and development team.
 - Apple App ID configuration, App Store Connect registration for the nine consumables and actual Apple environment acceptance. See [Coins and paid guides](docs/backend/coins-and-guides.md).
 - Signing and APNs entitlement configuration before push registration is enabled. Registration callbacks are prepared, but background notifications are not claimed as operational.
-- Legal operator and a real staffed contact channel before public distribution. The [published Lulu agreements](docs/backend/legal/2026-11-09-lulu/README.md) still need a substantive review of the account wording and operator details.
+- Publish the revised [Lulu agreements](docs/backend/legal/2026-11-09-lulu/README.md) at the existing URLs and review the account wording before public distribution.
 - Explicit authorization to deploy the self-account deletion service. Automatic review rejected that deployment because destructive account/data effects had not been explicitly authorized. The function source is provided, deployment is absent, and the UI accurately marks deletion unavailable.
 
 ## Verification boundaries

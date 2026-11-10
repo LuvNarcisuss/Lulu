@@ -4,8 +4,8 @@
   "termsURL": "https://dlbaneeshycwmhgfeokx.supabase.co/storage/v1/object/public/legal/2026-11-09-lulu/terms.pdf",
   "privacyURL": "https://dlbaneeshycwmhgfeokx.supabase.co/storage/v1/object/public/legal/2026-11-09-lulu/privacy.pdf",
   "stage": "A",
-  "consentVersion": "travel-f37d7cbb470d9d8dd3869568",
-  "termsSHA256": "8ee4322717fa6cefd23f27e9ae05c395736ea31cfbcffbe3f9a26549bd5580ec",
-  "privacySHA256": "30207420ee103b9c550567b35b8c46498d6229337eb9c8ad77e5a4a7faa5edeb",
+  "consentVersion": "travel-4105ae5ce665d809586ccd20",
+  "termsSHA256": "cab5f857cfd3eede9b21d0067d3f5ec43ed6bc594367b71704206d8099d51809",
+  "privacySHA256": "a0c4dccdb677ab453b0d36c2c1bb6a604523aa10cce323e975a3389137749594",
   "accountDeletionDeployed": false
 }

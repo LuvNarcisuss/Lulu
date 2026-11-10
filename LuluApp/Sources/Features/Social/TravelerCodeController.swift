@@ -178,7 +178,7 @@ final class FriendScannerController: TravelScreen {
     }
 }
 
-private final class CameraPreviewView: UIView {
+final class CameraPreviewView: UIView {
     override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
     var preview: AVCaptureVideoPreviewLayer { layer as! AVCaptureVideoPreviewLayer }
 }

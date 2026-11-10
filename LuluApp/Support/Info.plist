@@ -48,7 +48,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Scan a traveler's code to open their profile.</string>
+	<string>Scan traveler codes and show your camera preview in Chats.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Use the microphone for audio you choose to capture.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

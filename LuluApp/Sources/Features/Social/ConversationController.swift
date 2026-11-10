@@ -43,8 +43,9 @@ final class ConversationController: TravelScreen, UITextViewDelegate, PHPickerVi
             composer.delegate = self
             content.addArrangedSubview(line([
                 action("Travelers", icon: "icon-group", filled: false) { [weak self] in self?.showMembers() },
-                iconButton("icon-phone", label: "Calling availability") { [weak self] in
-                    self?.notice("Voice and video calling are not available. You can send messages and photos here.")
+                iconButton("icon-video", label: "Open video call camera preview") { [weak self] in
+                    guard let self else { return }
+                    self.push(LocalVideoPreviewController(store: self.store))
                 }
             ]))
             content.addArrangedSubview(policyLabel)

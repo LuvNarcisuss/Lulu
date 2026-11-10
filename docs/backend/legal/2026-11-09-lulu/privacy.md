@@ -1,5 +1,5 @@
 # Lulu — Privacy Policy
-Version 2026-11-09-v2 · November 9, 2026
+Version 2026-11-10-v3 · November 10, 2026
 
 ## Scope
 This policy describes information handled by Lulu. Editorial media and linked tourism websites may come from independent sources. Opening an external website makes that website's own policies applicable. The application does not provide AI chat, live broadcasting, connected voice or video calls, or advertising personalization in this version.
@@ -20,4 +20,4 @@ Supabase provides authentication, database, media storage, and realtime infrastr
 You can edit your profile, remove your own comments and pending submissions, manage saves and follows, delete journeys, block or report members, and sign out. Settings provides an account-deletion request; deletion is complete only after successful server processing. This removes the active account and associated owned records and uploads. Copies held by recipients, external sites, protected backups, or necessary safety and legal records may remain. Signing out alone does not delete server records and may permanently prevent recovery of a guest account. Keep information you need before ending guest access.
 
 ## Updates and contact
-Material changes to information handling require an updated policy and any consent required by applicable law. Lulu is being prepared for private development use. Its legal operator, and privacy-contact address remain unassigned, and no staffed contact channel is currently available. These details and any location-specific rights process must be established before public distribution.
+Material changes to information handling require an updated policy and any consent required by applicable law. Lulu is operated by Chengdu Yuehui Xingyu Technology Co., Ltd. For privacy questions or requests concerning your personal information, contact hemalathabroadway1@icloud.com.

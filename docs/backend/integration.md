@@ -11,7 +11,7 @@ Status: stage A deployed and finite backend verification passed for the implemen
 - Created specifically for this application: `travel-social-20261103`, ref `dlbaneeshycwmhgfeokx`, region `eu-west-1`, Free plan, observed `ACTIVE_HEALTHY`.
 - Origin: `https://dlbaneeshycwmhgfeokx.supabase.co`.
 - Creation attempt was recorded before creating the project in `supabase-plan.json`. No other application's project, identity, credits, products, contacts, credentials or data was copied. The creation tool did not request a cost confirmation.
-- The app is named Lulu, and its selected Bundle ID is `com.lulu.travel`. Apple registration, team, operator, and contact channel remain unconfirmed. See [Coins and paid guides](coins-and-guides.md) for the current product mapping and verification requirements.
+- The app is named Lulu, and its selected Bundle ID is `com.lulu.travel`. Apple registration and the development team remain unconfirmed. See [Coins and paid guides](coins-and-guides.md) for the current product mapping and verification requirements.
 
 ## Deployed contract
 
@@ -63,7 +63,7 @@ Security advisors were reviewed after deployment. Guest-policy and authenticated
 
 ## Agreements
 
-The current [Lulu revision](legal/2026-11-09-lulu/README.md) was published on November 9, 2026. Both public downloads match the bundled offline PDFs byte for byte. The consent identifier is `travel-f37d7cbb470d9d8dd3869568`. [Public verification](legal/2026-11-09-lulu/public-verification.json) records the exact URLs, response status, sizes and hashes.
+The [November 10 Lulu revision](legal/2026-11-09-lulu/README.md) updates the operator and contact email. The bundled PDFs, expected checksums, and consent identifier now use the revision. The same public URLs serve the November 9 files until the Storage objects are overwritten. [Public verification](legal/2026-11-09-lulu/public-verification.json) records the previous publication.
 
 ### Original November 3 publication
 
@@ -82,7 +82,7 @@ An initial attempt to open their deletion was rejected by automatic approval rev
 
 Separately, the `travel-account` Edge deployment was rejected by automatic approval review because it creates a persistent privileged account-deletion capability. The source is reviewable at `supabase/functions/travel-account/index.ts`, but the function is not deployed and in-app account deletion is not currently available. The user has not approved that deployment, and it has not been retried. These are two separate approvals.
 
-Release also requires the owned registered Bundle ID/team, legal operator/contact, APNs signing/capability configuration and actual push delivery infrastructure. Apple checkout remains gated on verification configuration and storefront availability. The hosted coin and guide APIs are recorded in [Coins and paid guides](coins-and-guides.md). External authentication, Socket forwarding and stage B remain unrequested. No app build, typecheck, Preview, app launch, simulator or runtime tests were performed.
+Release also requires the owned registered Bundle ID/team, APNs signing/capability configuration and actual push delivery infrastructure. Apple checkout remains gated on verification configuration and storefront availability. The hosted coin and guide APIs are recorded in [Coins and paid guides](coins-and-guides.md). External authentication, Socket forwarding and stage B remain unrequested. No app build, typecheck, Preview, app launch, simulator or runtime tests were performed.
 
 ## Public profile statistics
 

@@ -1,5 +1,5 @@
 # Lulu — Terms of Use
-Version 2026-11-09-v2 · November 9, 2026
+Version 2026-11-10-v3 · November 10, 2026
 
 ## About the service
 Lulu helps you discover editorial destination videos and guides, organize private journeys, and communicate with other travelers. Recorded footage is not a live broadcast. Editorial publishers are content sources, not necessarily registered members. Travel advice is general information. Check official sources for current access conditions, safety advice, permits, opening times, and prices before traveling.
@@ -20,4 +20,4 @@ Journeys, checklists, budgets, and journals are planning tools, not bookings or 
 Network failures may temporarily prevent reading or saving information. A successful save means the server accepted the change. Service features may be updated or restricted to address misuse or operational needs. Settings offers sign-out and an account-deletion request. Account deletion depends on successful server processing; a visible failure does not mean the account was deleted. Deleted content may remain temporarily in protected backups or records retained for legitimate security or legal needs. Content already copied or shared by another person cannot always be recalled.
 
 ## Operator and contact information
-Lulu is being prepared for private development use. Its legal operator, support address, and applicable consumer disclosures have not yet been designated. A staffed contact channel is not currently available. These details must be confirmed before public distribution. These terms do not limit rights that applicable law makes non-waivable.
+Lulu is operated by Chengdu Yuehui Xingyu Technology Co., Ltd. For questions about the service or these terms, contact hemalathabroadway1@icloud.com. These terms do not limit rights that applicable law makes non-waivable.
