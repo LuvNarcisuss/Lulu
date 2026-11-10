@@ -1,127 +1,65 @@
 workflows:
-  bibi-ios-app-store: &bibi_app_store
-    name: Bibi iOS App Store
+  lulu-ios-app-store:
+    name: Lulu iOS App Store
     max_build_duration: 120
     instance_type: mac_mini_m2
 
     integrations:
-      app_store_connect: Bibi
+      app_store_connect: Lulu
 
     environment:
+      xcode: "26.5"
+      # Use the Apple Distribution certificate and matching App Store profile from Code signing identities.
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.bibi.quadratic
-
+        bundle_identifier: com.lulu.travel
       vars:
-        BUNDLE_ID: "com.bibi.quadratic"
-        APPLE_TEAM_ID: "93BX5X327N"
-        XCODE_PROJECT: "BibiApp/Bibi.xcodeproj"
-        XCODE_SCHEME: "Bibi"
-        BIBI_MARKETING_VERSION: "0.1.2"
-        APP_STORE_APPLE_ID: "6828253391"
-        GIT_LFS_SKIP_SMUDGE: "1"
-
-      xcode: "26.5"
+        XCODE_PROJECT: "LuluApp/Lulu.xcodeproj"
+        XCODE_SCHEME: "Lulu"
+        APP_STORE_APPLE_ID: "6832914128"
 
     scripts:
-      - name: Verify native iOS project configuration
+      - name: Set next App Store build number
         script: |
           set -euo pipefail
-          cd "$CM_BUILD_DIR"
-          if [[ ! -f "$XCODE_PROJECT/project.pbxproj" ]]; then
-            echo "ERROR: Missing $XCODE_PROJECT/project.pbxproj in $CM_BUILD_DIR." >&2
-            exit 1
-          fi
-          SCHEME_PATH="$XCODE_PROJECT/xcshareddata/xcschemes/$XCODE_SCHEME.xcscheme"
-          if [[ ! -f "$SCHEME_PATH" ]]; then
-            echo "ERROR: Missing shared scheme: $SCHEME_PATH. Commit this file to Git." >&2
-            exit 1
-          fi
-          if ! grep -Fq \
-            -e "PRODUCT_BUNDLE_IDENTIFIER = \"$BUNDLE_ID\";" \
-            -e "PRODUCT_BUNDLE_IDENTIFIER = $BUNDLE_ID;" \
-            "$XCODE_PROJECT/project.pbxproj"; then
-            echo "ERROR: Bundle ID $BUNDLE_ID was not found in $XCODE_PROJECT/project.pbxproj." >&2
-            exit 1
-          fi
-          echo "Verified $XCODE_PROJECT, shared scheme $XCODE_SCHEME and bundle ID $BUNDLE_ID."
 
-      - name: Prepare bundled Bibi resources
-        script: |
-          set -euo pipefail
-          cd "$CM_BUILD_DIR"
-          git lfs install --local
-          git lfs pull --include="Assets/**" --exclude=""
-          python3 BibiApp/scripts/restore_ci_resources.py
-          python3 BibiApp/scripts/verify_ci_resources.py
-          python3 BibiApp/scripts/prepare_asset_catalog.py
+          LATEST_BUILD_NUMBER="$(app-store-connect get-latest-build-number "$APP_STORE_APPLE_ID" --all-versions)"
+          LATEST_BUILD_NUMBER="${LATEST_BUILD_NUMBER:-0}"
+          if [[ ! "$LATEST_BUILD_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "ERROR: Expected a numeric App Store Connect build number." >&2
+            exit 1
+          fi
+
+          NEXT_BUILD_NUMBER=$((10#$LATEST_BUILD_NUMBER + 1))
+          echo "Using build number: $NEXT_BUILD_NUMBER"
+          echo "LULU_BUILD_NUMBER=$NEXT_BUILD_NUMBER" >> "$CM_ENV"
 
       - name: Set up App Store signing
         script: |
           set -euo pipefail
-          cd "$CM_BUILD_DIR/BibiApp"
-          python3 scripts/ensure_app_store_profile.py
           xcode-project use-profiles \
-            --profile "$CM_BUILD_DIR/build/signing/Bibi-AppStore-Push.mobileprovision" \
+            --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
             --archive-method app-store \
-            --custom-export-options "{\"teamID\":\"$APPLE_TEAM_ID\"}"
+            --custom-export-options '{"manageAppVersionAndBuildNumber": false}'
 
-      - name: Set next App Store build number
+      - name: Build signed Release IPA
         script: |
           set -euo pipefail
-          cd "$CM_BUILD_DIR"
-
-          LATEST_BUILD_NUMBER="$(
-            app-store-connect get-latest-testflight-build-number \
-              "$APP_STORE_APPLE_ID" --all-versions
-          )"
-
-          LATEST_BUILD_NUMBER="${LATEST_BUILD_NUMBER:-0}"
-          [[ "$LATEST_BUILD_NUMBER" =~ ^[0-9]+$ ]] || { echo "Invalid App Store build number."; exit 1; }
-          NEXT_BUILD_NUMBER=$((10#$LATEST_BUILD_NUMBER + 1))
-          CI_BUILD_NUMBER="${BUILD_NUMBER:-1}"
-          [[ "$CI_BUILD_NUMBER" =~ ^[0-9]+$ ]] || { echo "Invalid CI build number."; exit 1; }
-          if (( 10#$CI_BUILD_NUMBER > NEXT_BUILD_NUMBER )); then
-            NEXT_BUILD_NUMBER=$((10#$CI_BUILD_NUMBER))
-          fi
-
-          echo "Using build number: $NEXT_BUILD_NUMBER"
-          echo "BIBI_BUILD_NUMBER=$NEXT_BUILD_NUMBER" >> "$CM_ENV"
-
-      - name: Build signed IPA
-        script: |
-          set -euo pipefail
-          cd "$CM_BUILD_DIR"
           xcode-project build-ipa \
             --project "$CM_BUILD_DIR/$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME" \
             --config Release \
-            --archive-xcargs "MARKETING_VERSION=$BIBI_MARKETING_VERSION CURRENT_PROJECT_VERSION=$BIBI_BUILD_NUMBER DEVELOPMENT_TEAM=$APPLE_TEAM_ID" \
+            --archive-xcargs "CURRENT_PROJECT_VERSION=$LULU_BUILD_NUMBER" \
             --ipa-directory "$CM_BUILD_DIR/build/ios/ipa"
 
     artifacts:
-      - build/signing/Bibi-AppStore-Push.mobileprovision
-      - build/signing/profile-summary.json
       - build/ios/ipa/*.ipa
+      - build/ios/xcarchive/**/*.dSYM
       - /tmp/xcodebuild_logs/*.log
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
 
     publishing:
-      email:
-        recipients:
-          - 2758057680@qq.com
-        notify:
-          success: true
-          failure: true
-
       app_store_connect:
-        # Upload the IPA using the Bibi integration; review submission is separate.
+        # Upload the IPA to App Store Connect without automatically submitting it for review.
         auth: integration
         submit_to_testflight: false
         submit_to_app_store: false
-
-  bibi-ios-signing-validation:
-    <<: *bibi_app_store
-    name: Bibi signing validation
-    publishing: {}
