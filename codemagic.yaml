@@ -12,7 +12,7 @@ workflows:
       # Use the Apple Distribution certificate and matching App Store profile from Code signing identities.
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.lulu.travel
+        bundle_identifier: com.lulu.tourtravel
       vars:
         XCODE_PROJECT: "LuluApp/Lulu.xcodeproj"
         XCODE_SCHEME: "Lulu"

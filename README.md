@@ -30,7 +30,7 @@ Stage B external authentication, external Socket, WebView and purchase forwardin
 
 ## Owner configuration still required
 
-- Apple registration for the selected Bundle ID `com.lulu.travel`, and development team.
+- Apple registration and distribution signing for `com.lulu.tourtravel`. Confirm that the App Store Connect record with Apple ID `6832914128` uses this Bundle ID before building with Codemagic.
 - Apple App ID configuration, App Store Connect registration for the nine consumables and actual Apple environment acceptance. See [Coins and paid guides](docs/backend/coins-and-guides.md).
 - Signing and APNs entitlement configuration before push registration is enabled. Registration callbacks are prepared, but background notifications are not claimed as operational.
 - Publish the revised [Lulu agreements](docs/backend/legal/2026-11-09-lulu/README.md) at the existing URLs and review the account wording before public distribution.

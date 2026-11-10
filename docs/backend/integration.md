@@ -11,7 +11,7 @@ Status: stage A deployed and finite backend verification passed for the implemen
 - Created specifically for this application: `travel-social-20261103`, ref `dlbaneeshycwmhgfeokx`, region `eu-west-1`, Free plan, observed `ACTIVE_HEALTHY`.
 - Origin: `https://dlbaneeshycwmhgfeokx.supabase.co`.
 - Creation attempt was recorded before creating the project in `supabase-plan.json`. No other application's project, identity, credits, products, contacts, credentials or data was copied. The creation tool did not request a cost confirmation.
-- The app is named Lulu, and its selected Bundle ID is `com.lulu.travel`. Apple registration and the development team remain unconfirmed. See [Coins and paid guides](coins-and-guides.md) for the current product mapping and verification requirements.
+- The app is named Lulu, and its Release Bundle ID is `com.lulu.tourtravel`. Apple registration and the development team remain unconfirmed. See [Coins and paid guides](coins-and-guides.md) for the current product mapping and verification requirements.
 
 ## Deployed contract
 

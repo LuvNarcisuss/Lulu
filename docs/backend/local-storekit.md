@@ -2,7 +2,7 @@
 
 ## Current mode
 
-The owner selected local Xcode StoreKit testing on November 10, 2026. The single Lulu scheme runs Debug with `Configuration/LuluCoins.storekit` and `LULU_LOCAL_STOREKIT=1`. Debug uses `im.seex.sao2` and Yu Sun team `JPTS6M4T5B`; Release retains `com.lulu.travel`. Selecting Apple-backed testing requires both StoreKit Configuration = None and removal of the local-wallet environment variable in the same scheme.
+The owner selected local Xcode StoreKit testing on November 10, 2026. The single Lulu scheme runs Debug with `Configuration/LuluCoins.storekit` and `LULU_LOCAL_STOREKIT=1`. Debug uses `im.seex.sao2` and Yu Sun team `JPTS6M4T5B`. Release uses `com.lulu.tourtravel`. Selecting Apple-backed testing requires both StoreKit Configuration = None and removal of the local-wallet environment variable in the same scheme.
 
 `LocalStoreKitWallet` is compiled only in Debug. It accepts only StoreKit-verified Xcode-environment consumable transactions for the signed account token, known product, quantity one and no revocation. It writes an account-scoped atomic file before finishing the transaction and retains all transaction identifiers for deduplication. The wallet shows a distinct local-test balance and history. It never writes Supabase wallet rows or grants production guide entitlements. The November 10 guide checkout fix adds isolated local debits and persisted access to project-owned editorial guide copies, compiled only in Debug. Ordinary app authentication remains required; test code does not add a production login bypass.
 

@@ -37,7 +37,7 @@
 			<string>Release identity callback</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.lulu.travel</string>
+				<string>com.lulu.tourtravel</string>
 			</array>
 		</dict>
 	</array>
