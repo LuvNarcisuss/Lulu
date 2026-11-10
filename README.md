@@ -16,7 +16,7 @@ Open `LuluApp/Lulu.xcodeproj` to inspect the project. Configuration originates i
 
 The catalog contains **14 distinct real videos and covers, 12 destinations, 12 original English guides and 14 real photographs**. Video and photography source, license, processing, inspection and SHA-256 records live in `Assets/media-manifest.json`. The catalog is uploaded to this application's own Supabase Storage; business media is not bundled or used as an offline business-data fallback.
 
-The image model generated **36 transparent icons, two watercolor/paper backgrounds and a dedicated opaque 1024-pixel AppIcon**. Generation prompts and engine records live in `Assets/generated/generation-record.json`. Packaged Kalam and a licensed, statically instantiated Fraunces display font supply app-owned typography; the app does not substitute system fonts or SF Symbols. System-owned Photos, Maps, sharing and permission surfaces retain their own rendering.
+The image model generated **36 transparent icons and two watercolor/paper backgrounds**. Generation prompts and engine records live in `Assets/generated/generation-record.json`. The owner supplied the artwork for the iPhone app icon and toolbar logo. See [Travel media and visual assets](docs/media/README.md#brand-artwork) for its provenance. Packaged Kalam and a licensed, statically instantiated Fraunces display font supply app-owned typography; the app does not substitute system fonts or SF Symbols. System-owned Photos, Maps, sharing and permission surfaces retain their own rendering.
 
 ## Backend and entry
 

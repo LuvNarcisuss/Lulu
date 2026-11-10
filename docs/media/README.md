@@ -8,7 +8,7 @@ The public catalog contains 14 recorded travel films, 14 matching covers, 12 des
 - `Assets/media-manifest.json`: every business-media object path, local file, SHA-256, byte count, dimensions, video duration/frame rate, source, creator where identified, license, processing and actual scene review.
 - `Assets/video-sources.json` and `Assets/photo-sources.json`: selected upstream source metadata. An uncredited Mixkit creator remains null instead of being invented.
 - The 42 catalog media files (60,681,789 bytes) are served from the dedicated Supabase project. The manifest `path` identifies each bucket and object, and `local_file` identifies its ignored staging path under `Assets/catalog/`. Keep catalog binaries out of the checkout, Git, and the application target.
-- `LuluApp/Resources/Assets.xcassets/`: 37 generated transparent raster icons, two generated portrait backgrounds, one independently generated opaque AppIcon, and its toolbar logo derivative. These are bundled shell resources.
+- `LuluApp/Resources/Assets.xcassets/`: 37 generated transparent raster icons, two generated portrait backgrounds, the owner-supplied app icon, and its toolbar logo derivative. These are bundled shell resources.
 - `LuluApp/Resources/Fonts/`: licensed custom typography and OFL licenses. Exact font names and registration paths are recorded in `fonts.json`.
 
 ## Actual scene review
@@ -36,9 +36,13 @@ The item-level source and license links in the manifest are authoritative proven
 
 The built-in `image_gen.imagegen` tool generated the icons and backgrounds. The tool does not disclose a model version, so no engine version is invented. Exact prompts, original generated file paths, workspace copies and processing are recorded in `Assets/generated/generation-record.json`. Design originals under `Assets/generated/` are excluded from Git. The application uses the processed copies in its asset catalog.
 
-The 6x6 icon sheet follows the exact shared row-major contract. Each cell was alpha-cropped, fitted proportionally within 144x144 and centered on a transparent 160x160 PNG. The sheet's generated alpha is preserved; no icons were drawn in code. The AppIcon is a separate 1254x1254 model original downsampled to 1024x1024 RGB, with no baked corner mask. The two 1024x1536 background originals are copied without pixel changes. All selected originals were visually inspected, including their actual alpha, absence of app-name text and the icon ordering.
+The 6x6 icon sheet follows the exact shared row-major contract. Each cell was alpha-cropped, fitted proportionally within 144x144 and centered on a transparent 160x160 PNG. The sheet's generated alpha is preserved; no icons were drawn in code. The two 1024x1536 background originals are copied without pixel changes. All selected originals were visually inspected, including their actual alpha, absence of app-name text and the icon ordering.
 
-The welcome illustration is a watercolor collage, not a geographically literal destination photograph. The illustration has no lettering. The separate opaque 1024x1024 AppIcon for Lulu depicts a travel compass without lettering. The `logo-lulu` toolbar asset is a 96x96 copy resized from the packaged AppIcon for display at 32 points.
+The welcome illustration is a watercolor collage, not a geographically literal destination photograph. The illustration has no lettering.
+
+## Brand artwork
+
+The owner supplied `logo.png` on November 10, 2026. The source SHA-256 is `5f5261a452c12ebbd05ce536af10198d7e2c2a21df5b50fdfe29ff7d3f766dff`. The 1024×1024 `AppIcon` retains the source RGB pixels with the fully opaque alpha channel removed. The 96×96 `logo-lulu` asset uses the same artwork for the 32-point toolbar mark and the existing editorial avatar fallback. The generation records for the original compass artwork describe the previous app icon and toolbar logo.
 
 ## Street map
 
