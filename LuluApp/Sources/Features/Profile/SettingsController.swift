@@ -21,16 +21,9 @@ final class SettingsController: TravelScreen {
                 self.push(AgreementController(store: self.store, document: document))
             })
         }
-        let isGuest = store.savedSessionIsGuest
-        if isGuest {
-            content.addArrangedSubview(text("This guest account is tied to the saved session on this device.", 14, color: Palette.muted))
-        }
         content.addArrangedSubview(action("Log out", icon: "icon-profile", filled: false) { [weak self] in
             guard let self else { return }
-            let message = isGuest
-                ? "Signing out may permanently remove access to this guest account."
-                : "Use your original sign-in method to return to this account."
-            self.confirm("Log out of this account?", message: message, destructive: true) {
+            self.confirm("Log out of this account?", destructive: true) {
                 self.run { try await self.store.signOut() }
             }
         })
@@ -39,7 +32,7 @@ final class SettingsController: TravelScreen {
             .flatMap { try? JSONDecoder().decode(Record.self, from: $0) }?.bool("accountDeletionDeployed") ?? false
         let deleteButton = action("Delete my account", icon: "icon-trash", filled: false) { [weak self] in
             guard let self else { return }
-            self.confirm("Permanently delete your account?", message: "This requests deletion of your own account and associated server data. This cannot be undone. Your original Photos library is unaffected.", destructive: true) {
+            self.confirm("Permanently delete your account?", message: "Your profile, private activity and uploads will be deleted. Published videos and guides will stay in the community without your profile. This cannot be undone.", destructive: true, actionTitle: "Delete account") {
                 self.run { try await self.store.deleteAccount() }
             }
         }

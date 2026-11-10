@@ -273,7 +273,7 @@ import Combine
         let dialog = TravelDialogController(title: "Travel notes", message: message, choices: [("OK", false, {})])
         present(dialog, animated: true)
     }
-    func confirm(_ title: String, message: String, destructive: Bool = false, actionTitle: String? = nil, action work: @escaping () -> Void) {
+    func confirm(_ title: String, message: String? = nil, destructive: Bool = false, actionTitle: String? = nil, action work: @escaping () -> Void) {
         let dialog = TravelDialogController(title: title, message: message, choices: [
             ("Cancel", false, {}), (actionTitle ?? (destructive ? "Confirm" : "Continue"), destructive, work)
         ])
@@ -295,9 +295,9 @@ private extension UIView {
 
 @MainActor final class TravelDialogController: UIViewController {
     private let heading: String
-    private let message: String
+    private let message: String?
     private let choices: [(String, Bool, () -> Void)]
-    init(title: String, message: String, choices: [(String, Bool, () -> Void)]) {
+    init(title: String, message: String? = nil, choices: [(String, Bool, () -> Void)]) {
         heading = title; self.message = message; self.choices = choices
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .pageSheet
@@ -307,7 +307,8 @@ private extension UIView {
         super.viewDidLoad()
         view.backgroundColor = Palette.cream
         let scroll = UIScrollView()
-        let body = column([text(heading, 29, display: true), text(message, 17)], spacing: 20)
+        let body = column([text(heading, 29, display: true)], spacing: 20)
+        if let message, !message.isEmpty { body.addArrangedSubview(text(message, 17)) }
         for choice in choices {
             let button = action(choice.0, filled: choice.0 != "Cancel") { [weak self] in
                 self?.dismiss(animated: true) { choice.2() }
@@ -341,7 +342,7 @@ private extension UIView {
         let background = UIImageView(image: UIImage(named: "background-paper"))
         background.contentMode = .scaleAspectFill; background.translatesAutoresizingMaskIntoConstraints = false
         addSubview(background)
-        let message = column([text("A small pause in the journey", 30, display: true), text("This page could not be refreshed. Check your connection and try again. Your unfinished input is kept.", 17, color: Palette.muted)])
+        let message = column([text("A small pause in the journey", 30, display: true), text("This page could not be refreshed. Check your connection and try again.", 17, color: Palette.muted)])
         let retry = TravelApp.action("Try again", icon: "icon-refresh") { [weak self] in
             guard let self else { return }
             Task { do { try await self.store.refresh() } catch { } }

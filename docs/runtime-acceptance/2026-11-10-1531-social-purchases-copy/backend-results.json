@@ -1,0 +1,37 @@
+{
+  "project": "dlbaneeshycwmhgfeokx",
+  "results": [
+    {
+      "name": "Three real guest accounts and empty initial state",
+      "status": "passed"
+    },
+    {
+      "name": "Like and save persist, deduplicate and remain account-scoped",
+      "status": "passed"
+    },
+    {
+      "name": "Unlike and unsave clear server state",
+      "status": "passed"
+    },
+    {
+      "name": "Comment and reply readback, other-account rejection and owner deletion",
+      "status": "passed"
+    },
+    {
+      "name": "Direct chat, replies, deduplication, greeting limit, read/draft state and block",
+      "status": "passed"
+    },
+    {
+      "name": "Group message persists for all test members",
+      "status": "passed"
+    },
+    {
+      "name": "Two real Realtime sessions, missed-message catch-up, and outsider isolation",
+      "status": "passed"
+    },
+    {
+      "name": "Hosted zero balance rejects a paid guide debit",
+      "status": "passed"
+    }
+  ]
+}

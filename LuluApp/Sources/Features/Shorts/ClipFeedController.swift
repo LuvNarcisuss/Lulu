@@ -388,11 +388,13 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
                 guard let self else { return }; self.fitEntireScene.toggle()
                 if self.films.indices.contains(self.activeIndex) { self.films[self.activeIndex].surface.playerLayer.videoGravity = self.fitEntireScene ? .resizeAspect : .resizeAspectFill }
                 self.covered = false; self.resumeIfAllowed()
-            }),
-            ("Source & license", false, { [weak self] in self?.openSource(clip) }),
-            ("Close", false, { [weak self] in self?.covered = false; self?.resumeIfAllowed() })
+            })
         ]
-        let dialog = TravelDialogController(title: "About this film", message: "Recorded travel footage. Credit: \(clip.string("author", fallback: "See source credits")).", choices: choices)
+        if let url = URL(string: clip.string("source_url")), url.scheme == "https" {
+            choices.append(("Source & license", false, { [weak self] in self?.openSource(clip) }))
+        }
+        choices.append(("Close", false, { [weak self] in self?.covered = false; self?.resumeIfAllowed() }))
+        let dialog = TravelDialogController(title: "About this film", choices: choices)
         present(dialog, animated: true); dialog.presentationController?.delegate = self
     }
     private func block(_ clip: Record) {
@@ -505,7 +507,9 @@ private final class FilmPage: UIView {
         surface.isAccessibilityElement = true; surface.accessibilityLabel = "Travel video. Double tap to pause or play."; surface.accessibilityTraits = .button
         let back = iconButton("icon-back", label: "Back") { [weak self] in self?.onBack?() }
         let publisher = clip.string("publisher_id") == store.userID ? store.profile : store.rows("profiles").first { $0.id == clip.string("publisher_id") }
-        let author = TravelApp.action(publisher?.string("display_name") ?? "Travel films", icon: "icon-profile", filled: false) { [weak self] in self?.onProfile?() }
+        let retainedCommunity = clip.bool("retained_community")
+        let author = TravelApp.action(retainedCommunity ? "Community film" : (publisher?.string("display_name") ?? "Travel films"), icon: "icon-profile", filled: false) { [weak self] in self?.onProfile?() }
+        author.isEnabled = !retainedCommunity
         let header: UIView
         if discovery {
             header = UIView()
@@ -524,10 +528,12 @@ private final class FilmPage: UIView {
             if let count { container.addArrangedSubview(count) }
             rail.addArrangedSubview(container)
         }
-        let avatar = publisherAvatar(clip.string("publisher_id", fallback: clip.string("owner_id")), store: store) { [weak self] in self?.onProfile?() }
-        let avatarContainer = column([avatar], spacing: 0)
-        avatarContainer.alignment = .center
-        rail.addArrangedSubview(avatarContainer)
+        if !retainedCommunity {
+            let avatar = publisherAvatar(clip.string("publisher_id", fallback: clip.string("owner_id")), store: store) { [weak self] in self?.onProfile?() }
+            let avatarContainer = column([avatar], spacing: 0)
+            avatarContainer.alignment = .center
+            rail.addArrangedSubview(avatarContainer)
+        }
         railItem("icon-heart", "Like video", likeCount) { [weak self] in self?.onLike?() }
         railItem("icon-comment", "Open comments", commentCount) { [weak self] in self?.onComments?() }
         railItem("icon-save", "Save video", saveCount) { [weak self] in self?.onSave?() }

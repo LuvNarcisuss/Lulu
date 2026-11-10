@@ -557,6 +557,9 @@ final class PlaceController: TravelScreen {
                 self.push(PublicProfileController(store: self.store, profileID: publisherID))
             })
         }
+        if offer.bool("retained_community") {
+            views.append(text("Community guide", 14, color: Palette.muted))
+        }
         if mine {
             views.append(text("Status: " + offer.string("status").capitalized, 14, color: Palette.muted))
         }
@@ -810,7 +813,7 @@ private func destinationGuideOffer(_ placeID: String, store: TravelStore, guideI
         ($0.string("author_id").isEmpty || !isBlocked($0.string("author_id"), store: store))
     }.sorted { $0.string("guide_id") < $1.string("guide_id") }
     if let guideID { return offers.first { $0.string("guide_id") == guideID } }
-    return offers.first { $0.string("author_id").isEmpty } ?? offers.first
+    return offers.first { $0.string("author_id").isEmpty && !$0.bool("retained_community") } ?? offers.first
 }
 
 @MainActor
@@ -900,7 +903,14 @@ extension UIViewController {
                     guard let self, store.isAuthenticated, store.userID == accountID else { return }
                     self.performGuideRequest(store: store) {
                         try await store.payments.unlockGuide(offer.string("guide_id"), expectedPrice: price)
-                        showGuide(offer)
+                        guard store.isAuthenticated, store.userID == accountID,
+                              self.navigationController?.topViewController === self,
+                              self.presentedViewController == nil else { return }
+                        let success = TravelDialogController(
+                            title: "Payment successful",
+                            message: "\(offer.string("title"))\n\nYour guide is unlocked and ready to read.",
+                            choices: [("Open guide", false, { showGuide(offer) })])
+                        self.present(success, animated: true)
                     }
                 })
             ])
@@ -950,6 +960,7 @@ extension UIViewController {
 @MainActor
 func guidePublisherID(place: Record, offer: Record?, store: TravelStore) -> String? {
     let listing = offer ?? destinationGuideOffer(place.id, store: store)
+    if listing?.bool("retained_community") == true { return nil }
     if let author = listing?.string("author_id"), !author.isEmpty { return author }
     let name = place.string("region") == "Europe" ? "European Field Notes" : "North American Field Notes"
     return store.rows("profiles").first { $0.bool("is_editorial") && $0.string("display_name") == name }?.id

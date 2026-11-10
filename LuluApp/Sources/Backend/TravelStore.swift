@@ -26,6 +26,7 @@ final class TravelStore: ObservableObject {
     private var generation = UUID()
     private var snapshotRequest = UUID()
     private var writeTail: Task<Void, Never>?
+    private var isDeletingAccount = false
     private var pendingWrites = 0
     private var realtimeChannel: RealtimeChannelV2?
     private var realtimeTasks: [Task<Void, Never>] = []
@@ -116,6 +117,7 @@ final class TravelStore: ObservableObject {
     @discardableResult
     func perform(_ action: String, _ payload: [String: JSONValue]) async throws -> Record {
         guard isAuthenticated else { throw StoreFailure.authenticationRequired }
+        guard !isDeletingAccount else { throw StoreFailure.message("Account deletion is in progress.") }
         let attempt = generation
         let previous = writeTail
         pendingWrites += 1
@@ -216,6 +218,7 @@ final class TravelStore: ObservableObject {
 
     func upload(data: Data, contentType: String, purpose: String) async throws -> String {
         guard isAuthenticated, !userID.isEmpty else { throw StoreFailure.authenticationRequired }
+        guard !isDeletingAccount else { throw StoreFailure.message("Account deletion is in progress.") }
         let purposes = ["avatar", "chat", "video", "cover", "submission"]
         let extensions = ["image/jpeg": "jpg", "image/png": "png", "image/heic": "heic", "video/mp4": "mp4", "video/quicktime": "mov"]
         guard purposes.contains(purpose), let fileExtension = extensions[contentType], !data.isEmpty else {
@@ -263,9 +266,12 @@ final class TravelStore: ObservableObject {
     func deleteAccount() async throws {
         guard isAuthenticated else { throw StoreFailure.authenticationRequired }
         try beginWork()
-        defer { isBusy = false }
-        _ = try await request(path: "functions/v1/travel-account", body: ["action": .string("delete")])
-        // Deletion is already authoritative; a remote sign-out failure cannot undo it.
+        isDeletingAccount = true
+        defer { isBusy = false; isDeletingAccount = false }
+        await writeTail?.value
+        let result = try await request(path: "functions/v1/travel-account", body: ["action": .string("delete")], timeout: 120)
+        guard result.bool("deleted") else { throw StoreFailure.message("Account deletion could not be confirmed. Please try again.") }
+        // Clear local account state after the service confirms deletion.
         try? await client.auth.signOut(scope: .local)
         await clearIdentity()
     }
@@ -315,11 +321,11 @@ final class TravelStore: ObservableObject {
         }
     }
 
-    private func request(path: String, body: [String: JSONValue], optionalRead: Bool = false) async throws -> Record {
+    private func request(path: String, body: [String: JSONValue], optionalRead: Bool = false, timeout: TimeInterval = 30) async throws -> Record {
         let session = try await client.auth.session
         var request = URLRequest(url: BackendConfiguration.projectURL.appendingPathComponent(path))
         request.httpMethod = "POST"
-        request.timeoutInterval = optionalRead ? 5 : 30
+        request.timeoutInterval = optionalRead ? 5 : timeout
         request.setValue(BackendConfiguration.publishableKey, forHTTPHeaderField: "apikey")
         request.setValue("Bearer \(session.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

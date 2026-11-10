@@ -4,6 +4,8 @@ import UIKit
 final class ChatsController: TravelScreen {
     private let search = input("Search conversations")
     private let list = column()
+    private let inbox = column(spacing: 20)
+    private lazy var emptyInbox = makeEmptyInbox()
     private var filter = 0
     private var built = false
     private var showArchived = false
@@ -17,29 +19,76 @@ final class ChatsController: TravelScreen {
     override func render() {
         if !built {
             super.render(); built = true; title = "Chats"; refreshWhileEditing = true
-            content.addArrangedSubview(text("Postcards & conversations", 30, display: true))
-            content.addArrangedSubview(text("Make plans with real travelers.", 16, color: Palette.muted))
+            inbox.addArrangedSubview(text("Postcards & conversations", 30, display: true))
+            inbox.addArrangedSubview(text("Make plans with real travelers.", 16, color: Palette.muted))
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: iconButton("icon-add", label: "Add traveler") { [weak self] in self?.addTravelerOptions() })
-            content.addArrangedSubview(line([
+            inbox.addArrangedSubview(line([
                 action("Find travelers", icon: "icon-search") { [weak self] in self?.discover(false) },
                 action("New group", icon: "icon-group", filled: false) { [weak self] in self?.discover(true) }
             ]))
             search.addTarget(self, action: #selector(searchChanged), for: .editingChanged)
-            content.addArrangedSubview(search)
-            content.addArrangedSubview(filterSlot)
-            content.addArrangedSubview(archiveToggle)
-            content.addArrangedSubview(action("Refresh", icon: "icon-refresh", filled: false) { [weak self] in
+            inbox.addArrangedSubview(search)
+            inbox.addArrangedSubview(filterSlot)
+            inbox.addArrangedSubview(archiveToggle)
+            inbox.addArrangedSubview(action("Refresh", icon: "icon-refresh", filled: false) { [weak self] in
                 guard let self else { return }; self.run { try await self.store.refresh() }
             })
-            content.addArrangedSubview(list)
+            inbox.addArrangedSubview(list)
+            content.addArrangedSubview(emptyInbox)
+            content.addArrangedSubview(inbox)
+
+            let refresh = UIRefreshControl()
+            refresh.tintColor = Palette.teal
+            refresh.addAction(UIAction { [weak self, weak refresh] _ in
+                guard let self else { return }
+                Task {
+                    defer { refresh?.endRefreshing() }
+                    try? await self.store.refresh()
+                }
+            }, for: .valueChanged)
+            scroll.refreshControl = refresh
         }
         updateList()
     }
 
     @objc private func searchChanged() { updateList() }
     private func discover(_ group: Bool) { push(MemberDiscoveryController(store: store, group: group)) }
+    private func makeEmptyInbox() -> UIStackView {
+        let mark = UIImageView(image: UIImage(named: "icon-chats"))
+        mark.contentMode = .scaleAspectFit
+        mark.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        mark.isAccessibilityElement = false
+
+        let heading = text("Postcards &\nconversations", 36, display: true)
+        heading.accessibilityTraits.insert(.header)
+        let cardTitle = text("Your next journey starts with a hello", 26, display: true)
+        cardTitle.accessibilityTraits.insert(.header)
+        return column([
+            heading,
+            text("Make plans with real travelers.", 17, color: Palette.muted),
+            card([
+                mark,
+                cardTitle,
+                text("Find a traveler to start a conversation.", 17),
+                action("Find travelers", icon: "icon-search") { [weak self] in self?.discover(false) }
+            ]),
+            action("New group", icon: "icon-group", filled: false) { [weak self] in self?.discover(true) }
+        ], spacing: 20)
+    }
+
     private func updateList() {
+        let conversations = store.rows("conversations")
+        let isEmpty = conversations.isEmpty
+        emptyInbox.isHidden = !isEmpty
+        inbox.isHidden = isEmpty
         clearStack(list); clearStack(filterSlot)
+        guard !isEmpty else {
+            search.resignFirstResponder()
+            search.text = nil
+            filter = 0
+            showArchived = false
+            return
+        }
         let archiveAction = showArchived ? "Back to inbox" : "Show archived"
         archiveToggle.configuration?.title = archiveAction
         archiveToggle.accessibilityLabel = archiveAction
@@ -47,7 +96,7 @@ final class ChatsController: TravelScreen {
             self?.filter = index; self?.updateList()
         })
         let query = search.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let rows = store.rows("conversations").filter { record in
+        let rows = conversations.filter { record in
             let preference = chatPreference(record.id, store: store)
             guard preference.bool("archived") == showArchived else { return false }
             if filter == 1 && record.int("unread_count") == 0 { return false }

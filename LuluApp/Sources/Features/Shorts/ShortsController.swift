@@ -75,16 +75,17 @@ final class ShortsSearchController: TravelScreen {
                 let place = store.rows("places").first { $0.id == clip.string("place_id") }
                 tile.addArrangedSubview(text(place?.string("city") ?? clip.string("category"), 13, color: Palette.muted))
                 let open = action("Watch film", icon: "icon-shorts", filled: false) { [weak self] in guard let self else { return }; self.push(ClipFeedController(store: self.store, clips: videos, initialIndex: index)) }
-                tile.addArrangedSubview(publisherAvatar(clip.string("publisher_id"), store: store) { [weak self] in
-                    guard let self else { return }
-                    self.push(PublicProfileController(store: self.store, profileID: clip.string("publisher_id")))
-                })
+                if !clip.bool("retained_community") {
+                    tile.addArrangedSubview(publisherAvatar(clip.string("publisher_id"), store: store) { [weak self] in
+                        guard let self else { return }
+                        self.push(PublicProfileController(store: self.store, profileID: clip.string("publisher_id")))
+                    })
+                }
                 tile.addArrangedSubview(open)
                 row.addArrangedSubview(tile)
             }
             if row.arrangedSubviews.count < columns { row.addArrangedSubview(UIView()) }
             gallery.addArrangedSubview(row)
         }
-        gallery.addArrangedSubview(text("Recorded travel films. Source credits are available for each video.", 13, color: Palette.muted))
     }
 }
