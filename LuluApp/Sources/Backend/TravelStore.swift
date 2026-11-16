@@ -15,6 +15,7 @@ final class TravelStore: ObservableObject {
     private(set) var hasCoinState = false
     private(set) var coinActivity: [Record] = []
     private(set) var guideOffers: [Record] = []
+    private(set) var sandboxGuides: [Record] = []
     private(set) lazy var payments = PaymentCatalogAdapter(store: self)
     private var coinStateRequest = UUID()
     private(set) var hiddenPlaceIDs: Set<String> = []
@@ -143,7 +144,10 @@ final class TravelStore: ObservableObject {
                 "guide.price": "travel_price_guide"
             ]
             if let endpoint = guideRoutes[action] {
-                let result = try await request(path: "rest/v1/rpc/" + endpoint, body: payload)
+                let sandboxUnlock = action == "guide.unlock" && payments.isSandbox
+                var parameters = payload
+                if sandboxUnlock { parameters["apple_bundle"] = .string(Bundle.main.bundleIdentifier ?? "") }
+                let result = try await request(path: "rest/v1/rpc/" + (sandboxUnlock ? "travel_unlock_sandbox_guide" : endpoint), body: parameters)
                 guard generation == attempt, result.bool("committed") else {
                     throw StoreFailure.message("The guide change could not be confirmed.")
                 }
@@ -183,7 +187,10 @@ final class TravelStore: ObservableObject {
         let attempt = generation
         let token = UUID()
         coinStateRequest = token
-        let result = try await request(path: "rest/v1/rpc/travel_coin_state", body: [:], optionalRead: true)
+        let environment = try await payments.resolveEnvironment()
+        let sandbox = environment == "Sandbox"
+        let result = try await request(path: "rest/v1/rpc/" + (sandbox ? "travel_sandbox_coin_state" : "travel_coin_state"),
+            body: sandbox ? ["apple_bundle": .string(Bundle.main.bundleIdentifier ?? "")] : [:], optionalRead: true)
         guard generation == attempt, coinStateRequest == token else { throw CancellationError() }
         guard case .number(let total) = result["balance"], total.isFinite, total >= 0,
               total.rounded(.towardZero) == total, total < Double(Int.max),
@@ -193,22 +200,29 @@ final class TravelStore: ObservableObject {
         balance = Int(total)
         coinActivity = result.records("activity")
         guideOffers = result.records("offers")
+        sandboxGuides = sandbox ? result.records("guides") : []
         hasCoinState = true
         revision += 1
     }
 
-    func coinPurchasesAvailable() async -> Bool {
-        guard isAuthenticated else { return false }
+    func coinPurchaseStatus(environment: String) async throws -> Record {
+        guard isAuthenticated else { throw StoreFailure.authenticationRequired }
         let attempt = generation
-        let state = try? await request(path: "functions/v1/travel-coin-purchase", body: ["action": .string("status")], optionalRead: true)
-        return generation == attempt && state?.bool("available") == true
+        let state = try await request(path: "functions/v1/travel-coin-purchase", body: [
+            "action": .string("status"), "environment": .string(environment),
+            "bundle_id": .string(Bundle.main.bundleIdentifier ?? "")
+        ], optionalRead: true)
+        guard generation == attempt else { throw CancellationError() }
+        return state
     }
 
-    func deliverCoinPurchase(_ transaction: String, account: UUID) async throws {
+    func deliverCoinPurchase(_ transaction: String, account: UUID, environment: String) async throws {
         guard isAuthenticated, UUID(uuidString: userID) == account else { throw StoreFailure.authenticationRequired }
         let attempt = generation
         let result = try await request(path: "functions/v1/travel-coin-purchase", body: [
             "action": .string("deliver"),
+            "environment": .string(environment),
+            "bundle_id": .string(Bundle.main.bundleIdentifier ?? ""),
             "signed_transaction": .string(transaction)
         ])
         guard generation == attempt, result.bool("committed") else {
@@ -421,6 +435,7 @@ final class TravelStore: ObservableObject {
         balance = 0
         coinActivity.removeAll()
         guideOffers.removeAll()
+        sandboxGuides.removeAll()
         hasCoinState = false
         coinStateRequest = UUID()
         payments.reset()

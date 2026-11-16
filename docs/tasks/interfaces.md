@@ -96,3 +96,7 @@ Keep file ownership boundaries. Do not compile/typecheck/run an app or simulator
 ## Active guide checkout interface
 
 Guide entry points call UIViewController.openPlaceGuide, which delegates confirmed payment to PaymentCatalogAdapter.unlockGuide(_:expectedPrice:). Use PaymentCatalogAdapter.walletBalance for user-visible balances and hasGuideAccess(to:) for access badges. Production guide.unlock remains a server operation; DEBUG-only Xcode test debits and editorial content copies stay inside the local wallet path. See docs/backend/local-storekit.md for the isolation and unexecuted regression cases.
+
+## Purchase waiting indicator — November 16, 2026
+
+While a wallet purchase is in flight, display a fixed loading card above the bottom safe area with the existing watercolor refresh icon and “Processing purchase…”. Rotate continuously, or use a gentle opacity animation when Reduce Motion is enabled. Hide the card when the purchase task returns; never treat waiting, cancellation or failure as credited coins.

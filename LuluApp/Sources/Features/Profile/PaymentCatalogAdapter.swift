@@ -30,6 +30,10 @@ final class PaymentCatalogAdapter {
     private var recoveryID = UUID()
     private var delivering: Set<UInt64> = []
     private var serverReady = false
+    private(set) var appleEnvironment: String?
+    private var environmentTask: Task<String, Error>?
+    private var deliveryDiagnostic = "not_checked"
+    private var checkoutMessage = "Purchases are temporarily unavailable. Tap a package to retry."
     private var loadTask: Task<Void, Never>?
     private var timeoutTask: Task<Void, Never>?
     private var generation = UUID()
@@ -59,7 +63,7 @@ final class PaymentCatalogAdapter {
 
     var isLocalStoreKit: Bool {
         #if DEBUG
-        return LocalStoreKitWallet.isEnabled
+        return LocalStoreKitWallet.isEnabled || appleEnvironment == "Xcode"
         #else
         return false
         #endif
@@ -67,6 +71,39 @@ final class PaymentCatalogAdapter {
     #if DEBUG
     private lazy var localWallet = LocalStoreKitWallet(offers: offers)
     #endif
+
+    var isSandbox: Bool { appleEnvironment == "Sandbox" }
+
+    func resolveEnvironment() async throws -> String {
+        if isLocalStoreKit { appleEnvironment = "Xcode"; return "Xcode" }
+        if let appleEnvironment { return appleEnvironment }
+        if let environmentTask { return try await environmentTask.value }
+        let task = Task<String, Error> {
+            // Receipt location selects a ledger only; the server separately verifies
+            // Apple's signed transaction before any coins are credited.
+            if Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" { return "Sandbox" }
+            let result = try await AppTransaction.shared
+            guard case .verified(let app) = result else {
+                throw GuidePurchaseFailure.message("Apple could not verify this installation. Please retry.")
+            }
+            switch app.environment {
+            case .sandbox: return "Sandbox"
+            case .production: return "Production"
+            case .xcode:
+                #if DEBUG
+                return "Xcode"
+                #else
+                throw GuidePurchaseFailure.message("Install Lulu from TestFlight or the App Store to purchase coins.")
+                #endif
+            default: throw GuidePurchaseFailure.message("This Apple purchase environment is unavailable.")
+            }
+        }
+        environmentTask = task
+        defer { environmentTask = nil }
+        let value = try await task.value
+        appleEnvironment = value
+        return value
+    }
 
     var walletBalance: Int? {
         #if DEBUG
@@ -99,6 +136,7 @@ final class PaymentCatalogAdapter {
     }
 
     func refreshWallet() async throws {
+        _ = try await resolveEnvironment()
         #if DEBUG
         if isLocalStoreKit {
             guard let id = store?.userID, let account = UUID(uuidString: id) else { return }
@@ -123,6 +161,7 @@ final class PaymentCatalogAdapter {
     }
 
     func localGuideContent(for offer: Record) -> Record? {
+        if isSandbox { return store?.sandboxGuides.first { $0.id == offer.string("guide_id") } }
         #if DEBUG
         if isLocalStoreKit, let store, store.isAuthenticated,
            offer.string("author_id").isEmpty, offer.string("status") == "published",
@@ -191,13 +230,26 @@ final class PaymentCatalogAdapter {
     }
 
     private func checkoutReady(_ store: TravelStore) async -> Bool {
-        #if DEBUG
-        if isLocalStoreKit {
-            guard let account = UUID(uuidString: store.userID) else { return false }
-            return (try? localWallet.state(account: account)) != nil
+        do {
+            let environment = try await resolveEnvironment()
+            #if DEBUG
+            if environment == "Xcode" {
+                guard let account = UUID(uuidString: store.userID) else { return false }
+                _ = try localWallet.state(account: account)
+                deliveryDiagnostic = "local_ready"
+                return true
+            }
+            #endif
+            let status = try await store.coinPurchaseStatus(environment: environment)
+            deliveryDiagnostic = status.string("code", fallback: "invalid_response")
+            checkoutMessage = status.string("message", fallback: "Purchases are temporarily unavailable. Tap a package to retry.")
+            return status.bool("available") && status.string("environment") == environment
+        } catch {
+            let failure = error as NSError
+            deliveryDiagnostic = "\(failure.domain):\(failure.code)"
+            checkoutMessage = "The purchase service could not be reached. Check your connection and tap a package to retry."
+            return false
         }
-        #endif
-        return await store.coinPurchasesAvailable()
     }
 
     func load() {
@@ -243,7 +295,7 @@ final class PaymentCatalogAdapter {
                 } else if self.products.isEmpty {
                     self.message = "Apple returned no coin packages. Please retry later."
                 } else if !ready {
-                    self.message = "Wallet checkout is temporarily unavailable. Please retry later."
+                    self.message = self.checkoutMessage
                 } else if self.products.count < requested.count {
                     self.message = "Some packages are unavailable. You can purchase any available package."
                 } else {
@@ -283,11 +335,13 @@ final class PaymentCatalogAdapter {
         lines.append("Local StoreKit wallet: \(isLocalStoreKit)")
         lines.append("Payments allowed: \(AppStore.canMakePayments)")
         lines.append("Delivery ready: \(serverReady)")
+        lines.append("Apple environment: " + (appleEnvironment ?? "unknown"))
+        lines.append("Delivery diagnostic: " + deliveryDiagnostic)
         lines.append("Requested: " + requested.sorted().joined(separator: ", "))
         lines.append("Returned: " + returned.sorted().joined(separator: ", "))
         lines.append("Missing: " + requested.subtracting(returned).sorted().joined(separator: ", "))
         lines.append("Error: " + lastErrorCode)
-        lines.append("Missing IDs are not a definitive Apple rejection. Local StoreKit configuration is selected in the Xcode scheme.")
+        lines.append("Catalog availability and verified delivery are checked separately.")
         return lines.joined(separator: "\n")
     }
 
@@ -398,7 +452,13 @@ final class PaymentCatalogAdapter {
             return true
         }
         #endif
-        try await store.deliverCoinPurchase(result.jwsRepresentation, account: account)
+        let transactionEnvironment: String
+        switch transaction.environment {
+        case .sandbox: transactionEnvironment = "Sandbox"
+        case .production: transactionEnvironment = "Production"
+        default: throw PurchaseFailure.unverified
+        }
+        try await store.deliverCoinPurchase(result.jwsRepresentation, account: account, environment: transactionEnvironment)
         await transaction.finish()
         try? await store.refreshCoinState()
         return true

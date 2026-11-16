@@ -1,0 +1,27 @@
+import { PGlite } from '@electric-sql/pglite';
+import { readFileSync } from 'node:fs';
+const root = process.env.LULU_PROJECT_ROOT ?? new URL('../../../', import.meta.url).pathname;
+const db=new PGlite();
+await db.exec(`
+create role anon; create role authenticated; create role service_role;
+create schema auth; create schema private;
+create table auth.users(id uuid primary key);
+create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
+create function private.blocked(uuid,uuid) returns boolean language sql stable as $$select false$$;
+create table public.coin_products(product_id text primary key,coins integer not null);
+create table public.coin_apple_deliveries(transaction_id text primary key,owner_id uuid references auth.users(id),product_id text references public.coin_products(product_id),delivered_at timestamptz default now());
+create table public.wallet_activity(id uuid default gen_random_uuid(),owner_id uuid references auth.users(id),data jsonb,created_at timestamptz default now());
+create table public.guides(id uuid primary key,place_id uuid,data jsonb);
+create table public.guide_offers(guide_id uuid primary key references public.guides(id),place_id uuid,author_id uuid,title text,preview text,price_coins integer,status text,created_at timestamptz default now());
+create table public.guide_unlocks(owner_id uuid,guide_id uuid,price_coins integer);
+insert into public.guides values('00000000-0000-4000-8000-000000000010','00000000-0000-4000-8000-000000000020','{"title":"Test guide"}');
+insert into public.guide_offers(guide_id,place_id,title,price_coins,status) values('00000000-0000-4000-8000-000000000010','00000000-0000-4000-8000-000000000020','Test guide',180,'published');
+`);
+const catalog=JSON.parse(readFileSync(root+'LuluApp/Resources/PaymentCatalog.json')).tiers;
+for(const p of catalog)await db.query('insert into public.coin_products values($1,$2)',[p.productID,p.coins]);
+await db.exec(readFileSync(root+'supabase/repairs/lulu_sandbox_purchases.sql','utf8'));
+await db.exec('begin;');
+const result=await db.exec(readFileSync(root+'scripts/tests/sandbox-ledger.sql','utf8'));
+await db.exec('rollback;');
+console.log(JSON.stringify({result:result.at(-1).rows,scope:'Isolated PGlite PostgreSQL; synthetic base schema; no Apple transaction or hosted writes',remainingUsers:(await db.query('select count(*) as n from auth.users')).rows},null,2));
+await db.close();

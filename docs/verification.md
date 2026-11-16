@@ -6,6 +6,10 @@ Original delivery date: November 3, 2026. The application is now named Lulu. Thi
 
 The displayed name and bundle name are Lulu. The internal target and product identifiers remain TravelApp. The current project is `LuluApp/Lulu.xcodeproj`.
 
+## November 16 purchase verification
+
+The owner authorized real-device Apple sandbox testing on iPhone 12 and confirmed com.lulu.tourtravel / Apple ID 6832914128. Current scoped results supersede earlier payment and build statements below. See [purchase repair evidence](runtime-acceptance/2026-11-16-1030-purchase-repair/README.md) for the actual build, seven local StoreKit test results, 18 handler tests, isolated SQL/signature regressions, and remaining real sandbox delivery blockers. Earlier sections retain their original dates and scopes.
+
 ## Original static evidence
 
 - XcodeGen successfully generated `TravelApp/TravelApp.xcodeproj` from the current configuration. This is metadata generation, not compilation.

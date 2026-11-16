@@ -5,6 +5,8 @@ import UIKit
 final class WalletController: TravelScreen {
     private var catalog: PaymentCatalogAdapter { store.payments }
     private var catalogObservation: AnyCancellable?
+    private var purchaseLoadingView: UIView?
+    private let purchaseLoadingIcon = UIImageView(image: UIImage(named: "icon-refresh"))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,16 +18,22 @@ final class WalletController: TravelScreen {
     override func render() {
         super.render()
         title = "Wallet"
+        updatePurchaseLoading()
         let wallet = UIImageView(image: UIImage(named: "icon-coin"))
         wallet.contentMode = .scaleAspectFit
         wallet.heightAnchor.constraint(equalToConstant: 56).isActive = true
         let balance = catalog.walletBalance.map(String.init) ?? "—"
-        content.addArrangedSubview(card([wallet, text(balance, 40, display: true), text("Coin balance", 16, color: Palette.muted)], color: Palette.cream))
+        let balanceLabel = text(balance, 40, display: true)
+        balanceLabel.accessibilityIdentifier = "wallet.balance"
+        content.addArrangedSubview(card([wallet, balanceLabel, text("Coin balance", 16, color: Palette.muted)], color: Palette.cream))
         if catalog.isLocalStoreKit {
             content.addArrangedSubview(text("Local StoreKit testing · Separate test balance", 13, color: Palette.muted))
         }
         content.addArrangedSubview(text("Buy coins", 27, display: true))
-        content.addArrangedSubview(text(catalog.message, 15, color: Palette.muted))
+        let statusLabel = text(catalog.message, 15, color: Palette.muted)
+        statusLabel.accessibilityIdentifier = "wallet.status"
+        statusLabel.accessibilityValue = catalog.appleEnvironment ?? "Unknown"
+        content.addArrangedSubview(statusLabel)
 
         for offset in stride(from: 0, to: catalog.offers.count, by: 3) {
             let row = line([], spacing: 8)
@@ -51,10 +59,11 @@ final class WalletController: TravelScreen {
                 let package = UIButton(type: .custom)
                 package.backgroundColor = Palette.paper
                 package.layer.cornerRadius = 15
-                package.isEnabled = canBuy
+                package.isEnabled = !catalog.loading && !catalog.purchasing
                 package.isAccessibilityElement = true
                 package.accessibilityLabel = "\(offer.coins.formatted()) coins, \(price ?? catalog.buttonTitle(for: offer))"
-                package.accessibilityHint = canBuy ? "Opens purchase confirmation." : nil
+                package.accessibilityHint = canBuy ? "Opens purchase confirmation." : "Shows availability and retries loading."
+                package.accessibilityIdentifier = "wallet.package.\(offer.coins)"
                 package.addSubview(details)
                 NSLayoutConstraint.activate([
                     details.topAnchor.constraint(equalTo: package.topAnchor, constant: 12),
@@ -64,7 +73,12 @@ final class WalletController: TravelScreen {
                     package.heightAnchor.constraint(greaterThanOrEqualToConstant: 100)
                 ])
                 package.addAction(UIAction { [weak self] _ in
-                    guard let self, let price = self.catalog.price(for: offer), self.catalog.canBuy(offer) else { return }
+                    guard let self else { return }
+                    guard let price = self.catalog.price(for: offer), self.catalog.canBuy(offer) else {
+                        self.notice(self.catalog.message)
+                        self.catalog.load()
+                        return
+                    }
                     self.confirm("Buy coins?", message: "Add \(offer.coins.formatted()) coins for \(price)? Apple will ask you to confirm the purchase.") {
                         self.catalog.buy(offer)
                     }
@@ -105,4 +119,47 @@ final class WalletController: TravelScreen {
             ]))
         }
     }
+
+    private func updatePurchaseLoading() {
+        guard catalog.purchasing else {
+            purchaseLoadingIcon.layer.removeAllAnimations()
+            purchaseLoadingView?.isHidden = true
+            return
+        }
+        if purchaseLoadingView == nil {
+            purchaseLoadingIcon.contentMode = .scaleAspectFit
+            purchaseLoadingIcon.isAccessibilityElement = false
+            NSLayoutConstraint.activate([
+                purchaseLoadingIcon.widthAnchor.constraint(equalToConstant: 28),
+                purchaseLoadingIcon.heightAnchor.constraint(equalToConstant: 28)
+            ])
+            let label = text("Processing purchase…", 16)
+            let panel = card([line([purchaseLoadingIcon, label], spacing: 12)])
+            panel.translatesAutoresizingMaskIntoConstraints = false
+            panel.isUserInteractionEnabled = false
+            panel.isAccessibilityElement = true
+            panel.accessibilityLabel = "Processing purchase"
+            panel.accessibilityIdentifier = "wallet.purchase-loading"
+            view.addSubview(panel)
+            NSLayoutConstraint.activate([
+                panel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+                panel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+                panel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12)
+            ])
+            purchaseLoadingView = panel
+        }
+        guard let panel = purchaseLoadingView else { return }
+        panel.isHidden = false
+        view.bringSubviewToFront(panel)
+        guard purchaseLoadingIcon.layer.animation(forKey: "purchase-loading") == nil else { return }
+        let reduceMotion = UIAccessibility.isReduceMotionEnabled
+        let animation = CABasicAnimation(keyPath: reduceMotion ? "opacity" : "transform.rotation.z")
+        animation.fromValue = reduceMotion ? 0.5 : 0
+        animation.toValue = reduceMotion ? 1 : Double.pi * 2
+        animation.duration = reduceMotion ? 0.8 : 1.2
+        animation.autoreverses = reduceMotion
+        animation.repeatCount = .infinity
+        purchaseLoadingIcon.layer.add(animation, forKey: "purchase-loading")
+    }
+
 }

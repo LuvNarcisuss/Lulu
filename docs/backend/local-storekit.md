@@ -1,12 +1,16 @@
 # Lulu local StoreKit verification
 
-## Current mode
+## Current mode — November 16, 2026
 
-The owner selected local Xcode StoreKit testing on November 10, 2026. The single Lulu scheme runs Debug with `Configuration/LuluCoins.storekit` and `LULU_LOCAL_STOREKIT=1`. Debug uses `im.seex.sao2` and Yu Sun team `JPTS6M4T5B`. Release uses `com.lulu.tourtravel`. Selecting Apple-backed testing requires both StoreKit Configuration = None and removal of the local-wallet environment variable in the same scheme.
+The owner requested Apple sandbox acceptance on a physical iPhone. Ordinary Run now uses Debug with `com.lulu.tourtravel`, team `JPTS6M4T5B`, no `.storekit` selection and no `LULU_LOCAL_STOREKIT` launch variable. Release uses the same confirmed identity, and the server binds purchases to App Store Apple ID `6832914128`.
 
-`LocalStoreKitWallet` is compiled only in Debug. It accepts only StoreKit-verified Xcode-environment consumable transactions for the signed account token, known product, quantity one and no revocation. It writes an account-scoped atomic file before finishing the transaction and retains all transaction identifiers for deduplication. The wallet shows a distinct local-test balance and history. It never writes Supabase wallet rows or grants production guide entitlements. The November 10 guide checkout fix adds isolated local debits and persisted access to project-owned editorial guide copies, compiled only in Debug. Ordinary app authentication remains required; test code does not add a production login bypass.
+Local StoreKit remains available through the isolated `LuluPurchaseTests` test target, which explicitly loads the nine-product fixture. A Debug build can also recognize a verified Xcode AppTransaction, preventing a missing launch variable from mixing a local catalog with hosted delivery. Local balances remain account-scoped and separate from hosted wallets.
 
-Production delivery still uses the original server verifier and authoritative ledger. Apple sandbox/production catalog access, numeric Apple ID, production signing and production purchase acceptance remain separate prerequisites. The local configuration does not register products with Apple.
+Apple sandbox uses separate server balances, delivery records and editorial-guide entitlements. Production and sandbox transactions must pass Apple's signature, environment, Bundle ID, product, account-token and quantity checks. Xcode transactions are never submitted for hosted credit. Sandbox funds cannot purchase real members' paid guides.
+
+The opt-in `LuluAppleSandboxUITests` target requires `LULU_SANDBOX_UI_TESTS=1`, checks that the wallet reports Sandbox before buying, and uses native Apple confirmation. Credentials and side-button confirmation remain owner actions. It must never be treated as a production purchase test.
+
+See the [November 16 repair evidence](../runtime-acceptance/2026-11-16-1030-purchase-repair/README.md) for current results. The following sections are historical November 10 evidence.
 
 ## Executed verification
 

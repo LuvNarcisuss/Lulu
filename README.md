@@ -10,7 +10,7 @@ Open `LuluApp/Lulu.xcodeproj` to inspect the project. Configuration originates i
 - Explore switches between an English OpenFreeMap street map and a filtered destination list with real photographs, independently written travel notes, official tourism sources, saves, Apple Maps directions and itinerary connections.
 - Journeys keeps private dated itineraries, ordered stops, per-stop/day notes, packing checklists, estimated budgets and journal notes. Date changes preserve retained day records and ask before dropping populated days.
 - Chats uses actual discoverable members, canonical direct threads, groups, persistent text/photo/reply messages, realtime updates, drafts, read state, pinned/muted/archived preferences, member safety controls and camera-based friend codes. It does not simulate connected voice/video calls or remote read receipts.
-- Me includes profile editing, actual works/liked/saved/pending collections, private submission playback, source credits, agreements, safety history and a zero-initial-balance wallet. The wallet displays nine coin packages. Apple supplies storefront prices and the production verifier gates checkout.
+- Me includes profile editing, actual works/liked/saved/pending collections, private submission playback, source credits, agreements, safety history and a zero-initial-balance wallet. The wallet displays nine coin packages. Apple supplies storefront prices. Verified Sandbox and Production transactions use separate server ledgers. Ordinary Run does not select a local StoreKit fixture.
 
 ## Content and visual resources
 
@@ -30,7 +30,7 @@ Stage B external authentication, external Socket, WebView and purchase forwardin
 
 ## Owner configuration still required
 
-- Apple registration and distribution signing for `com.lulu.tourtravel`. Confirm that the App Store Connect record with Apple ID `6832914128` uses this Bundle ID before building with Codemagic.
+- Apple registration and distribution signing for `com.lulu.tourtravel`. The owner confirmed this Bundle ID and Apple ID `6832914128` on November 16, 2026. Physical-device sandbox testing requires an explicit provisioning profile; the existing wildcard profile is not valid acceptance evidence.
 - Apple App ID configuration, App Store Connect registration for the nine consumables and actual Apple environment acceptance. See [Coins and paid guides](docs/backend/coins-and-guides.md).
 - Signing and APNs entitlement configuration before push registration is enabled. Registration callbacks are prepared, but background notifications are not claimed as operational.
 - Publish the revised [Lulu agreements](docs/backend/legal/2026-11-09-lulu/README.md) at the existing URLs and review the account wording before public distribution.
@@ -40,7 +40,7 @@ Stage B external authentication, external Socket, WebView and purchase forwardin
 
 Static resource/configuration checks, Swift grammar parsing, XcodeGen metadata generation and an independent static review were performed. Xcode 26.0.1 resolved the Lulu scheme’s Swift packages, and the project’s shared Package.resolved records the verified versions. Finite isolated Supabase API, permissions, media and realtime checks are recorded separately under `docs/backend/`.
 
-The owner-authorized November 10 simulator run built and launched Lulu and exercised selected flows across all five tabs. The [functional acceptance report](docs/runtime-acceptance/2026-11-10-1154-full-functional.md) records the scenarios, fixes, and remaining gaps. Apple sandbox and production purchases remain unverified.
+The owner-authorized November 10 simulator run built and launched Lulu and exercised selected flows across all five tabs. The [functional acceptance report](docs/runtime-acceptance/2026-11-10-1154-full-functional.md) records the scenarios, fixes, and remaining gaps. The [November 16 purchase repair report](docs/runtime-acceptance/2026-11-16-1030-purchase-repair/README.md) separates the seven passing local StoreKit tests, backend regression coverage, and incomplete real Apple sandbox acceptance. Production purchases have not been exercised.
 
 Run permitted static inspection with `python3 scripts/static_audit.py` and `python3 scripts/media_verify.py`. `scripts/swift_syntax_audit.py` requires the separately installed `tree-sitter` and `tree-sitter-swift` Python packages and parses grammar only. Do not infer runtime success from these commands.
 

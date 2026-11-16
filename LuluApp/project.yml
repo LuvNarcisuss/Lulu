@@ -74,10 +74,11 @@ targets:
         SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
       configs:
         Debug:
-          PRODUCT_BUNDLE_IDENTIFIER: im.seex.sao2
+          PRODUCT_BUNDLE_IDENTIFIER: com.lulu.tourtravel
           DEVELOPMENT_TEAM: JPTS6M4T5B
         Release:
           PRODUCT_BUNDLE_IDENTIFIER: com.lulu.tourtravel
+          DEVELOPMENT_TEAM: JPTS6M4T5B
     dependencies:
       - package: Alamofire
         product: Alamofire
@@ -95,7 +96,21 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.lulu.purchase-tests
+        DEVELOPMENT_TEAM: JPTS6M4T5B
         GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: TravelApp
+  LuluAppleSandboxUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: Tests/AppleSandboxUI
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.lulu.tourtravel.sandbox-tests
+        DEVELOPMENT_TEAM: JPTS6M4T5B
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: TravelApp
     dependencies:
       - target: TravelApp
 schemes:
@@ -105,13 +120,12 @@ schemes:
         TravelApp: all
     run:
       config: Debug
-      storeKitConfiguration: Configuration/LuluCoins.storekit
-      environmentVariables:
-        LULU_LOCAL_STOREKIT: "1"
     test:
       config: Debug
       targets:
         - name: LuluPurchaseTests
+          skipped: false
+        - name: LuluAppleSandboxUITests
           skipped: false
     archive:
       config: Release

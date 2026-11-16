@@ -1,0 +1,16 @@
+{
+  "result": [
+    {
+      "result": "passed",
+      "tested_tiers": 9,
+      "expected_total": 172400,
+      "fixture_lifecycle": "rolled_back"
+    }
+  ],
+  "scope": "Isolated PGlite PostgreSQL; synthetic base schema; no Apple transaction or hosted writes",
+  "remainingUsers": [
+    {
+      "n": 0
+    }
+  ]
+}

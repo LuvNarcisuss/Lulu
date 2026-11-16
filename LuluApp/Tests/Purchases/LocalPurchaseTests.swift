@@ -36,6 +36,13 @@ final class LocalPurchaseTests: XCTestCase {
         if let directory, FileManager.default.fileExists(atPath: directory.path) { try FileManager.default.removeItem(at: directory) }
     }
 
+    func testLocalStoreKitEnvironmentResolvesWithoutLaunchVariable() async throws {
+        let store = TravelStore()
+        let environment = try await store.payments.resolveEnvironment()
+        XCTAssertEqual(environment, "Xcode")
+        XCTAssertTrue(store.payments.isLocalStoreKit)
+    }
+
     func testNineProductsCreditOnceAndPersist() async throws {
         let wallet = LocalStoreKitWallet(directory: directory, offers: offers)
         let products = try await Product.products(for: offers.map(\.productID))
@@ -49,6 +56,7 @@ final class LocalPurchaseTests: XCTestCase {
             guard case .success(let result) = outcome else { XCTFail("Expected successful local purchase"); return }
             let state = try await wallet.deliver(result, account: account)
             expected += offer.coins
+            print("LOCAL_TIER \(offer.productID) coins=\(offer.coins) balance=\(expected)")
             XCTAssertEqual(state.balance, expected)
             let duplicate = try await wallet.deliver(result, account: account)
             XCTAssertEqual(duplicate.balance, expected)

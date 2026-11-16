@@ -1,6 +1,6 @@
 # Coins and paid guides
 
-The wallet uses StoreKit 2 consumable products. Current owner-selected Debug testing uses the isolated local StoreKit wallet described in [Local StoreKit verification](local-storekit.md); the production flow below remains unchanged. The values below are the US reference mapping. The app displays Apple's returned storefront price and only offers checkout when Apple returns the product and the verifier is configured.
+The wallet uses StoreKit 2 consumable products. Ordinary Debug and Release now use Apple-backed purchases for the owner-confirmed `com.lulu.tourtravel` / `6832914128` identity. Local StoreKit remains explicitly available through the isolated test target described in [Local StoreKit verification](local-storekit.md). The values below are the US reference mapping. The app displays Apple's returned storefront price and only offers checkout when Apple returns the product and the verifier is configured.
 
 | Reference USD | Coins | Product ID |
 | ---: | ---: | --- |
@@ -15,6 +15,12 @@ The wallet uses StoreKit 2 consumable products. Current owner-selected Debug tes
 | 99.99 | 63,700 | `rzeethasxinmprew` |
 
 The two new product IDs are for the 29.99 and 69.99 tiers. Register them for Lulu in App Store Connect and confirm the seven supplied IDs are on the same app. Codemagic uses Apple ID `6832914128`. Confirm that the record uses `com.lulu.tourtravel` before deploying the updated verifier and setting `APPLE_APP_ID` in its Edge Function environment. The local verifier source targets `com.lulu.tourtravel` and uses Apple Root CA G3 and Apple's pinned server library. Deployment of the identity change is pending. The verifier checks production consumables, the signed account token, product identity and quantity before calling the service-only ledger. The transaction is finished on iOS only after the ledger acknowledges it. Unfinished transactions can be retried. Sandbox and local StoreKit purchases do not credit the production ledger.
+
+## November 16 repair status
+
+This section supersedes older pending-verifier and local-default statements below. The purchase Edge Function was updated to version 2, and additive sandbox tables and RPCs were deployed. Public Apple identity is configured directly from the owner-confirmed app record; checkout no longer depends on an absent numeric Apple ID secret. Native transactions are verified against Sandbox or Production, with distinct ledgers. Sandbox credits and guide access are limited to authorized editorial content. Existing production balances and entitlements are unchanged.
+
+All nine tiers passed isolated ledger tests and local StoreKit purchase tests. Actual Apple sandbox device outcomes are recorded separately in the [current evidence](../runtime-acceptance/2026-11-16-1030-purchase-repair/README.md). Do not infer sandbox or production purchase completion from those local tests.
 
 ## Guide access
 
