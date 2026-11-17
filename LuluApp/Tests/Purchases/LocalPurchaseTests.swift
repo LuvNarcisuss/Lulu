@@ -10,6 +10,7 @@ final class LocalPurchaseTests: XCTestCase {
     private var offers: [CoinOffer] = []
     private var account: UUID!
     private var prices: [String: Decimal] = [:]
+    private var observer: StoreKitOneObserver!
 
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -29,37 +30,60 @@ final class LocalPurchaseTests: XCTestCase {
         let url = try XCTUnwrap(Bundle.main.url(forResource: "PaymentCatalog", withExtension: "json"))
         struct Catalog: Decodable { let tiers: [CoinOffer] }
         offers = try JSONDecoder().decode(Catalog.self, from: Data(contentsOf: url)).tiers
+        observer = StoreKitOneObserver()
+        SKPaymentQueue.default().add(observer)
     }
 
     override func tearDownWithError() throws {
+        if let observer { SKPaymentQueue.default().remove(observer) }
         session?.clearTransactions()
         if let directory, FileManager.default.fileExists(atPath: directory.path) { try FileManager.default.removeItem(at: directory) }
     }
 
-    func testLocalStoreKitEnvironmentResolvesWithoutLaunchVariable() async throws {
-        let store = TravelStore()
-        let environment = try await store.payments.resolveEnvironment()
-        XCTAssertEqual(environment, "Xcode")
-        XCTAssertTrue(store.payments.isLocalStoreKit)
+    func testInstallationReceiptOnlyProvidesAnInitialWalletHint() {
+        let sandbox = URL(fileURLWithPath: "/StoreKit/sandboxReceipt")
+        XCTAssertEqual(CoinWalletEnvironment.installation(receiptURL: sandbox, localTesting: false, bundleID: "com.lulu.tourtravel"), .sandbox)
+        XCTAssertEqual(CoinWalletEnvironment.installation(receiptURL: nil, localTesting: false, bundleID: "com.lulu.tourtravel"), .production)
+        XCTAssertEqual(CoinWalletEnvironment.installation(receiptURL: nil, localTesting: false, bundleID: "im.seex.sao2"), .sandbox)
+        XCTAssertEqual(CoinWalletEnvironment.installation(receiptURL: nil, localTesting: false, bundleID: "other.app"), .production)
+        XCTAssertEqual(CoinWalletEnvironment.installation(receiptURL: sandbox, localTesting: true, bundleID: "im.seex.sao2"), .xcode)
+    }
+
+    func testConfirmedSandboxPurchaseSelectsSandboxBalanceAfterProductionInstallLookup() {
+        var routing = CoinWalletRouting()
+        XCTAssertEqual(routing.useInstallation(.production).statePath, "rest/v1/rpc/travel_coin_state")
+        let acknowledgment = Record(["committed": .bool(true), "environment": .string("Sandbox")])
+        XCTAssertEqual(routing.acknowledge(acknowledgment), .sandbox)
+        XCTAssertEqual(routing.useInstallation(.production).statePath, "rest/v1/rpc/travel_sandbox_coin_state")
+        XCTAssertEqual(routing.environment, .sandbox)
+    }
+
+    func testFailedOrUnsupportedDeliveryCannotSelectAnotherWallet() {
+        var routing = CoinWalletRouting()
+        _ = routing.useInstallation(.production)
+        XCTAssertNil(routing.acknowledge(Record(["committed": .bool(false), "environment": .string("Sandbox")])))
+        XCTAssertNil(routing.acknowledge(Record(["committed": .bool(true), "environment": .string("Xcode")])))
+        XCTAssertNil(routing.acknowledge(Record(["committed": .bool(true)])))
+        XCTAssertEqual(routing.environment, .production)
     }
 
     func testNineProductsCreditOnceAndPersist() async throws {
         let wallet = LocalStoreKitWallet(directory: directory, offers: offers)
-        let products = try await Product.products(for: offers.map(\.productID))
+        let products = await fetchProducts()
         XCTAssertEqual(products.count, 9)
         var expected = 0
         for offer in offers {
-            let product = try XCTUnwrap(products.first { $0.id == offer.productID })
-            XCTAssertEqual(product.type, .consumable)
-            XCTAssertEqual(product.price, prices[offer.productID])
-            let outcome = try await product.purchase(options: [.appAccountToken(account)])
-            guard case .success(let result) = outcome else { XCTFail("Expected successful local purchase"); return }
-            let state = try await wallet.deliver(result, account: account)
+            let product = try XCTUnwrap(products.first { $0.productIdentifier == offer.productID })
+            XCTAssertEqual(product.price.decimalValue, prices[offer.productID])
+            let queued = try await submit(product)
+            XCTAssertEqual(queued.transactionState, .purchased)
+            XCTAssertEqual(queued.payment.applicationUsername.flatMap { UUID(uuidString: $0) }, account)
+            let state = try wallet.credit(queued, account: account)
             expected += offer.coins
-            print("LOCAL_TIER \(offer.productID) coins=\(offer.coins) balance=\(expected)")
             XCTAssertEqual(state.balance, expected)
-            let duplicate = try await wallet.deliver(result, account: account)
+            let duplicate = try wallet.credit(queued, account: account)
             XCTAssertEqual(duplicate.balance, expected)
+            try await finish(queued)
             let reopened = LocalStoreKitWallet(directory: directory, offers: offers)
             XCTAssertEqual(try reopened.state(account: account).balance, expected)
         }
@@ -68,28 +92,27 @@ final class LocalPurchaseTests: XCTestCase {
     }
 
     func testWrongAccountCannotReceivePurchase() async throws {
-        let offer = try XCTUnwrap(offers.first)
-        let fetched = try await Product.products(for: [offer.productID])
-        let product = try XCTUnwrap(fetched.first)
-        guard case .success(let result) = try await product.purchase(options: [.appAccountToken(account)]) else { XCTFail("Missing transaction"); return }
+        let products = await fetchProducts()
+        let product = try XCTUnwrap(products.first)
+        let queued = try await submit(product)
         let wallet = LocalStoreKitWallet(directory: directory, offers: offers)
         let other = UUID()
-        do { _ = try await wallet.deliver(result, account: other); XCTFail("Wrong account accepted") }
+        do { _ = try wallet.credit(queued, account: other); XCTFail("Wrong account accepted") }
         catch LocalStoreKitWallet.Failure.invalidTransaction { }
         XCTAssertEqual(try wallet.state(account: other).balance, 0)
-        let delivered = try await wallet.deliver(result, account: account)
-        XCTAssertEqual(delivered.balance, offer.coins)
+        let delivered = try wallet.credit(queued, account: account)
+        try await finish(queued)
+        XCTAssertEqual(delivered.balance, offers.first { $0.productID == product.productIdentifier }?.coins)
     }
 
     func testGuideSpendingUsesPurchasedBalanceAndPersistsAccess() async throws {
         let offer = try XCTUnwrap(offers.first { $0.coins == 400 })
-        let products = try await Product.products(for: [offer.productID])
-        let product = try XCTUnwrap(products.first)
-        guard case .success(let result) = try await product.purchase(options: [.appAccountToken(account)]) else {
-            XCTFail("Missing transaction"); return
-        }
+        let products = await fetchProducts()
+        let product = try XCTUnwrap(products.first { $0.productIdentifier == offer.productID })
+        let queued = try await submit(product)
         let wallet = LocalStoreKitWallet(directory: directory, offers: offers)
-        _ = try await wallet.deliver(result, account: account)
+        _ = try wallet.credit(queued, account: account)
+        try await finish(queued)
         let guides = LocalGuideFixtures.guides
         let first = try XCTUnwrap(guides.first)
         let second = try XCTUnwrap(guides.dropFirst().first)
@@ -111,7 +134,7 @@ final class LocalPurchaseTests: XCTestCase {
         XCTAssertEqual(try reopened.state(account: UUID()).unlocks.count, 0)
         XCTAssertEqual(try reopened.state(account: account).balance, 0)
         // Re-delivery must not restore coins already spent on guides.
-        let redelivered = try await reopened.deliver(result, account: account)
+        let redelivered = try reopened.credit(queued, account: account)
         XCTAssertEqual(redelivered.balance, 0)
     }
 
@@ -140,16 +163,93 @@ final class LocalPurchaseTests: XCTestCase {
         XCTAssertTrue(try wallet.state(account: account).unlocks.isEmpty)
     }
 
-    func testCancellationDoesNotCredit() async throws {
-        let offer = try XCTUnwrap(offers.first)
-        let fetched = try await Product.products(for: [offer.productID])
-        let product = try XCTUnwrap(fetched.first)
-        if #available(iOS 17.0, *) {
-            try await session.setSimulatedError(.generic(.userCancelled), forAPI: .purchase)
-            let result = try await product.purchase(options: [.appAccountToken(account)])
-            guard case .userCancelled = result else { XCTFail("Expected cancellation"); return }
-            let wallet = LocalStoreKitWallet(directory: directory, offers: offers)
-            XCTAssertEqual(try wallet.state(account: account).balance, 0)
-        } else { throw XCTSkip("Error injection requires iOS 17") }
+    func testFailedPaymentDoesNotCredit() async throws {
+        let products = await fetchProducts()
+        let product = try XCTUnwrap(products.first)
+        session.failureError = .unknown
+        session.failTransactionsEnabled = true
+        let queued = try await submit(product)
+        XCTAssertEqual(queued.transactionState, .failed)
+        let wallet = LocalStoreKitWallet(directory: directory, offers: offers)
+        XCTAssertThrowsError(try wallet.credit(queued, account: account))
+        XCTAssertEqual(try wallet.state(account: account).balance, 0)
+    }
+
+    private func fetchProducts() async -> [SKProduct] {
+        let request = SKProductsRequest(productIdentifiers: Set(offers.map(\.productID)))
+        let received = expectation(description: "StoreKit 1 product request")
+        observer.productReceived = received
+        request.delegate = observer
+        defer { request.cancel() }
+        request.start()
+        await fulfillment(of: [received], timeout: 10)
+        return observer.products
+    }
+
+    private func submit(_ product: SKProduct) async throws -> SKPaymentTransaction {
+        let received = expectation(description: "StoreKit 1 purchase callback")
+        observer.productID = product.productIdentifier
+        observer.transaction = nil
+        observer.purchaseReceived = received
+        let payment = SKMutablePayment(product: product)
+        payment.applicationUsername = account.uuidString
+        SKPaymentQueue.default().add(payment)
+        await fulfillment(of: [received], timeout: 15)
+        return try XCTUnwrap(observer.transaction)
+    }
+
+    private func finish(_ transaction: SKPaymentTransaction) async throws {
+        let removed = expectation(description: "StoreKit 1 transaction leaves the queue")
+        observer.removalID = try XCTUnwrap(transaction.transactionIdentifier)
+        observer.transactionRemoved = removed
+        SKPaymentQueue.default().finishTransaction(transaction)
+        await fulfillment(of: [removed], timeout: 10)
+    }
+}
+
+@MainActor
+private final class StoreKitOneObserver: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
+    var productReceived: XCTestExpectation?
+    var purchaseReceived: XCTestExpectation?
+    var transactionRemoved: XCTestExpectation?
+    var removalID: String?
+    var products: [SKProduct] = []
+    var productID: String?
+    var transaction: SKPaymentTransaction?
+
+    nonisolated func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+        Task { @MainActor in
+            products = response.products
+            productReceived?.fulfill()
+            productReceived = nil
+        }
+    }
+
+    nonisolated func request(_ request: SKRequest, didFailWithError error: Error) {
+        Task { @MainActor in
+            XCTFail("StoreKit 1 catalog request failed: \(error)")
+            productReceived?.fulfill()
+            productReceived = nil
+        }
+    }
+
+    nonisolated func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        Task { @MainActor in
+            guard purchaseReceived != nil, let terminal = transactions.first(where: {
+                $0.payment.productIdentifier == productID &&
+                    ($0.transactionState == .purchased || $0.transactionState == .failed)
+            }) else { return }
+            transaction = terminal
+            purchaseReceived?.fulfill()
+            purchaseReceived = nil
+        }
+    }
+
+    nonisolated func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
+        Task { @MainActor in
+            guard let removalID, transactions.contains(where: { $0.transactionIdentifier == removalID }) else { return }
+            transactionRemoved?.fulfill()
+            transactionRemoved = nil
+        }
     }
 }

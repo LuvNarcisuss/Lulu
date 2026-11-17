@@ -2,6 +2,13 @@ import UIKit
 import Combine
 
 @main final class AppDelegate: UIResponder, UIApplicationDelegate {
+    fileprivate let store = TravelStore()
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        store.payments.startObservingPayments()
+        return true
+    }
+
     func application(_ application: UIApplication, configurationForConnecting session: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         let config = UISceneConfiguration(name: "Default", sessionRole: session.role)
         config.delegateClass = SceneDelegate.self
@@ -16,10 +23,10 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     private var coordinator: TravelCoordinator?
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let scene = scene as? UIWindowScene else { return }
+        guard let scene = scene as? UIWindowScene, let application = UIApplication.shared.delegate as? AppDelegate else { return }
         let window = UIWindow(windowScene: scene)
         window.backgroundColor = Palette.cream
-        let coordinator = TravelCoordinator(window: window)
+        let coordinator = TravelCoordinator(window: window, store: application.store)
         self.window = window
         self.coordinator = coordinator
         coordinator.start()
@@ -33,10 +40,13 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 @MainActor final class TravelCoordinator {
     private let window: UIWindow
-    private let store = TravelStore()
+    private let store: TravelStore
     private var observation: AnyCancellable?
     private var pendingFriendID: String?
-    init(window: UIWindow) { self.window = window }
+    init(window: UIWindow, store: TravelStore) {
+        self.window = window
+        self.store = store
+    }
     func start() {
         LaunchServices.shared.start()
         configureAppearance()

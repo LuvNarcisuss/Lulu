@@ -52,24 +52,25 @@ final class LocalStoreKitWallet {
     }
 
     @discardableResult
-    func deliver(_ result: VerificationResult<Transaction>, account: UUID) async throws -> State {
-        guard case .verified(let transaction) = result, transaction.environment == .xcode,
-              transaction.productType == .consumable, transaction.purchasedQuantity == 1,
-              transaction.revocationDate == nil, transaction.appAccountToken == account else {
+    func credit(_ transaction: SKPaymentTransaction, account: UUID) throws -> State {
+        let payment = transaction.payment
+        guard transaction.transactionState == .purchased, payment.quantity == 1,
+              let id = transaction.transactionIdentifier, !id.isEmpty,
+              let username = payment.applicationUsername, UUID(uuidString: username) == account else {
             throw Failure.invalidTransaction
         }
-        guard let coins = offers[transaction.productID], coins > 0 else { throw Failure.unknownProduct }
+        let productID = payment.productIdentifier
+        guard let coins = offers[productID], coins > 0 else { throw Failure.unknownProduct }
         var next = try state(account: account)
-        let id = String(transaction.id)
         if let previous = next.entries[id] {
-            guard previous.productID == transaction.productID, previous.coins == coins else { throw Failure.inconsistentLedger }
+            guard previous.productID == productID, previous.coins == coins else { throw Failure.inconsistentLedger }
         } else {
             guard next.creditedCoins <= Int.max - coins else { throw Failure.inconsistentLedger }
-            next.entries[id] = Entry(transactionID: id, productID: transaction.productID, coins: coins, date: transaction.purchaseDate)
+            next.entries[id] = Entry(transactionID: id, productID: productID, coins: coins,
+                                     date: transaction.transactionDate ?? Date())
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             try JSONEncoder().encode(next).write(to: file(account), options: .atomic)
         }
-        await transaction.finish()
         return next
     }
 

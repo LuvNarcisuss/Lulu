@@ -7,6 +7,41 @@ struct CoinOffer: Decodable {
     let productID: String
 }
 
+enum CoinWalletEnvironment: String {
+    case production = "Production"
+    case sandbox = "Sandbox"
+    case xcode = "Xcode"
+
+    static func installation(receiptURL: URL?, localTesting: Bool, bundleID: String) -> Self {
+        if localTesting { return .xcode }
+        // This owner-authorized test app can only use the hosted sandbox wallet.
+        if bundleID == "im.seex.sao2" { return .sandbox }
+        return receiptURL?.lastPathComponent == "sandboxReceipt" ? .sandbox : .production
+    }
+
+    var statePath: String {
+        self == .sandbox ? "rest/v1/rpc/travel_sandbox_coin_state" : "rest/v1/rpc/travel_coin_state"
+    }
+}
+
+struct CoinWalletRouting {
+    private(set) var environment: CoinWalletEnvironment?
+
+    mutating func useInstallation(_ installation: CoinWalletEnvironment) -> CoinWalletEnvironment {
+        if let environment { return environment }
+        environment = installation
+        return installation
+    }
+
+    mutating func acknowledge(_ response: Record) -> CoinWalletEnvironment? {
+        guard response.bool("committed"),
+              let confirmed = CoinWalletEnvironment(rawValue: response.string("environment")),
+              confirmed != .xcode else { return nil }
+        environment = confirmed
+        return confirmed
+    }
+}
+
 enum GuidePurchaseFailure: LocalizedError {
     case insufficientCoins(balance: Int, price: Int)
     case message(String)
@@ -21,17 +56,22 @@ enum GuidePurchaseFailure: LocalizedError {
 }
 
 @MainActor
-final class PaymentCatalogAdapter {
+final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
     private struct Configuration: Decodable { let tiers: [CoinOffer] }
     private weak var store: TravelStore?
-    private var products: [String: Product] = [:]
-    private var updates: Task<Void, Never>?
+    private var products: [String: SKProduct] = [:]
+    private var invalidProductIDs: Set<String> = []
+    private var productRequest: SKProductsRequest?
+    private var paymentQueue: SKPaymentQueue?
+    private var activePayment: SKPayment?
+    private var activeTransaction: SKPaymentTransaction?
     private var recovery: Task<Void, Never>?
-    private var recoveryID = UUID()
-    private var delivering: Set<UInt64> = []
+    private var recoveryRequested = false
+    private var sessionID = UUID()
     private var serverReady = false
-    private(set) var appleEnvironment: String?
-    private var environmentTask: Task<String, Error>?
+    private var walletRouting = CoinWalletRouting()
+    private let receiptReader = StoreReceiptReader()
+    var appleEnvironment: String? { walletRouting.environment?.rawValue }
     private var deliveryDiagnostic = "not_checked"
     private var checkoutMessage = "Purchases are temporarily unavailable. Tap a package to retry."
     private var loadTask: Task<Void, Never>?
@@ -48,22 +88,24 @@ final class PaymentCatalogAdapter {
 
     init(store: TravelStore) {
         self.store = store
+        super.init()
         if let url = Bundle.main.url(forResource: "PaymentCatalog", withExtension: "json"),
            let data = try? Data(contentsOf: url),
            let catalog = try? JSONDecoder().decode(Configuration.self, from: data) {
             offers = catalog.tiers.filter { $0.coins > 0 && !$0.productID.isEmpty }
         }
-        updates = Task { [weak self] in
-            for await result in Transaction.updates {
-                guard let self else { return }
-                await self.deliverUpdate(result)
-            }
-        }
+    }
+
+    func startObservingPayments() {
+        guard paymentQueue == nil else { return }
+        let queue = SKPaymentQueue.default()
+        paymentQueue = queue
+        queue.add(self)
     }
 
     var isLocalStoreKit: Bool {
-        #if DEBUG
-        return LocalStoreKitWallet.isEnabled || appleEnvironment == "Xcode"
+        #if DEBUG && targetEnvironment(simulator)
+        return LocalStoreKitWallet.isEnabled
         #else
         return false
         #endif
@@ -72,37 +114,17 @@ final class PaymentCatalogAdapter {
     private lazy var localWallet = LocalStoreKitWallet(offers: offers)
     #endif
 
-    var isSandbox: Bool { appleEnvironment == "Sandbox" }
+    var isSandbox: Bool { walletRouting.environment == .sandbox }
 
-    func resolveEnvironment() async throws -> String {
-        if isLocalStoreKit { appleEnvironment = "Xcode"; return "Xcode" }
-        if let appleEnvironment { return appleEnvironment }
-        if let environmentTask { return try await environmentTask.value }
-        let task = Task<String, Error> {
-            // Receipt location selects a ledger only; the server separately verifies
-            // Apple's signed transaction before any coins are credited.
-            if Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" { return "Sandbox" }
-            let result = try await AppTransaction.shared
-            guard case .verified(let app) = result else {
-                throw GuidePurchaseFailure.message("Apple could not verify this installation. Please retry.")
-            }
-            switch app.environment {
-            case .sandbox: return "Sandbox"
-            case .production: return "Production"
-            case .xcode:
-                #if DEBUG
-                return "Xcode"
-                #else
-                throw GuidePurchaseFailure.message("Install Lulu from TestFlight or the App Store to purchase coins.")
-                #endif
-            default: throw GuidePurchaseFailure.message("This Apple purchase environment is unavailable.")
-            }
-        }
-        environmentTask = task
-        defer { environmentTask = nil }
-        let value = try await task.value
-        appleEnvironment = value
-        return value
+    func resolveEnvironment() -> CoinWalletEnvironment {
+        let installation = CoinWalletEnvironment.installation(
+            receiptURL: Bundle.main.appStoreReceiptURL, localTesting: isLocalStoreKit,
+            bundleID: Bundle.main.bundleIdentifier ?? "")
+        return walletRouting.useInstallation(installation)
+    }
+
+    func acknowledgeCoinDelivery(_ response: Record) -> CoinWalletEnvironment? {
+        walletRouting.acknowledge(response)
     }
 
     var walletBalance: Int? {
@@ -136,7 +158,7 @@ final class PaymentCatalogAdapter {
     }
 
     func refreshWallet() async throws {
-        _ = try await resolveEnvironment()
+        _ = resolveEnvironment()
         #if DEBUG
         if isLocalStoreKit {
             guard let id = store?.userID, let account = UUID(uuidString: id) else { return }
@@ -231,19 +253,19 @@ final class PaymentCatalogAdapter {
 
     private func checkoutReady(_ store: TravelStore) async -> Bool {
         do {
-            let environment = try await resolveEnvironment()
+            let environment = resolveEnvironment()
             #if DEBUG
-            if environment == "Xcode" {
+            if environment == .xcode {
                 guard let account = UUID(uuidString: store.userID) else { return false }
                 _ = try localWallet.state(account: account)
                 deliveryDiagnostic = "local_ready"
                 return true
             }
             #endif
-            let status = try await store.coinPurchaseStatus(environment: environment)
+            let status = try await store.coinPurchaseStatus(environment: environment.rawValue)
             deliveryDiagnostic = status.string("code", fallback: "invalid_response")
             checkoutMessage = status.string("message", fallback: "Purchases are temporarily unavailable. Tap a package to retry.")
-            return status.bool("available") && status.string("environment") == environment
+            return status.bool("available") && status.string("environment") == environment.rawValue
         } catch {
             let failure = error as NSError
             deliveryDiagnostic = "\(failure.domain):\(failure.code)"
@@ -256,67 +278,90 @@ final class PaymentCatalogAdapter {
         guard !loading, !purchasing, let store, store.isAuthenticated else { return }
         let requestID = UUID()
         generation = requestID
-        let account = store.userID
-        loadedAccount = account
+        loadedAccount = store.userID
         loading = true
         serverReady = false
+        products.removeAll()
+        invalidProductIDs.removeAll()
         catalogPhase = "loading"
         lastErrorCode = "none"
         message = "Loading Apple coin packages…"
         revision += 1
-        timeoutTask?.cancel()
+
+        let request = SKProductsRequest(productIdentifiers: Set(offers.map(\.productID)))
+        productRequest = request
+        request.delegate = self
         timeoutTask = Task { [weak self] in
             do { try await Task.sleep(nanoseconds: 20_000_000_000) } catch { return }
             guard let self, self.generation == requestID, self.loading else { return }
             self.generation = UUID()
-            self.loadTask?.cancel()
-            self.loadTask = nil
-            self.loading = false
-            self.serverReady = false
+            self.stopCatalogLoading()
             self.catalogPhase = "timedOut"
             self.message = "Loading took too long. Check your connection and retry."
             self.revision += 1
         }
-        loadTask = Task { [weak self, weak store] in
-            guard let self, let store else { return }
-            async let readiness = self.checkoutReady(store)
-            do {
-                let available = try await Product.products(for: self.offers.map(\.productID))
-                let ready = await readiness
-                guard self.generation == requestID, store.isAuthenticated, store.userID == account else { return }
-                let requested = Set(self.offers.map(\.productID))
-                self.products = available.reduce(into: [:]) { result, product in
-                    if requested.contains(product.id), product.type == .consumable { result[product.id] = product }
-                }
+        request.start()
+    }
+
+    nonisolated func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+        Task { @MainActor [weak self] in
+            guard let self, self.productRequest === request,
+                  let store = self.store, store.isAuthenticated, store.userID == self.loadedAccount else { return }
+            let requestID = self.generation
+            request.delegate = nil
+            self.productRequest = nil
+            let requested = Set(self.offers.map(\.productID))
+            self.invalidProductIDs = requested.intersection(response.invalidProductIdentifiers)
+            let available = response.products.reduce(into: [String: SKProduct]()) { result, product in
+                if requested.contains(product.productIdentifier) { result[product.productIdentifier] = product }
+            }
+            self.loadTask = Task { [weak self, weak store] in
+                guard let self, let store else { return }
+                let ready = await self.checkoutReady(store)
+                guard self.generation == requestID, store.isAuthenticated, store.userID == self.loadedAccount else { return }
+                self.products = available
                 self.serverReady = ready
-                self.catalogPhase = self.products.isEmpty ? "unavailable" : (self.products.count == requested.count ? "ready" : "partial")
-                if !AppStore.canMakePayments {
+                self.catalogPhase = available.isEmpty ? "unavailable" : (available.count == requested.count ? "ready" : "partial")
+                if !SKPaymentQueue.canMakePayments() {
                     self.message = "In-app purchases are restricted on this device."
-                } else if self.products.isEmpty {
+                } else if available.isEmpty {
                     self.message = "Apple returned no coin packages. Please retry later."
                 } else if !ready {
                     self.message = self.checkoutMessage
-                } else if self.products.count < requested.count {
+                } else if available.count < requested.count {
                     self.message = "Some packages are unavailable. You can purchase any available package."
                 } else {
                     self.message = "Choose a coin package."
                 }
-            } catch {
-                guard self.generation == requestID, store.userID == account else { return }
-                self.products.removeAll()
-                self.serverReady = false
-                self.catalogPhase = "failed"
-                let failure = error as NSError
-                self.lastErrorCode = "\(failure.domain):\(failure.code)"
-                self.message = "Apple coin packages could not be loaded. Please retry."
+                self.loadTask = nil
+                self.stopCatalogLoading()
+                self.revision += 1
+                if ready { self.recoverUnfinished() }
             }
-            self.timeoutTask?.cancel()
-            self.timeoutTask = nil
-            self.loadTask = nil
-            self.loading = false
-            self.revision += 1
-            if self.serverReady { self.recoverUnfinished() }
         }
+    }
+
+    nonisolated func request(_ request: SKRequest, didFailWithError error: Error) {
+        Task { @MainActor [weak self] in
+            guard let self, self.productRequest === request else { return }
+            self.stopCatalogLoading()
+            self.catalogPhase = "failed"
+            let failure = error as NSError
+            self.lastErrorCode = "\(failure.domain):\(failure.code)"
+            self.message = "Apple coin packages could not be loaded. Please retry."
+            self.revision += 1
+        }
+    }
+
+    private func stopCatalogLoading() {
+        productRequest?.delegate = nil
+        productRequest?.cancel()
+        productRequest = nil
+        loadTask?.cancel()
+        loadTask = nil
+        timeoutTask?.cancel()
+        timeoutTask = nil
+        loading = false
     }
 
     func buttonTitle(for offer: CoinOffer) -> String {
@@ -331,145 +376,295 @@ final class PaymentCatalogAdapter {
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
         lines.append("Bundle: " + (Bundle.main.bundleIdentifier ?? "unknown"))
         lines.append("Version: " + version)
+        lines.append("Delivery method: StoreKit 1 app receipt")
         lines.append("Catalog: " + catalogPhase)
         lines.append("Local StoreKit wallet: \(isLocalStoreKit)")
-        lines.append("Payments allowed: \(AppStore.canMakePayments)")
+        lines.append("Payments allowed: \(SKPaymentQueue.canMakePayments())")
         lines.append("Delivery ready: \(serverReady)")
         lines.append("Apple environment: " + (appleEnvironment ?? "unknown"))
         lines.append("Delivery diagnostic: " + deliveryDiagnostic)
         lines.append("Requested: " + requested.sorted().joined(separator: ", "))
         lines.append("Returned: " + returned.sorted().joined(separator: ", "))
         lines.append("Missing: " + requested.subtracting(returned).sorted().joined(separator: ", "))
+        lines.append("Invalid IDs from Apple: " + invalidProductIDs.sorted().joined(separator: ", "))
         lines.append("Error: " + lastErrorCode)
         lines.append("Catalog availability and verified delivery are checked separately.")
         return lines.joined(separator: "\n")
     }
 
-    func price(for offer: CoinOffer) -> String? { products[offer.productID]?.displayPrice }
+    func price(for offer: CoinOffer) -> String? {
+        guard let product = products[offer.productID] else { return nil }
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = product.priceLocale
+        return formatter.string(from: product.price)
+    }
 
     func canBuy(_ offer: CoinOffer) -> Bool {
-        !loading && !purchasing && serverReady && store?.isAuthenticated == true && store?.userID == loadedAccount && AppStore.canMakePayments && products[offer.productID] != nil
+        !loading && !purchasing && serverReady && store?.isAuthenticated == true
+            && store?.userID == loadedAccount && SKPaymentQueue.canMakePayments()
+            && products[offer.productID] != nil
     }
 
     func buy(_ offer: CoinOffer) {
         guard canBuy(offer), let product = products[offer.productID],
               let store, let account = UUID(uuidString: store.userID) else { return }
-        let purchaseGeneration = generation
+        startObservingPayments()
+        guard let queue = paymentQueue else { return }
+        let session = sessionID
         purchasing = true
         message = "Opening Apple purchase…"
         revision += 1
         Task { [weak self, weak store] in
             guard let self, let store else { return }
-            defer {
-                if self.generation == purchaseGeneration { self.purchasing = false; self.revision += 1 }
-            }
             let ready = await self.checkoutReady(store)
-            guard self.generation == purchaseGeneration, store.isAuthenticated,
-                  store.userID.lowercased() == account.uuidString.lowercased() else { return }
-            guard ready, AppStore.canMakePayments else {
+            guard self.sessionID == session, store.isAuthenticated,
+                  UUID(uuidString: store.userID) == account else { return }
+            guard ready, SKPaymentQueue.canMakePayments() else {
                 self.serverReady = false
-                self.message = "Coin purchases are temporarily unavailable."
+                self.endCheckout("Coin purchases are temporarily unavailable.")
                 return
             }
-            do {
-                let outcome = try await product.purchase(options: [.appAccountToken(account)])
-                guard self.generation == purchaseGeneration, store.userID == self.loadedAccount else { return }
-                switch outcome {
-                case .success(let result):
-                    let committed = try await self.deliver(result)
-                    guard self.generation == purchaseGeneration else { return }
-                    self.message = committed ? "Coins added to your wallet." : "Your purchase is awaiting confirmation. Check pending purchases shortly."
-                case .pending:
-                    self.message = "The purchase is pending Apple approval."
-                case .userCancelled:
-                    self.message = "Purchase cancelled."
-                @unknown default:
-                    self.message = "Apple returned an unknown purchase status."
-                }
-            } catch {
-                guard self.generation == purchaseGeneration else { return }
-                self.message = "The purchase could not be confirmed. Retry to check for unfinished purchases."
+            let payment = SKMutablePayment(product: product)
+            payment.applicationUsername = account.uuidString
+            let alreadyQueued = queue.transactions.contains { transaction in
+                self.matchesPayment(transaction.payment, payment) &&
+                    (transaction.transactionState == .purchasing || transaction.transactionState == .deferred ||
+                     transaction.transactionState == .purchased)
             }
+            guard !alreadyQueued else {
+                self.endCheckout("A purchase for this package is already pending.")
+                self.recoverUnfinished()
+                return
+            }
+            self.activePayment = payment
+            queue.add(payment)
         }
     }
 
-    func recoverUnfinished() {
-        guard recovery == nil, store?.isAuthenticated == true else { return }
-        let recoveryToken = UUID()
-        recoveryID = recoveryToken
-        recovery = Task { [weak self] in
-            for await result in Transaction.unfinished {
-                guard let self, !Task.isCancelled, self.recoveryID == recoveryToken else { return }
-                await self.deliverUpdate(result)
-            }
-            if self?.recoveryID == recoveryToken { self?.recovery = nil }
+    nonisolated func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        Task { @MainActor [weak self] in
+            guard let self, self.paymentQueue === queue else { return }
+            for transaction in transactions { self.handle(transaction, in: queue) }
         }
     }
 
-    func reset() {
-        generation = UUID()
-        loadTask?.cancel(); loadTask = nil
-        timeoutTask?.cancel(); timeoutTask = nil
-        recoveryID = UUID()
-        recovery?.cancel(); recovery = nil
-        loadedAccount = ""
+    private func handle(_ transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
+        guard offers.contains(where: { $0.productID == transaction.payment.productIdentifier }) else { return }
+        let isActive = activePayment.map { matchesPayment(transaction.payment, $0) } ?? false
+        switch transaction.transactionState {
+        case .purchasing:
+            break
+        case .deferred:
+            if isActive { endCheckout("The purchase is pending Apple approval.") }
+        case .failed:
+            let error = transaction.error as? SKError
+            queue.finishTransaction(transaction)
+            if isActive {
+                endCheckout(error?.code == .paymentCancelled ? "Purchase cancelled." : "Apple could not complete the purchase. Please retry.")
+            }
+        case .purchased:
+            if isActive { activeTransaction = transaction }
+            recoverUnfinished()
+        case .restored:
+            // The catalog contains only consumables, which have no restorable entitlement.
+            queue.finishTransaction(transaction)
+        @unknown default:
+            if isActive { endCheckout("Apple returned an unknown purchase status. Check pending purchases shortly.") }
+        }
+    }
+
+    private func matchesPayment(_ first: SKPayment, _ second: SKPayment) -> Bool {
+        first.productIdentifier == second.productIdentifier &&
+            first.applicationUsername?.lowercased() == second.applicationUsername?.lowercased()
+    }
+
+    private func endCheckout(_ status: String) {
+        activePayment = nil
+        activeTransaction = nil
         purchasing = false
-        catalogPhase = "idle"
-        lastErrorCode = "none"
-        products.removeAll()
-        loading = false
-        serverReady = false
-        message = "Loading coin packages…"
+        message = status
         revision += 1
     }
 
-    private func deliverUpdate(_ result: VerificationResult<Transaction>) async {
-        let session = generation
-        do {
-            if try await deliver(result), generation == session {
+    func recoverUnfinished() {
+        guard store?.isAuthenticated == true else { return }
+        startObservingPayments()
+        recoveryRequested = true
+        guard recovery == nil else { return }
+        recovery = Task { [weak self] in
+            guard let self else { return }
+            defer { self.recovery = nil }
+            var finished = Set<String>()
+            repeat {
+                self.recoveryRequested = false
+                let completed = await self.deliverUnfinished(session: self.sessionID, excluding: finished)
+                finished.formUnion(completed)
+            } while self.recoveryRequested && !Task.isCancelled
+        }
+    }
+
+    private func deliverUnfinished(session: UUID, excluding finished: Set<String>) async -> Set<String> {
+        guard let store, store.isAuthenticated, let account = UUID(uuidString: store.userID),
+              let queue = paymentQueue else { return [] }
+        var delivered = Set<String>()
+        var awaitingConfirmation = false
+        var creditedPayment: SKPayment?
+        let checkoutAtStart = activeTransaction
+        for transaction in queue.transactions {
+            guard !Task.isCancelled, sessionID == session else { return delivered }
+            let payment = transaction.payment
+            guard transaction.transactionState == .purchased, payment.quantity == 1,
+                  let transactionID = transaction.transactionIdentifier, !transactionID.isEmpty,
+                  !finished.contains(transactionID), !delivered.contains(transactionID),
+                  offers.contains(where: { $0.productID == payment.productIdentifier }) else { continue }
+            // Do not deliver a queued purchase associated with another local account.
+            // The server also checks Apple's account token when the receipt includes it.
+            if let username = payment.applicationUsername, !username.isEmpty,
+               UUID(uuidString: username) != account { continue }
+            let checkoutPayment: SKPayment? = activePayment.flatMap { payment in
+                guard matchesPayment(transaction.payment, payment) else { return nil }
+                return payment
+            }
+            do {
+                try await deliver(transaction, transactionID: transactionID, account: account, in: store)
+                guard sessionID == session else { return delivered }
+                queue.finishTransaction(transaction)
+                delivered.insert(transactionID)
+                if let checkoutPayment { creditedPayment = checkoutPayment }
+            } catch {
+                guard sessionID == session else { return delivered }
+                awaitingConfirmation = true
+                if let checkoutPayment, activePayment === checkoutPayment {
+                    endCheckout("Your purchase is awaiting confirmation. Check pending purchases shortly.")
+                }
+            }
+        }
+        guard !Task.isCancelled, sessionID == session else { return delivered }
+        if let creditedPayment, activePayment === creditedPayment {
+            endCheckout("Coins added to your wallet.")
+        } else if let checkoutAtStart, activeTransaction === checkoutAtStart, !recoveryRequested {
+            endCheckout("Your purchase is awaiting confirmation. Check pending purchases shortly.")
+        } else if !purchasing, !loading {
+            if !delivered.isEmpty {
                 message = "Coins added to your wallet."
                 revision += 1
+            } else if awaitingConfirmation {
+                message = "A purchase is awaiting confirmation. Check pending purchases shortly."
+                revision += 1
             }
-        } catch {
-            guard generation == session else { return }
-            message = "A purchase is awaiting verification. Retry from the wallet."
-            revision += 1
         }
+        return delivered
     }
 
-    private func deliver(_ result: VerificationResult<Transaction>) async throws -> Bool {
-        guard case .verified(let transaction) = result else { throw PurchaseFailure.unverified }
-        guard transaction.productType == .consumable,
-              transaction.purchasedQuantity == 1, transaction.revocationDate == nil,
-              offers.contains(where: { $0.productID == transaction.productID }),
-              let store, store.isAuthenticated,
-              let account = UUID(uuidString: store.userID), transaction.appAccountToken == account,
-              delivering.insert(transaction.id).inserted else { return false }
-        defer { delivering.remove(transaction.id) }
-        #if DEBUG
+    func reset() {
+        sessionID = UUID()
+        generation = UUID()
+        walletRouting = CoinWalletRouting()
+        stopCatalogLoading()
+        recoveryRequested = false
+        receiptReader.cancel()
+        loadedAccount = ""
+        catalogPhase = "idle"
+        lastErrorCode = "none"
+        products.removeAll()
+        invalidProductIDs.removeAll()
+        serverReady = false
+        endCheckout("Loading coin packages…")
+    }
+
+    private func deliver(_ transaction: SKPaymentTransaction, transactionID: String,
+                         account: UUID, in store: TravelStore) async throws {
+        #if DEBUG && targetEnvironment(simulator)
         if isLocalStoreKit {
-            _ = try await localWallet.deliver(result, account: account)
-            return true
+            _ = try localWallet.credit(transaction, account: account)
+            return
         }
         #endif
-        let transactionEnvironment: String
-        switch transaction.environment {
-        case .sandbox: transactionEnvironment = "Sandbox"
-        case .production: transactionEnvironment = "Production"
-        default: throw PurchaseFailure.unverified
-        }
-        try await store.deliverCoinPurchase(result.jwsRepresentation, account: account, environment: transactionEnvironment)
-        await transaction.finish()
-        try? await store.refreshCoinState()
-        return true
+        let receipt = try await receiptReader.encodedReceipt()
+        try await store.deliverCoinPurchase(transactionID: transactionID,
+                                            productID: transaction.payment.productIdentifier,
+                                            receipt: receipt, account: account)
     }
 
-    private enum PurchaseFailure: Error { case unverified }
-
     deinit {
+        paymentQueue?.remove(self)
+        productRequest?.delegate = nil
+        productRequest?.cancel()
         loadTask?.cancel()
         timeoutTask?.cancel()
-        updates?.cancel()
         recovery?.cancel()
+    }
+}
+
+/// Read receipts only after a purchased callback; first sandbox installs may have none.
+@MainActor
+private final class StoreReceiptReader: NSObject, SKRequestDelegate {
+    private var request: SKReceiptRefreshRequest?
+    private var continuation: CheckedContinuation<Void, Error>?
+    private var timeout: Task<Void, Never>?
+
+    func encodedReceipt() async throws -> String {
+        if let receipt = readReceipt() { return receipt }
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            guard self.continuation == nil else {
+                continuation.resume(throwing: ReceiptReadFailure.message("Apple receipt refresh is already in progress."))
+                return
+            }
+            self.continuation = continuation
+            let request = SKReceiptRefreshRequest()
+            self.request = request
+            request.delegate = self
+            timeout = Task { [weak self] in
+                do { try await Task.sleep(nanoseconds: 30_000_000_000) } catch { return }
+                self?.complete(.failure(ReceiptReadFailure.message("Apple receipt refresh timed out. Check pending purchases shortly.")))
+            }
+            request.start()
+        }
+        guard let receipt = readReceipt() else {
+            throw ReceiptReadFailure.message("Apple has not provided the purchase receipt. Check pending purchases shortly.")
+        }
+        return receipt
+    }
+
+    private func readReceipt() -> String? {
+        guard let url = Bundle.main.appStoreReceiptURL,
+              let data = try? Data(contentsOf: url), !data.isEmpty, data.count <= 1_050_000 else { return nil }
+        return data.base64EncodedString()
+    }
+
+    nonisolated func requestDidFinish(_ request: SKRequest) {
+        Task { @MainActor [weak self] in
+            guard let self, self.request === request else { return }
+            self.complete(.success(()))
+        }
+    }
+
+    nonisolated func request(_ request: SKRequest, didFailWithError error: Error) {
+        Task { @MainActor [weak self] in
+            guard let self, self.request === request else { return }
+            self.complete(.failure(error))
+        }
+    }
+
+    func cancel() { complete(.failure(CancellationError())) }
+
+    private func complete(_ result: Result<Void, Error>) {
+        request?.delegate = nil
+        request?.cancel()
+        request = nil
+        timeout?.cancel()
+        timeout = nil
+        let pending = continuation
+        continuation = nil
+        pending?.resume(with: result)
+    }
+}
+
+
+private enum ReceiptReadFailure: LocalizedError {
+    case message(String)
+    var errorDescription: String? {
+        switch self { case .message(let value): return value }
     }
 }

@@ -17,7 +17,7 @@ This matrix describes implemented source routes. The [November 10 functional acc
 | Friend codes | FriendScannerController / TravelerCodeController | Strict travelapp friend UUID + actual member lookup | Explicit camera action, session stops outside active screen; never opens arbitrary scanned websites |
 | Profile | MeController / PublicProfileController / EditProfileController | profile.update / relationship.follow | Actual record-derived counts; editorial publishers visibly identified |
 | Safety | ReportController / SafetyHistoryController | safety.report / safety.unreport / safety.block | Real saved report/block, no claim of staffed moderation |
-| Wallet | WalletController / PaymentCatalogAdapter | Nine StoreKit 2 consumables, Apple JWS verifier and server coin ledger | Confirmed identity com.lulu.tourtravel; separate verified Sandbox/Production ledgers; unavailable taps provide feedback/retry; no unverified credit |
+| Wallet | WalletController / PaymentCatalogAdapter | Nine StoreKit 1 consumables, Apple JWS verification and server coin ledger | Confirmed identity com.lulu.tourtravel; separate verified Sandbox/Production ledgers; unavailable taps provide feedback/retry; no unverified credit |
 | Agreements | AgreementController | Verified public PDFs + matching bundled PDF | Same entry/settings links; not production legal-operator approval |
 | Sign out | SettingsController | SDK local signout, secure state cleanup | Does not delete cloud records; guest access may be unrecoverable |
 | Own-account deletion | SettingsController / travel-account source | Not deployed | Explicit authorization absent; automatic review rejection disclosed; UI unavailable |

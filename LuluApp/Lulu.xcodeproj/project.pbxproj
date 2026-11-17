@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		04E844829C4C464459C3BD7E /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E8D61184C3E4E00BC680EB /* Record.swift */; };
 		080951B91C1ACF529444A98D /* PrivacyPolicy.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9C786AEF81A4894CFE7DB169 /* PrivacyPolicy.pdf */; };
+		0977C428EE50C4A94C8EBE95 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A8719E9CFB2EB01859CEC9 /* StoreKit.framework */; };
 		0ABFB7AC74DBBA5479719E08 /* ProfileControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7CEBCA93B333303F227F322 /* ProfileControllers.swift */; };
 		0B36185B095E3F564029A3C2 /* BackendConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 9EBBDC7AA0E742CC254ADB20 /* BackendConfig.json */; };
 		0EBDE66BF0C08773786B48C2 /* LocalPurchaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF34A77FB58150C39436D4E3 /* LocalPurchaseTests.swift */; };
@@ -93,6 +94,7 @@
 		9AFB7E23BEFC455FF34A1434 /* ClipFeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipFeedController.swift; sourceTree = "<group>"; };
 		9C786AEF81A4894CFE7DB169 /* PrivacyPolicy.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PrivacyPolicy.pdf; sourceTree = "<group>"; };
 		9EBBDC7AA0E742CC254ADB20 /* BackendConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BackendConfig.json; sourceTree = "<group>"; };
+		A8A8719E9CFB2EB01859CEC9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		AA219D96723E27BCBAB5DDB2 /* LocalVideoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalVideoPreviewController.swift; sourceTree = "<group>"; };
 		ADF8BD4AFEF5272B7B5BF584 /* TravelDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDesign.swift; sourceTree = "<group>"; };
 		BB07A6DA24EDB1C504C8DA29 /* AppleSandboxUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSandboxUITests.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0977C428EE50C4A94C8EBE95 /* StoreKit.framework in Frameworks */,
 				3CD92C2293E10849390EBED4 /* Alamofire in Frameworks */,
 				88A0D2BEC0021252B7269183 /* MapLibre in Frameworks */,
 				465DE5AFC4134348C7FDCAF7 /* Supabase in Frameworks */,
@@ -203,6 +206,14 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
+		71455EFF47BE976DB5A16494 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A8A8719E9CFB2EB01859CEC9 /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		77C9B70A20A05CFDE761C781 /* Social */ = {
 			isa = PBXGroup;
 			children = (
@@ -280,6 +291,7 @@
 				589BA95B69F09D28A9FEEC97 /* Sources */,
 				341068E220BD7AEB6CDD020A /* Support */,
 				ECA08AA84FDCE3F72FFC7CC5 /* Tests */,
+				71455EFF47BE976DB5A16494 /* Frameworks */,
 				86B6FE2583886977318311B9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -401,7 +413,11 @@
 					};
 					2D8B4B89FFAE1AB314CE025C = {
 						ProvisioningStyle = Automatic;
-						SystemCapabilities = "[\"com.apple.InAppPurchase\": [\"enabled\": 1]]";
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 					6C9D5FFD760319A6D4010C86 = {
 						DevelopmentTeam = JPTS6M4T5B;

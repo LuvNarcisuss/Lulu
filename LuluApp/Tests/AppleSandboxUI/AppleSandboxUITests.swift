@@ -4,6 +4,14 @@ import XCTest
 /// identified Apple's Sandbox environment. Native account prompts require the owner.
 final class AppleSandboxUITests: XCTestCase {
     func testNineSandboxPackages() throws {
+        try purchasePackages([400, 800, 2450, 5150, 10800, 17000, 29400, 42700, 63700])
+    }
+
+    func testFirstSandboxPackage() throws {
+        try purchasePackages([400])
+    }
+
+    private func purchasePackages(_ coinAmounts: [Int]) throws {
         guard ProcessInfo.processInfo.environment["LULU_SANDBOX_UI_TESTS"] == "1" else {
             throw XCTSkip("Enable LULU_SANDBOX_UI_TESTS only for authorized Apple sandbox acceptance.")
         }
@@ -12,8 +20,8 @@ final class AppleSandboxUITests: XCTestCase {
         app.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launch()
         if app.buttons["Start exploring"].waitForExistence(timeout: 8) {
-            app.buttons["Agree to the Terms of Service and Privacy Policy"].tap()
-            app.buttons["Start exploring"].tap()
+            capture(app, name: "Owner sign-in required")
+            XCTFail("The owner must complete sign-in and consent before purchase acceptance."); return
         }
         guard app.buttons["Me"].waitForExistence(timeout: 60) else {
             capture(app, name: "Entry blocked")
@@ -27,6 +35,7 @@ final class AppleSandboxUITests: XCTestCase {
         let ready = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label == %@", "Choose a coin package."), object: status)
         guard XCTWaiter.wait(for: [ready], timeout: 45) == .completed else {
             capture(app, name: "Catalog or delivery blocked")
+            print("WALLET_DIAGNOSTICS \(String(describing: app.buttons["wallet.diagnostics"].value))")
             XCTFail("Checkout unavailable: \(status.label), environment: \(String(describing: status.value))"); return
         }
         XCTAssertEqual(status.value as? String, "Sandbox", "Never purchase in Production or Xcode in this test.")
@@ -35,7 +44,7 @@ final class AppleSandboxUITests: XCTestCase {
         var expected = initial
         var failures: [String] = []
         let system = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        for coins in [400, 800, 2450, 5150, 10800, 17000, 29400, 42700, 63700] {
+        for coins in coinAmounts {
             let package = app.buttons["wallet.package.\(coins)"]
             for _ in 0..<10 { if package.isHittable { break }; app.swipeUp() }
             XCTAssertTrue(package.isHittable); package.tap()

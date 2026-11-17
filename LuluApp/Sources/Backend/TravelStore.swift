@@ -185,11 +185,18 @@ final class TravelStore: ObservableObject {
     func refreshCoinState() async throws {
         guard isAuthenticated else { throw StoreFailure.authenticationRequired }
         let attempt = generation
+        let environment = payments.resolveEnvironment()
+        try await refreshCoinState(environment: environment, generation: attempt)
+    }
+
+    private func refreshCoinState(environment: CoinWalletEnvironment, generation attempt: UUID) async throws {
+        guard isAuthenticated, generation == attempt, payments.appleEnvironment == environment.rawValue else {
+            throw CancellationError()
+        }
         let token = UUID()
         coinStateRequest = token
-        let environment = try await payments.resolveEnvironment()
-        let sandbox = environment == "Sandbox"
-        let result = try await request(path: "rest/v1/rpc/" + (sandbox ? "travel_sandbox_coin_state" : "travel_coin_state"),
+        let sandbox = environment == .sandbox
+        let result = try await request(path: environment.statePath,
             body: sandbox ? ["apple_bundle": .string(Bundle.main.bundleIdentifier ?? "")] : [:], optionalRead: true)
         guard generation == attempt, coinStateRequest == token else { throw CancellationError() }
         guard case .number(let total) = result["balance"], total.isFinite, total >= 0,
@@ -209,25 +216,41 @@ final class TravelStore: ObservableObject {
         guard isAuthenticated else { throw StoreFailure.authenticationRequired }
         let attempt = generation
         let state = try await request(path: "functions/v1/travel-coin-purchase", body: [
-            "action": .string("status"), "environment": .string(environment),
+            "action": .string("status_receipt"), "environment": .string(environment),
             "bundle_id": .string(Bundle.main.bundleIdentifier ?? "")
         ], optionalRead: true)
         guard generation == attempt else { throw CancellationError() }
         return state
     }
 
-    func deliverCoinPurchase(_ transaction: String, account: UUID, environment: String) async throws {
+    func deliverCoinPurchase(transactionID: String, productID: String, receipt: String, account: UUID) async throws {
         guard isAuthenticated, UUID(uuidString: userID) == account else { throw StoreFailure.authenticationRequired }
         let attempt = generation
+        let environmentHint = payments.resolveEnvironment()
         let result = try await request(path: "functions/v1/travel-coin-purchase", body: [
-            "action": .string("deliver"),
-            "environment": .string(environment),
+            "action": .string("deliver_receipt"),
+            "environment": .string(environmentHint.rawValue),
             "bundle_id": .string(Bundle.main.bundleIdentifier ?? ""),
-            "signed_transaction": .string(transaction)
+            "transaction_id": .string(transactionID),
+            "product_id": .string(productID),
+            "receipt_data": .string(receipt)
         ])
-        guard generation == attempt, result.bool("committed") else {
+        guard generation == attempt, let environment = payments.acknowledgeCoinDelivery(result) else {
             throw StoreFailure.message("Coin delivery could not be confirmed. Please retry.")
         }
+        // Discard an earlier read before loading the ledger that actually received the purchase.
+        resetCoinState()
+        revision += 1
+        try await refreshCoinState(environment: environment, generation: attempt)
+    }
+
+    private func resetCoinState() {
+        coinStateRequest = UUID()
+        hasCoinState = false
+        balance = 0
+        coinActivity.removeAll()
+        guideOffers.removeAll()
+        sandboxGuides.removeAll()
     }
 
     func upload(data: Data, contentType: String, purpose: String) async throws -> String {
@@ -432,12 +455,7 @@ final class TravelStore: ObservableObject {
         hiddenPlaceIDs.removeAll()
         hasGuideVisibility = false
         guideVisibilityVersion = UUID()
-        balance = 0
-        coinActivity.removeAll()
-        guideOffers.removeAll()
-        sandboxGuides.removeAll()
-        hasCoinState = false
-        coinStateRequest = UUID()
+        resetCoinState()
         payments.reset()
         lastRefreshError = nil
         realtimeError = nil

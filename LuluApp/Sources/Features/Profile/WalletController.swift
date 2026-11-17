@@ -96,11 +96,14 @@ final class WalletController: TravelScreen {
             self?.catalog.recoverUnfinished()
         })
         #if DEBUG
-        content.addArrangedSubview(action("Copy store diagnostics", filled: false) { [weak self] in
+        let diagnostics = action("Copy store diagnostics", filled: false) { [weak self] in
             guard let self else { return }
             UIPasteboard.general.string = self.catalog.diagnostics
             self.notice("Store diagnostics copied.")
-        })
+        }
+        diagnostics.accessibilityIdentifier = "wallet.diagnostics"
+        diagnostics.accessibilityValue = catalog.diagnostics
+        content.addArrangedSubview(diagnostics)
         #endif
         content.addArrangedSubview(text("History", 26, display: true))
         content.addArrangedSubview(action("Refresh wallet", icon: "icon-refresh", filled: false) { [weak self] in

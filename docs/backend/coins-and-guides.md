@@ -1,10 +1,16 @@
 # Coins and paid guides
 
-The wallet uses StoreKit 2 consumable products. Ordinary Debug and Release now use Apple-backed purchases for the owner-confirmed `com.lulu.tourtravel` / `6832914128` identity. Local StoreKit remains explicitly available through the isolated test target described in [Local StoreKit verification](local-storekit.md). The values below are the US reference mapping. The app displays Apple's returned storefront price and only offers checkout when Apple returns the product and the verifier is configured.
+The wallet uses StoreKit 1 to load its nine consumable products, show localized storefront prices, and process checkout through the payment queue. The production identity remains `com.lulu.tourtravel` / `6832914128`. The owner-authorized `im.seex.sao2` test build uses Apple's Sandbox and a bundle-scoped sandbox wallet. The isolated StoreKit test target and current test signing are documented in [Local StoreKit verification](local-storekit.md). The values below are the US reference mapping. The app displays Apple's returned storefront price and only offers checkout when Apple returns the product and the verifier is configured.
+
+The active StoreKit 1 path calls `status_receipt` before checkout and `deliver_receipt` after a purchased callback. It reads the Base64 app receipt, refreshing a missing receipt with `SKReceiptRefreshRequest`, and submits it with the specific transaction and product IDs. The server sends that receipt to Apple's production `verifyReceipt` endpoint, then to Sandbox only after status `21007`. Consumables require no `.p8` signing key or subscription shared secret in this path. Apple marks `verifyReceipt` deprecated; it remains the selected compatibility path for this StoreKit 1 repair. [Apple receipt validation](https://developer.apple.com/documentation/storekit/validating-receipts-with-the-app-store) and [consumable receipt lifetime](https://developer.apple.com/documentation/appstorereceipts/responsebody/receipt-data.dictionary/in_app-data.dictionary).
+
+Only an Apple status-zero response with the correct endpoint environment, receipt type, bundle, requested transaction, product and quantity can reach the existing atomic ledger. Refunded, revoked and subscription rows are rejected. The server checks Apple's account token when present. Legacy consumable receipts can omit that field: those receipts are treated as purchase credentials, and the authenticated claimant becomes the immutable transaction owner through the existing atomic ledger. This is not an Apple-signed account-token guarantee when the field is absent. The client rejects locally queued purchases carrying another account UUID. A replay by another account cannot receive the same transaction, and repeated delivery cannot increment the balance twice.
+
+The verified Apple environment selects the wallet. The client refreshes its authoritative balance and history after acknowledgment and calls `finishTransaction` only after delivery and refresh succeed. Receipt, network, verification or wallet-read failures preserve the unfinished order. Version 4 adds this flow while retaining the earlier signed-JWS and transaction-ID API contracts for installed older builds; the latter still requires API credentials. Those credentials are not required by the current receipt-based app. No provided private key was uploaded or embedded.
 
 | Reference USD | Coins | Product ID |
 | ---: | ---: | --- |
-| 0.99 | 400 | `iltpkpefqtjskxel` |
+| Apple storefront price | 400 | `neiku_30` (current test); `iltpkpefqtjskxel` (original) |
 | 1.99 | 800 | `eweerqrczkwsjyjn` |
 | 4.99 | 2,450 | `bfktecvbuyjzwxtp` |
 | 9.99 | 5,150 | `zsadvhodvgamjqqp` |
@@ -14,13 +20,41 @@ The wallet uses StoreKit 2 consumable products. Ordinary Debug and Release now u
 | 69.99 | 42,700 | `qjcdfljcmzajynnd` |
 | 99.99 | 63,700 | `rzeethasxinmprew` |
 
-The two new product IDs are for the 29.99 and 69.99 tiers. Register them for Lulu in App Store Connect and confirm the seven supplied IDs are on the same app. Codemagic uses Apple ID `6832914128`. Confirm that the record uses `com.lulu.tourtravel` before deploying the updated verifier and setting `APPLE_APP_ID` in its Edge Function environment. The local verifier source targets `com.lulu.tourtravel` and uses Apple Root CA G3 and Apple's pinned server library. Deployment of the identity change is pending. The verifier checks production consumables, the signed account token, product identity and quantity before calling the service-only ledger. The transaction is finished on iOS only after the ledger acknowledges it. Unfinished transactions can be retried. Sandbox and local StoreKit purchases do not credit the production ledger.
+The two added product IDs belong to the 29.99 and 69.99 tiers. The verifier pins Apple Root CA G3. Sandbox credits and Xcode test credits use separate ledgers.
+
+The catalog uses a 20-second timeout and preserves eligible products in a partial response. Checkout rechecks the account, device restrictions, and verifier before opening Apple's sheet. Debug diagnostics distinguish requested, returned, missing, and Apple-confirmed invalid IDs. See [Local StoreKit verification](local-storekit.md) for the isolated runtime evidence.
+
+## November 17 owner-confirmed first-tier sandbox delivery
+
+After installing the receipt-based StoreKit 1 build on the designated iPhone, the
+owner confirmed that the actual Wallet received the purchased 400-coin package.
+The successful test used `neiku_30`, `im.seex.sao2` and Yu Sun. It required no `.p8`
+key. This acceptance is based on the owner's on-device report; follow-up database
+inspection failed because the Supabase connector transport was unavailable.
+It does not establish availability of the other eight products or acceptance under
+the formal identity or in Production. See [device evidence](local-storekit.md).
+
+## November 17 test identity and first-tier change
+
+The owner confirmed that the nine products were created under `im.seex.sao2`, then selected `neiku_30` as the temporary 400-coin product. The current app catalog and local fixture use that identifier. The other eight tiers are unchanged. The backend retains the original 400-coin mapping for existing or unfinished purchases. It accepts `neiku_30` only for the test bundle in Sandbox; its price comes from Apple, not the old product's reference price.
+
+Applied repairs `lulu_sandbox_test_identity` and `lulu_test_product` permit the exact test bundle and map `neiku_30` to 400 coins. They preserve existing balances, row security and service-only credit privileges. Unknown bundles remain rejected. The first repair keeps separate transaction keys and balances per bundle; no balance is copied between applications or environments. The test bundle selects Sandbox before its first receipt exists, while a successful verified delivery acknowledgment remains authoritative.
+
+`travel-coin-purchase` version 3 now serves `status_by_id` and `deliver_by_id` as well as the earlier signed-JWS contract. Readback confirmed the deployed contract and test identifier. Forty-four isolated handler/API cases passed. The isolated PostgreSQL harness passed bundle isolation, duplicate delivery, ownership, guide spending and the test-product mapping checks. These checks do not establish Apple catalog availability, account permission or real wallet delivery.
+
+## November 17 App Review purchase diagnosis
+
+App Review reported that the balance stayed at zero after checkout in version 1.0 build 3. The submitted build's source revision and the specific review transaction were unavailable. Hosted function logs show seven version 2 delivery requests returned HTTP 422 on November 16 between 15:17 and 15:19 China Standard Time. Both Apple delivery ledgers contained zero entries during the read-only inspection. Supabase documents a failure mode that matches these observations. Edge Runtime's Node compatibility layer lacks X.509 methods required by Apple Server Library 3.1.0. The reported responses did not retain the individual verification exception. [Supabase Edge Runtime issue](https://github.com/supabase/edge-runtime/issues/761).
+
+The client also had an independent defect. It could select the credited ledger from the signed transaction and then read the balance from a different, cached installation environment. It also ignored failures from the final balance read. The client now checks the acknowledgment environment, invalidates older wallet reads and refreshes the credited ledger before showing success. Failed or mismatched acknowledgments preserve the previous environment.
+
+The corrected Edge Function uses Web Crypto and PKIjs for certificate-chain, signing-purpose, ES256 signature and live OCSP validation. The P-384/SHA-256 compatibility path uses Deno's direct signature primitive. The function separately reports verification outages, rejected transactions and ledger write failures. The account, product, quantity, environment, revocation and idempotency checks still apply. On Deno 2.1.4, the new verifier checked the Apple G3/G6 chain and accepted two live Apple-signed OCSP responses for public certificates. Synthetic signed transactions exercised the complete local verification path. The corrected verifier and StoreKit 1 contract were deployed as version 3 on November 17. A completed Apple sandbox purchase remains pending.
 
 ## November 16 repair status
 
 This section supersedes older pending-verifier and local-default statements below. The purchase Edge Function was updated to version 2, and additive sandbox tables and RPCs were deployed. Public Apple identity is configured directly from the owner-confirmed app record; checkout no longer depends on an absent numeric Apple ID secret. Native transactions are verified against Sandbox or Production, with distinct ledgers. Sandbox credits and guide access are limited to authorized editorial content. Existing production balances and entitlements are unchanged.
 
-All nine tiers passed isolated ledger tests and local StoreKit purchase tests. Actual Apple sandbox device outcomes are recorded separately in the [current evidence](../runtime-acceptance/2026-11-16-1030-purchase-repair/README.md). Do not infer sandbox or production purchase completion from those local tests.
+Before the StoreKit 1 migration, all nine tiers passed isolated ledger tests and local StoreKit purchase tests. Apple sandbox device outcomes are recorded separately in the [November 16 evidence](../runtime-acceptance/2026-11-16-1030-purchase-repair/README.md).
 
 ## Guide access
 
@@ -28,7 +62,7 @@ The initial catalog has eight free guides. Colosseum and Ancient Rome costs 180 
 
 To submit a guide, open a destination and select **Write a guide for this place**. The author sets 0 to make it free or a whole coin amount through 10,000. **My guides** shows submissions and lets the author change their own price. New guides enter the pending queue. A moderator reviews the body and changes the corresponding `guide_offers.status` to `published` or `rejected` in the Supabase project. Pricing changes cannot approve a submission. Other accounts can report a published guide or block its member author.
 
-## Hosted evidence
+## November 10 hosted evidence
 
 The Supabase project applied migrations `20261110020657_lulu_coin_guides` and `20261110020907_scope_guide_author_visibility`. The second migration scopes the author-block check to the current account. Hosted checks found nine coin products, eight free guides, four paid guides and no ledger entries. An authenticated zero-balance test claim could read all 12 previews and only the eight free bodies through the existing snapshot or direct guide read. The same claim was denied an unlock for insufficient coins. The service-only credit RPC is denied to authenticated app clients. The Edge Function `travel-coin-purchase` version 1 is active and rejected an unsigned-in request with HTTP 401.
 

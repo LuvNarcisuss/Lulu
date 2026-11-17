@@ -1,9 +1,17 @@
 import { Buffer } from "node:buffer";
-import { Environment, SignedDataVerifier } from "npm:@apple/app-store-server-library@3.1.0";
 import { createClient } from "npm:@supabase/supabase-js@2.80.0";
+import { AppleVerificationUnavailable, verifyAppleTransaction } from "./apple-transaction.ts";
+import { AppleReceiptRejected, verifyAppleReceipt } from "./apple-receipt.ts";
+import {
+  AppleTransactionNotFound,
+  isAppleTransactionJWS,
+  loadAppleIAPCredentials,
+  lookupAppleTransaction,
+} from "./apple-transaction-info.ts";
 
 // Public App Store identity confirmed by the owner on November 16, 2026.
-const bundleID = "com.lulu.tourtravel";
+const productionBundleID = "com.lulu.tourtravel";
+const testBundleID = "im.seex.sao2";
 const appleAppID = 6832914128;
 const productIDs = new Set([
   "iltpkpefqtjskxel", "eweerqrczkwsjyjn", "bfktecvbuyjzwxtp",
@@ -30,48 +38,140 @@ Deno.serve(async (request: Request) => {
   let input: Record<string, unknown>;
   try {
     const body = await request.text();
-    if (body.length > 32768) return json({ message: "Invalid purchase request." }, 413);
+    if (body.length > 1_450_000) return json({ message: "Invalid purchase request." }, 413);
     input = JSON.parse(body);
     if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("Invalid input");
   } catch { return json({ message: "Invalid purchase request." }, 400); }
 
-  const validBundle = input.bundle_id === bundleID;
-  const validEnvironment = input.environment === "Sandbox" || input.environment === "Production";
-  if (!validBundle || !validEnvironment) {
+  const bundleID = input.bundle_id;
+  const environment = input.environment;
+  const testBuild = bundleID === testBundleID;
+  const validBundle = bundleID === productionBundleID || (testBuild && environment === "Sandbox");
+  const acceptsProduct = (id: string) => productIDs.has(id) || (testBuild && id === "neiku_30");
+  const action = input.action;
+  const statusRequest = action === "status" || action === "status_by_id" || action === "status_receipt";
+  if (!validBundle || (environment !== "Sandbox" && environment !== "Production")) {
     return json({ available: false, code: !validBundle ? "app_identity_mismatch" : "unsupported_environment",
-      message: "This build is not configured for Apple purchases. Install the latest Lulu build." }, input.action === "status" ? 200 : 422);
+      message: "This build is not configured for Apple purchases. Install the latest Lulu build." }, statusRequest ? 200 : 422);
   }
-  const environment = input.environment === "Sandbox" ? Environment.SANDBOX : Environment.PRODUCTION;
-  if (input.action === "status") return json({ available: true, environment: input.environment, bundle_id: bundleID, code: "ready" });
-  if (input.action !== "deliver") return json({ message: "Invalid purchase request." }, 400);
-  const signed = input.signed_transaction;
-  if (typeof signed !== "string" || !/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(signed)) {
-    return json({ message: "Invalid Apple transaction." }, 400);
+  const ready = { available: true, environment, bundle_id: bundleID, code: "ready" };
+  if (action === "status" || action === "status_receipt") return json(ready);
+  if (action === "deliver_receipt") {
+    const { transaction_id: transactionID, product_id: productID } = input;
+    if (typeof transactionID !== "string" || !/^[0-9]{1,32}$/.test(transactionID) ||
+        typeof productID !== "string" || !acceptsProduct(productID)) {
+      return json({ message: "Invalid purchase request." }, 400);
+    }
+    let purchase;
+    try {
+      purchase = await verifyAppleReceipt(input.receipt_data, {
+        bundleID, transactionID, productID, accountID: user.id, sandboxOnly: testBuild,
+        appleAppID: testBuild ? undefined : appleAppID,
+      });
+    } catch (error) {
+      const rejected = error instanceof AppleReceiptRejected;
+      return json({ code: rejected ? "receipt_rejected" : "receipt_verification_unavailable",
+        message: rejected ? "Apple could not verify this purchase. Check pending purchases shortly."
+          : "Apple verification is temporarily unavailable. Check pending purchases shortly." }, rejected ? 422 : 503);
+    }
+    try {
+      const ledger = createClient(url, serviceKey, options);
+      const sandbox = purchase.environment === "Sandbox";
+      const parameters: Record<string, string> = {
+        viewer: user.id, apple_transaction: purchase.transactionID, apple_product: purchase.productID,
+      };
+      if (sandbox) parameters.apple_bundle = bundleID;
+      const { data, error } = await ledger.rpc(sandbox ? "travel_credit_sandbox_coins" : "travel_credit_apple_coins", parameters);
+      if (error || data?.committed !== true) throw new Error("Unconfirmed delivery");
+      return json({ committed: true, environment: purchase.environment });
+    } catch {
+      return json({ code: "receipt_delivery_unavailable",
+        message: "Coin delivery could not be confirmed. Check pending purchases shortly." }, 503);
+    }
+  }
+  if (action !== "deliver" && action !== "deliver_by_id" && action !== "status_by_id") {
+    return json({ message: "Invalid purchase request." }, 400);
+  }
+
+  let requestByID: { transactionID: string; productID: string } | undefined;
+  let signed = input.signed_transaction;
+  let settlementEnvironment = environment;
+  if (action !== "deliver") {
+    if (action === "deliver_by_id") {
+      const { transaction_id: transactionID, product_id: productID } = input;
+      if (typeof transactionID !== "string" || !/^[0-9]{1,32}$/.test(transactionID) ||
+          typeof productID !== "string" || !acceptsProduct(productID)) {
+        return json({ message: "Invalid purchase request." }, 400);
+      }
+      requestByID = { transactionID, productID };
+    }
+    // The test application may belong to a different App Store Connect team.
+    const credentialPrefix = testBuild ? "APPLE_TEST_IAP_" : "APPLE_IAP_";
+    const credentials = await loadAppleIAPCredentials(
+      Deno.env.get(credentialPrefix + "ISSUER_ID"),
+      Deno.env.get(credentialPrefix + "KEY_ID"),
+      Deno.env.get(credentialPrefix + "PRIVATE_KEY"),
+    );
+    if (!credentials) {
+      return json({
+        ...ready, available: false, code: "apple_iap_configuration",
+        message: "Apple purchases are temporarily unavailable. Please try again later.",
+      }, statusRequest ? 200 : 503);
+    }
+    if (!requestByID) return json(ready);
+    try {
+      const lookup = await lookupAppleTransaction(requestByID.transactionID, environment, bundleID, credentials);
+      signed = lookup.signedTransaction;
+      settlementEnvironment = lookup.environment;
+      if (testBuild && settlementEnvironment !== "Sandbox") {
+        return json({ message: "Apple transaction does not match this purchase." }, 422);
+      }
+    } catch (error) {
+      if (error instanceof AppleTransactionNotFound) {
+        return json({ message: "Apple transaction does not match this purchase." }, 422);
+      }
+      console.warn("Apple transaction lookup temporarily unavailable");
+      return json({ message: "Apple verification is temporarily unavailable. Check pending purchases shortly." }, 503);
+    }
+  }
+  if (!isAppleTransactionJWS(signed)) return json({ message: "Invalid Apple transaction." }, 400);
+  let verified: Record<string, unknown>;
+  try {
+    verified = await verifyAppleTransaction(signed, { trustedRoot: appleRoot });
+  } catch (error) {
+    if (error instanceof AppleVerificationUnavailable) {
+      console.warn("Apple purchase verification temporarily unavailable");
+      return json({ message: "Apple verification is temporarily unavailable. Check pending purchases shortly." }, 503);
+    }
+    console.warn("Apple purchase signature or certificate verification failed");
+    return json({ message: "Apple could not verify this transaction. Check pending purchases shortly." }, 422);
+  }
+  // The verified JWS must match its Apple endpoint environment and the requested purchase.
+  const { appAccountToken, transactionId, productId } = verified;
+  if (verified.environment !== settlementEnvironment || verified.bundleId !== bundleID ||
+      (!testBuild && verified.appAppleId !== undefined && verified.appAppleId !== appleAppID) ||
+      verified.type !== "Consumable" || verified.quantity !== 1 ||
+      verified.inAppOwnershipType !== "PURCHASED" || verified.revocationDate != null ||
+      typeof appAccountToken !== "string" || appAccountToken.toLowerCase() !== user.id.toLowerCase() ||
+      typeof transactionId !== "string" || !/^[0-9]{1,32}$/.test(transactionId) ||
+      typeof productId !== "string" || !acceptsProduct(productId) ||
+      (requestByID && (productId !== requestByID.productID ||
+        (requestByID.transactionID !== transactionId && requestByID.transactionID !== verified.originalTransactionId)))) {
+    console.warn("Verified Apple purchase did not match the account or catalog");
+    return json({ message: "Apple transaction does not match this purchase." }, 422);
   }
   try {
-    // A client-selected environment never grants credit: Apple must sign the same
-    // environment, bundle, product and account. Xcode transactions are not accepted.
-    const verifier = new SignedDataVerifier([appleRoot], true, environment, bundleID,
-      environment === Environment.PRODUCTION ? appleAppID : undefined);
-    const verified = await verifier.verifyAndDecodeTransaction(signed);
-    if (verified.environment !== environment || verified.bundleId !== bundleID ||
-        verified.type !== "Consumable" || verified.quantity !== 1 ||
-        verified.inAppOwnershipType !== "PURCHASED" || verified.revocationDate != null ||
-        verified.appAccountToken?.toLowerCase() !== user.id.toLowerCase() ||
-        !verified.transactionId || !/^[0-9]{1,32}$/.test(verified.transactionId) ||
-        !verified.productId || !productIDs.has(verified.productId)) {
-      return json({ message: "Apple transaction does not match this purchase." }, 422);
-    }
     const ledger = createClient(url, serviceKey, options);
     const parameters: Record<string, string> = {
-      viewer: user.id, apple_transaction: verified.transactionId, apple_product: verified.productId,
+      viewer: user.id, apple_transaction: transactionId, apple_product: productId,
     };
-    const sandbox = environment === Environment.SANDBOX;
+    const sandbox = settlementEnvironment === "Sandbox";
     if (sandbox) parameters.apple_bundle = bundleID;
     const { data, error } = await ledger.rpc(sandbox ? "travel_credit_sandbox_coins" : "travel_credit_apple_coins", parameters);
     if (error || data?.committed !== true) return json({ message: "Coin delivery could not be confirmed. Check pending purchases shortly." }, 503);
-    return json({ committed: true, environment: verified.environment });
+    return json({ committed: true, environment: settlementEnvironment });
   } catch {
-    return json({ message: "Apple could not verify this transaction. Check pending purchases shortly." }, 422);
+    console.warn("Verified Apple purchase could not be recorded");
+    return json({ message: "Coin delivery could not be confirmed. Check pending purchases shortly." }, 503);
   }
 });
