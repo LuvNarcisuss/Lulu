@@ -1,8 +1,7 @@
 import { readFile, writeFile, chmod } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
-const url='https://dlbaneeshycwmhgfeokx.supabase.co';
-const key='sb_publishable_fILH9r1CitJSP2ZOA2HaNQ_jSZ20Znb';
-const sessionPath='/tmp/travel-backend-verification-sessions.json';
+const {projectURL: url, publishableKey: key} = JSON.parse(await readFile('LuluApp/Resources/BackendConfig.json', 'utf8'));
+const sessionPath='/tmp/lulu-company-verification-sessions.json';
 let users=[];
 try { users=JSON.parse(await readFile(sessionPath,'utf8')); } catch {}
 async function api(path,body,user,method='POST') {
@@ -17,7 +16,7 @@ for(let i=users.length;i<3;i++){
 }
 const rpc=(name,body,u)=>api('/rest/v1/rpc/'+name,body,u);
 const action=(name,payload,u)=>rpc('travel_action',{action:name,payload},u);
-const ids=users.map(x=>x.user.id);let report={project:'dlbaneeshycwmhgfeokx',users:ids,checks:[],cleanupPending:true};
+const ids=users.map(x=>x.user.id);let report={project:new URL(url).hostname.split('.')[0],users:ids,checks:[],cleanupPending:true};
 try {
  let rejected=false;try{await rpc('travel_bootstrap',{})}catch(e){rejected=e.status===401||e.status===403}check(rejected,'Raw anonymous bootstrap must reject');report.checks.push('raw anonymous RPC denied');
  for(const [i,u]of users.entries()){

@@ -75,7 +75,7 @@ final class LocalVideoPreviewController: TravelScreen {
             capture.start { [weak self] running in
                 guard let self, self.visible, UIApplication.shared.applicationState == .active else { return }
                 guard running else {
-                    self.show("Front camera is unavailable.", retry: true)
+                    self.showCameraError("Front camera is unavailable.", retry: true)
                     return
                 }
                 if let connection = self.cameraView.preview.connection {
@@ -97,32 +97,41 @@ final class LocalVideoPreviewController: TravelScreen {
                     self.requestingAccess = false
                     guard self.visible else { return }
                     if AVCaptureDevice.authorizationStatus(for: .video) == .notDetermined {
-                        self.show("Front camera is unavailable.", retry: true)
+                        self.showCameraError("Front camera is unavailable.", retry: true)
                     } else {
                         self.startCameraIfVisible()
                     }
                 }
             }
         case .denied:
-            show("Camera access is off.", settings: true)
+            showCameraError("Camera access is off.", settings: true)
         case .restricted:
-            show("Camera access is restricted on this device.")
+            showCameraError("Camera access is restricted on this device.")
         @unknown default:
-            show("Camera access is unavailable.")
+            showCameraError("Camera access is unavailable.")
         }
     }
 
-    private func show(_ message: String, preview: Bool = false, settings: Bool = false, retry: Bool = false) {
+    private func show(_ message: String, preview: Bool = false) {
+        updateProblem(nil, for: "camera")
         status.text = message
         cameraView.isHidden = !preview
+        settingsButton.isHidden = true
+        retryButton.isHidden = true
+    }
+
+    private func showCameraError(_ message: String, settings: Bool = false, retry: Bool = false) {
+        status.text = nil
+        cameraView.isHidden = true
         settingsButton.isHidden = !settings
         retryButton.isHidden = !retry
+        updateProblem(message, for: "camera")
     }
 
     private func cameraStopped(_ message: String) {
         guard visible, UIApplication.shared.applicationState == .active else { return }
         capture.stop()
-        show(message, retry: true)
+        showCameraError(message, retry: true)
     }
 
     private func observe(_ name: Notification.Name, object: AnyObject? = nil,

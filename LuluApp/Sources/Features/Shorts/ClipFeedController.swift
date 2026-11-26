@@ -8,7 +8,7 @@ private final class FilmSurface: UIView {
     var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
 }
 
-class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePresentationControllerDelegate, SFSafariViewControllerDelegate {
+class ClipFeedController: TravelNoticeScreen, UIScrollViewDelegate, UIAdaptivePresentationControllerDelegate, SFSafariViewControllerDelegate {
     private let store: TravelStore
     private var clips: [Record]
     private var initialIndex: Int
@@ -97,7 +97,7 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
         buildPages()
         if discovery { installDiscoveryToolbar() }
         let back: (() -> Void)? = discovery ? nil : { [weak self] in self?.navigationController?.popViewController(animated: true) }
-        let failure = ServerReadFailureOverlay(store: store, back: back)
+        let failure = ServerReadFailureOverlay(store: store, owner: self, back: back)
         failure.translatesAutoresizingMaskIntoConstraints = false; view.addSubview(failure)
         NSLayoutConstraint.activate([failure.leadingAnchor.constraint(equalTo: view.leadingAnchor), failure.trailingAnchor.constraint(equalTo: view.trailingAnchor), failure.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor), failure.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
         failure.onVisibilityChange = { [weak self] failed in self?.readFailed = failed; if failed { self?.player.pause() } else { self?.resumeIfAllowed() } }
@@ -136,9 +136,11 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
 
     private func buildPages() {
         if clips.isEmpty {
-            let message = discovery ? "No travel videos available." : "This film is no longer available."
-            let empty = column([text(message, 25, color: .white, display: true)])
-            if !discovery {
+            let empty = column()
+            if discovery {
+                empty.addArrangedSubview(text("No travel videos available.", 25, color: .white, display: true))
+            } else {
+                notice("This film is no longer available.")
                 empty.addArrangedSubview(action("Go back", icon: "icon-back", filled: false) { [weak self] in
                     self?.navigationController?.popViewController(animated: true)
                 })
@@ -190,7 +192,7 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
                 self.manuallyPaused = false
                 self.reloadDiscovery(startAtFirst: true)
             } catch is CancellationError { }
-            catch { self.showNotice(error.localizedDescription) }
+            catch { self.notice(error.localizedDescription) }
         }
     }
 
@@ -283,7 +285,8 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
                             self.films[index].poster.isHidden = true
                             self.resumeIfAllowed()
                         case .failed:
-                            self.films[index].setLoadingMessage("This film could not load. Tap Retry below.")
+                            self.films[index].setLoadingMessage("")
+                            self.notice("This film could not load. Tap Retry to try again.")
                             self.films[index].retry.isHidden = false
                         default: break
                         }
@@ -295,7 +298,8 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
                 self.resumeIfAllowed()
             } catch {
                 guard self.requestID == identity else { return }
-                self.films[index].setLoadingMessage("This film is unavailable. Please try again.")
+                self.films[index].setLoadingMessage("")
+                self.notice("This film is unavailable. Please try again.")
                 self.films[index].retry.isHidden = false
             }
         }
@@ -329,7 +333,7 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
         Task { [weak self] in
             guard let self else { return }; defer { self.busy = false }
             do { try await self.store.perform(action, ["clip_id": .string(clip.id), "enabled": .bool(enabled)]) }
-            catch { self.showNotice(error.localizedDescription) }
+            catch { self.notice(error.localizedDescription) }
         }
     }
     private func refreshInteractions() {
@@ -409,7 +413,7 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
                 } else if self.navigationController?.topViewController === self {
                     self.navigationController?.popViewController(animated: true)
                 }
-            } catch { self.showNotice(error.localizedDescription) }
+            } catch { self.notice(error.localizedDescription) }
         }
     }
     private func openSource(_ clip: Record) {
@@ -418,10 +422,9 @@ class ClipFeedController: UIViewController, UIScrollViewDelegate, UIAdaptivePres
         safari.delegate = self
         present(safari, animated: true); safari.presentationController?.delegate = self
     }
-    private func showNotice(_ message: String) {
-        covered = true; player.pause()
-        let dialog = TravelDialogController(title: "Travel notes", message: message, choices: [("OK", false, { [weak self] in self?.covered = false; self?.resumeIfAllowed() })])
-        present(dialog, animated: true); dialog.presentationController?.delegate = self
+    override func noticeVisibilityChanged(_ visible: Bool) {
+        covered = visible
+        if visible { player.pause() } else { resumeIfAllowed() }
     }
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) { covered = false; resumeIfAllowed() }
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) { covered = false; resumeIfAllowed() }

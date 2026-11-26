@@ -28,6 +28,7 @@ class AppleTransactionNotFound extends Error {}
 function harness({
   transaction = {}, verificationError, ledgerError, throwsOnLedger = false, authenticated = true,
   lookupReady = false, lookupEnvironment = "Sandbox", lookupError, receiptReply, receiptNetworkError,
+  sessionID = account, walletID = account,
 } = {}) {
   const calls = [];
   const lookups = [];
@@ -46,8 +47,9 @@ function harness({
     ...transaction,
   };
   const client = {
-    auth: { getUser: async () => ({ data: { user: authenticated ? { id: account } : null }, error: null }) },
+    auth: { getUser: async () => ({ data: { user: authenticated ? { id: sessionID } : null }, error: null }) },
     rpc: async (name, args) => {
+      if (name === "travel_account_identity") return { data: { account_id: walletID }, error: null };
       calls.push({ name, args });
       if (throwsOnLedger) throw new Error("Unavailable");
       return { data: { committed: !ledgerError }, error: ledgerError };
@@ -340,6 +342,12 @@ test("real receipt verifier feeds only the requested sandbox purchase into the e
   assert.equal(audit.calls.length, 1);
   assert.equal(audit.calls[0].name, "travel_credit_sandbox_coins");
   assert.deepEqual({ ...audit.calls[0].args }, { viewer: account, apple_transaction: "100001", apple_product: "neiku_30", apple_bundle: "im.seex.sao2" });
+});
+
+test("a transferred guest credits the original wallet after opening a new company session", async () => {
+  const audit = harness({ sessionID: "00000000-0000-4000-8000-000000000099", receiptReply: receiptReply() });
+  assert.equal((await audit.request(receiptInput)).status, 200);
+  assert.equal(audit.calls[0].args.viewer, account);
 });
 
 for (const row of [{ product_id: "other" }, { transaction_id: "200002" }, { quantity: "2" },

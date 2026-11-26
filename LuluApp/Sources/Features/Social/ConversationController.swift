@@ -144,21 +144,23 @@ final class ConversationController: TravelScreen, UITextViewDelegate, PHPickerVi
     private func persistDraft() {
         guard !saveInFlight, accountID == store.userID, store.isAuthenticated else { return }
         let value = composer.text ?? ""
-        guard value != savedDraft else { return }
-        guard value.count <= 2000 else { stateLabel.text = "Drafts can contain up to 2,000 characters."; return }
+        updateProblem(value.count > 2000 ? "Drafts can contain up to 2,000 characters." : nil, for: "draftLength")
+        guard value.count <= 2000, value != savedDraft else { return }
         saveInFlight = true
         let generation = draftGeneration
         Task { [self] in
             do {
                 try await store.perform("chat.preferences", ["conversation_id": .string(conversationID), "draft": .string(value)])
                 guard accountID == store.userID else { saveInFlight = false; return }
+                updateProblem(nil, for: "draftSave")
                 savedDraft = value
                 stateLabel.text = "Draft saved"
                 saveInFlight = false
                 if generation != draftGeneration || composer.text != value { persistDraft() }
             } catch {
                 saveInFlight = false
-                stateLabel.text = "Draft not saved: \(error.localizedDescription)"
+                stateLabel.text = nil
+                updateProblem("Draft not saved: \(error.localizedDescription)", for: "draftSave")
             }
         }
     }
@@ -226,8 +228,16 @@ final class ConversationController: TravelScreen, UITextViewDelegate, PHPickerVi
         lastReadMessage = latest
         Task { [weak self] in
             guard let self else { return }
-            do { try await self.store.perform("chat.preferences", ["conversation_id": .string(self.conversationID), "last_read_at": .string(ISO8601DateFormatter().string(from: Date()))]) }
-            catch { self.lastReadMessage = ""; self.stateLabel.text = "Read state could not be saved: \(error.localizedDescription)" }
+            do {
+                try await self.store.perform("chat.preferences", [
+                    "conversation_id": .string(self.conversationID),
+                    "last_read_at": .string(ISO8601DateFormatter().string(from: Date()))
+                ])
+                self.updateProblem(nil, for: "readState")
+            } catch {
+                self.lastReadMessage = ""
+                self.updateProblem("Read state could not be saved: \(error.localizedDescription)", for: "readState")
+            }
         }
     }
     private func send() {
@@ -250,7 +260,7 @@ final class ConversationController: TravelScreen, UITextViewDelegate, PHPickerVi
                 if composer.text == raw { composer.text = ""; draftGeneration += 1 }
                 replyID = nil; attachment = nil; uploadedPath = nil; pendingID = UUID().uuidString
                 stateLabel.text = "Sent"; persistDraft()
-            } catch { stateLabel.text = "Not sent: \(error.localizedDescription)" }
+            } catch { stateLabel.text = nil; notice("Not sent: \(error.localizedDescription)") }
             sending = false; updateComposer()
         }
     }

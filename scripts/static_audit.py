@@ -27,7 +27,8 @@ name = identity['displayName']
 require(bool(name) and info['CFBundleDisplayName'] == info['CFBundleName'] == name,
         'App display and bundle names agree with the selected identity')
 scheme_path = app / f"{identity['scheme']}.xcodeproj/xcshareddata/xcschemes/{identity['scheme']}.xcscheme"
-buildables = ET.parse(scheme_path).findall('.//BuildableReference')
+scheme = ET.parse(scheme_path)
+buildables = scheme.findall('LaunchAction/BuildableProductRunnable/BuildableReference')
 product = identity['productName']
 require(bool(buildables) and all(ref.get('BuildableName') == f'{product}.app' for ref in buildables)
         and f'path = {product}.app;' in project and f'PRODUCT_NAME: {product}\n' in source_config,
@@ -71,7 +72,21 @@ payment = json.loads((app / 'Resources/PaymentCatalog.json').read_text())
 tiers = payment['tiers']
 require(len(tiers) == 9 and len({offer['productID'] for offer in tiers}) == 9, 'Nine unique wallet tiers')
 require(all(re.fullmatch(r'[a-z]{16}', offer['productID']) and offer['coins'] > 0 for offer in tiers), 'Wallet product IDs and coin amounts match the configured format')
-require('storeKitConfiguration' not in source_config, 'Scheme has no local StoreKit catalog masquerading as Apple availability')
+fixture_path = 'Configuration/LuluCoins.storekit'
+fixture = json.loads((app / fixture_path).read_text())
+local_ids = {tier.get('localProductID', tier['productID']) for tier in tiers}
+require(len(fixture['products']) == len(local_ids) == len(tiers)
+        and all(product['type'] == 'Consumable' for product in fixture['products'])
+        and {product['productID'] for product in fixture['products']} == local_ids,
+        'Simulator wallet tiers match the nine local StoreKit consumables')
+launch = scheme.find('LaunchAction')
+fixture_ref = launch.find('StoreKitConfigurationFileReference')
+local_switch = launch.find("EnvironmentVariables/EnvironmentVariable[@key='LULU_LOCAL_STOREKIT']")
+require(launch.get('buildConfiguration') == 'Debug'
+        and fixture_ref is not None and fixture_ref.get('identifier') == '../../' + fixture_path
+        and local_switch is not None and local_switch.get('value') == '1' and local_switch.get('isEnabled') == 'YES'
+        and f'storeKitConfiguration: {fixture_path}' in source_config and 'LULU_LOCAL_STOREKIT: "1"' in source_config,
+        'Shared Debug Run and XcodeGen select local StoreKit and the simulator wallet')
 require(not any(s in project for s in ['catalog/videos/', 'catalog/places/', 'catalog/covers/']), 'Business media is excluded from the application bundle')
 for file in (app / 'Resources/Legal').glob('*.pdf'):
     require(file.read_bytes().startswith(b'%PDF-'), f'Bundled agreement is actual PDF: {file.name}')

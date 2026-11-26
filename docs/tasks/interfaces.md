@@ -1,5 +1,7 @@
 # Shared Interfaces
 
+After the company cutover, `TravelStore.userID` is the canonical member ID returned by the authenticated entry function. A transferred guest may have a different company Auth UUID. Business records, friend codes, media ownership and Apple account tokens use the canonical member ID.
+
 This contract is binding across independent feature work. Contact the coordinator before changing shared names. All IDs are server UUID strings. All timestamps use ISO 8601. Records are flat JSON dictionaries; nested arrays/objects use JSONValue. Record.swift is already supplied by the coordinator.
 
 ## Backend store (backend worker owns implementation)
@@ -14,9 +16,9 @@ This contract is binding across independent feature work. Contact the coordinato
     var balance: Int { get }
     init()
     func rows(_ key: String) -> [Record]
-    var hasSavedSession: Bool { get }
-    var savedSessionIsGuest: Bool { get }
-    func signInWithOneTap() async throws
+    var hasGuestToUpgrade: Bool { get }
+    func register(email: String, password: String) async throws
+    func signIn(email: String, password: String) async throws
     func refresh() async throws
     @discardableResult func perform(_ action: String, _ payload: [String: JSONValue]) async throws -> Record
     func upload(data: Data, contentType: String, purpose: String) async throws -> String
@@ -27,6 +29,8 @@ This contract is binding across independent feature work. Contact the coordinato
 ```
 
 `perform` refreshes committed state and increments revision after successful writes. It must preserve the operation's success if a later refresh fails, exposing refresh failure separately. No UI success before persistence. Upload returns object path, never temporary signed URL. Media URL resolves public catalog paths and authorized private uploads. Store handles real Auth, realtime subscriptions, refresh, reconnection and user isolation. No seeded private data.
+
+Only the current snapshot request can publish a refresh failure. A cancelled or superseded refresh throws `CancellationError` so callers can end their loading state silently. A successful refresh clears the previous failure.
 
 Snapshot keys: `clips`, `places`, `guides`, `profiles`, `likes`, `saved_clips`, `saved_places`, `comments`, `follows`, `blocks`, `reports`, `journeys`, `conversations`, `messages`, `chat_preferences`, `submissions`, `wallet_activity`.
 
@@ -67,7 +71,7 @@ All payload keys below are snake_case. Optional IDs use null when absent. Every 
 
 ## Shared UIKit design (coordinator owns implementation)
 
-`TravelScreen: UIViewController` has `let store: TravelStore`, `let content: UIStackView`, `let scroll: UIScrollView`, `init(store: TravelStore)`, `func render()` (override; base clears content), `func push(_ controller: UIViewController)`, `func run(_ work: @escaping () async throws -> Void)` (busy guard + visible error, retains fields), `func notice(_ message: String)`, `func confirm(_ title: String, message: String, destructive: Bool = false, action: @escaping () -> Void)`. Base subscribes to revision and calls render only while visible; feature controllers may override to preserve active inputs. Pushed screens hide the floating dock.
+`TravelScreen: TravelNoticeScreen` has `let store: TravelStore`, `let content: UIStackView`, `let scroll: UIScrollView`, `init(store: TravelStore)`, `func render()` (override; base clears content), `func push(_ controller: UIViewController)`, `func run(_ work: @escaping () async throws -> Void)` (guards concurrent work, presents errors in an alert and retains fields), `func notice(_ message: String)`, `func confirm(_ title: String, message: String, destructive: Bool = false, action: @escaping () -> Void)`. Use the inherited `notice` for error events and `updateProblem(_:for:)` for failures that persist across renders. The shared presenter queues errors until the screen can show them. The base subscribes to revision and calls render only while visible; feature controllers may override to preserve active inputs. Pushed screens hide the floating dock.
 
 Global helpers (UIKit, @MainActor):
 - `text(_ value: String, _ size: CGFloat = 16, color: UIColor = Palette.ink, display: Bool = false) -> UILabel`
@@ -95,7 +99,7 @@ Keep file ownership boundaries. Do not compile/typecheck/run an app or simulator
 
 ## Active guide checkout interface
 
-Guide entry points call UIViewController.openPlaceGuide, which delegates confirmed payment to PaymentCatalogAdapter.unlockGuide(_:expectedPrice:). Use PaymentCatalogAdapter.walletBalance for user-visible balances and hasGuideAccess(to:) for access badges. Production guide.unlock remains a server operation; DEBUG-only Xcode test debits and editorial content copies stay inside the local wallet path. See docs/backend/local-storekit.md for the isolation and unexecuted regression cases.
+Guide entry points call TravelNoticeScreen.openPlaceGuide, which delegates confirmed payment to PaymentCatalogAdapter.unlockGuide(_:expectedPrice:). Use PaymentCatalogAdapter.walletBalance for user-visible balances and hasGuideAccess(to:) for access badges. Production guide.unlock remains a server operation; DEBUG-only Xcode test debits and editorial content copies stay inside the local wallet path. See docs/backend/local-storekit.md for the isolation and unexecuted regression cases.
 
 ## Purchase waiting indicator — November 16, 2026
 

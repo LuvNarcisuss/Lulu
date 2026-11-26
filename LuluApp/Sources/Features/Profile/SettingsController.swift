@@ -38,7 +38,6 @@ final class SettingsController: TravelScreen {
         }
         deleteButton.isEnabled = deletionConfigured
         content.addArrangedSubview(deleteButton)
-        if !deletionConfigured { content.addArrangedSubview(text("Account deletion is temporarily unavailable.", 14, color: Palette.muted)) }
     }
 }
 
@@ -82,13 +81,14 @@ private final class HiddenGuidesController: TravelScreen {
         super.render()
         title = "Hidden guides"
         guard store.hasGuideVisibility else {
-            content.addArrangedSubview(text("Your hidden guides could not be loaded.", color: Palette.muted))
+            updateProblem("Your hidden guides could not be loaded.", for: "hiddenGuides")
             content.addArrangedSubview(action("Retry", icon: "icon-refresh", filled: false) { [weak self] in
                 guard let self else { return }
                 self.run { try await self.store.refresh() }
             })
             return
         }
+        updateProblem(nil, for: "hiddenGuides")
         let places = store.rows("places").filter { store.hiddenPlaceIDs.contains($0.id) }
         if places.isEmpty {
             content.addArrangedSubview(text("You have no hidden guides.", color: Palette.muted))
@@ -149,7 +149,7 @@ final class AgreementController: TravelScreen {
         guard let url = URL(string: raw), url.scheme == "https", url.host != nil,
               let checksum = values?[agreement.checksumKey] as? String else {
             if let bundled, let document = PDFDocument(url: bundled) { pdf.document = document; status.text = "Bundled agreement" }
-            else { status.text = "This agreement is not configured yet. Operator details must be confirmed before release." }
+            else { status.text = nil; notice("This agreement is currently unavailable.") }
             return
         }
         status.text = "Loading current agreement…"
@@ -177,7 +177,7 @@ final class AgreementController: TravelScreen {
             } catch {
                 guard !Task.isCancelled else { return }
                 if let bundled, let document = PDFDocument(url: bundled) { self?.pdf.document = document; self?.status.text = "Offline bundled agreement" }
-                else { self?.status.text = "The agreement could not be loaded. Please try again." }
+                else { self?.status.text = nil; self?.notice("The agreement could not be loaded. Please try again.") }
             }
         }
     }

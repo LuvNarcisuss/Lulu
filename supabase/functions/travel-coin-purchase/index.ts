@@ -56,6 +56,12 @@ Deno.serve(async (request: Request) => {
   }
   const ready = { available: true, environment, bundle_id: bundleID, code: "ready" };
   if (action === "status" || action === "status_receipt") return json(ready);
+  const scoped = createClient(url, publicKey, { ...options, global: { headers: { Authorization: authorization } } });
+  const { data: identity, error: identityError } = await scoped.rpc("travel_account_identity");
+  if (identityError || typeof identity?.account_id !== "string") {
+    return json({ message: "Your wallet could not be opened. Please retry." }, 503);
+  }
+  const accountID: string = identity.account_id;
   if (action === "deliver_receipt") {
     const { transaction_id: transactionID, product_id: productID } = input;
     if (typeof transactionID !== "string" || !/^[0-9]{1,32}$/.test(transactionID) ||
@@ -65,7 +71,7 @@ Deno.serve(async (request: Request) => {
     let purchase;
     try {
       purchase = await verifyAppleReceipt(input.receipt_data, {
-        bundleID, transactionID, productID, accountID: user.id, sandboxOnly: testBuild,
+        bundleID, transactionID, productID, accountID, sandboxOnly: testBuild,
         appleAppID: testBuild ? undefined : appleAppID,
       });
     } catch (error) {
@@ -78,7 +84,7 @@ Deno.serve(async (request: Request) => {
       const ledger = createClient(url, serviceKey, options);
       const sandbox = purchase.environment === "Sandbox";
       const parameters: Record<string, string> = {
-        viewer: user.id, apple_transaction: purchase.transactionID, apple_product: purchase.productID,
+        viewer: accountID, apple_transaction: purchase.transactionID, apple_product: purchase.productID,
       };
       if (sandbox) parameters.apple_bundle = bundleID;
       const { data, error } = await ledger.rpc(sandbox ? "travel_credit_sandbox_coins" : "travel_credit_apple_coins", parameters);
@@ -152,7 +158,7 @@ Deno.serve(async (request: Request) => {
       (!testBuild && verified.appAppleId !== undefined && verified.appAppleId !== appleAppID) ||
       verified.type !== "Consumable" || verified.quantity !== 1 ||
       verified.inAppOwnershipType !== "PURCHASED" || verified.revocationDate != null ||
-      typeof appAccountToken !== "string" || appAccountToken.toLowerCase() !== user.id.toLowerCase() ||
+      typeof appAccountToken !== "string" || appAccountToken.toLowerCase() !== accountID.toLowerCase() ||
       typeof transactionId !== "string" || !/^[0-9]{1,32}$/.test(transactionId) ||
       typeof productId !== "string" || !acceptsProduct(productId) ||
       (requestByID && (productId !== requestByID.productID ||
@@ -163,7 +169,7 @@ Deno.serve(async (request: Request) => {
   try {
     const ledger = createClient(url, serviceKey, options);
     const parameters: Record<string, string> = {
-      viewer: user.id, apple_transaction: transactionId, apple_product: productId,
+      viewer: accountID, apple_transaction: transactionId, apple_product: productId,
     };
     const sandbox = settlementEnvironment === "Sandbox";
     if (sandbox) parameters.apple_bundle = bundleID;

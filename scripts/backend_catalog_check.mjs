@@ -1,7 +1,8 @@
 import {isDeepStrictEqual} from 'node:util';
 import {readFile,writeFile} from 'node:fs/promises';import {randomUUID} from 'node:crypto';
-const base='https://dlbaneeshycwmhgfeokx.supabase.co', key='sb_publishable_fILH9r1CitJSP2ZOA2HaNQ_jSZ20Znb';
-const users=JSON.parse(await readFile('/tmp/travel-backend-verification-sessions.json','utf8')),ids=users.map(u=>u.user.id),previous=JSON.parse(await readFile('docs/backend/api-verification.json','utf8'));
+const {projectURL: base, publishableKey: key} = JSON.parse(await readFile('LuluApp/Resources/BackendConfig.json', 'utf8'));
+const users=JSON.parse(await readFile('/tmp/lulu-company-verification-sessions.json','utf8')),ids=users.map(u=>u.user.id),previous=JSON.parse(await readFile('docs/backend/api-verification.json','utf8'));
+if (previous.project !== new URL(base).hostname.split('.')[0]) throw new Error('Run the company backend check before using its verification sessions.');
 async function api(path,body,user,method='POST',type='application/json'){const r=await fetch(base+path,{method,headers:{apikey:key,'Content-Type':type,...(user?{Authorization:'Bearer '+user.access_token}:{})},...(body===undefined?{}:{body:type==='application/json'?JSON.stringify(body):body}),signal:AbortSignal.timeout(45000)});const v=await r.json();if(!r.ok)throw Object.assign(new Error(v.message||v.error||'Request failed'),{status:r.status});return v;}
 const rpc=(name,body,u)=>api('/rest/v1/rpc/'+name,body,u),action=(name,payload,u)=>rpc('travel_action',{action:name,payload},u),check=(x,m)=>{if(!x)throw new Error(m)};
 const report={project:previous.project,checks:[],status:'failed',testUploads:[]};

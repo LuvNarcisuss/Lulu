@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import Security
 import Supabase
 
 @MainActor
@@ -33,12 +34,28 @@ final class TravelStore: ObservableObject {
     private var realtimeTasks: [Task<Void, Never>] = []
     private var refreshTask: Task<Void, Never>?
     private let client: SupabaseClient
+    private let companyStorage = GuestCredentialStorage(service: "lulu.company.auth")
+    private let previousStorage = GuestCredentialStorage(service: "supabase.gotrue.swift")
+    private static let guestSessionKey = "travel-auth-ziryoihosvlqnbvfdvbw"
+    private static let pendingAccountKey = "pending-legacy-account"
+    private lazy var guestClient = SupabaseClient(
+        supabaseURL: BackendConfiguration.projectURL,
+        supabaseKey: BackendConfiguration.publishableKey,
+        options: .init(auth: .init(storage: companyStorage, storageKey: TravelStore.guestSessionKey,
+                                   autoRefreshToken: false, emitLocalSessionAsInitialSession: true))
+    )
+    private lazy var previousClient = SupabaseClient(
+        supabaseURL: BackendConfiguration.legacyProjectURL,
+        supabaseKey: BackendConfiguration.legacyPublishableKey,
+        options: .init(auth: .init(storage: previousStorage, storageKey: BackendConfiguration.legacySessionKey,
+                                   autoRefreshToken: false, emitLocalSessionAsInitialSession: true))
+    )
 
     init() {
         client = SupabaseClient(
             supabaseURL: BackendConfiguration.projectURL,
             supabaseKey: BackendConfiguration.publishableKey,
-            options: .init(auth: .init(storageKey: "travel-auth-dlbaneeshycwmhgfeokx"))
+            options: .init(auth: .init(storage: EmailSessionStorage()))
         )
     }
 
@@ -55,33 +72,85 @@ final class TravelStore: ObservableObject {
         rows("places").filter { !hiddenPlaceIDs.contains($0.id) }
     }
 
-    var hasSavedSession: Bool { client.auth.currentSession != nil }
-    var savedSessionIsGuest: Bool { client.auth.currentSession?.user.isAnonymous == true }
+    var hasGuestToUpgrade: Bool {
+        guestClient.auth.currentUser?.isAnonymous == true || previousClient.auth.currentSession != nil
+    }
 
-    func signInWithOneTap() async throws {
+    func register(email: String, password: String) async throws {
+        guard !isAuthenticated else { throw StoreFailure.message("Sign out before creating another account.") }
         try beginWork()
         defer { isBusy = false }
         try await LaunchServices.shared.prepareForLogin()
-        let session: Session
-        do {
-            if hasSavedSession {
-                session = try await client.auth.session
+        let previousID = try pendingAccountID()
+        let hasGuest = try companyStorage.retrieve(key: Self.guestSessionKey) != nil
+        if hasGuest || previousID != nil {
+            // The ticket must bind while the destination is still a guest.
+            let session: Session
+            if hasGuest {
+                session = try await guestClient.auth.session
             } else {
-                session = try await client.auth.signInAnonymously()
+                let original = try await previousClient.auth.session
+                guard original.user.id == previousID else { throw GuestTransferError() }
+                session = try await guestClient.auth.signInAnonymously()
             }
+            guard guestClient.auth.currentUser?.id == session.user.id else { throw GuestTransferError() }
+            let owner = try await guestClient.auth.user()
+            guard owner.id == session.user.id else { throw GuestTransferError() }
+            guard owner.isAnonymous else {
+                throw StoreFailure.message("Your saved account already has an email address. Sign in to continue.")
+            }
+            let parameters = try await transferParameters(previousID: previousID, destination: owner.id)
+            let accountID = try await enter(using: guestClient, parameters: parameters)
+            if let previousID, previousID != accountID { throw GuestTransferError() }
+            let updated = try await guestClient.auth.update(user: UserAttributes(email: email, password: password))
+            guard updated.id == owner.id, !updated.isAnonymous, updated.email == email,
+                  updated.emailConfirmedAt != nil else { throw GuestTransferError() }
+        } else {
+            let response = try await client.auth.signUp(email: email, password: password)
+            guard let session = response.session, !session.user.isAnonymous, session.user.email == email,
+                  session.user.emailConfirmedAt != nil else {
+                throw StoreFailure.message("Registration could not be confirmed. Please try signing in.")
+            }
+            // The SDK clears its local session before contacting the sign-out endpoint.
+            try? await client.auth.signOut(scope: .local)
+        }
+    }
+
+    private func enter(using source: SupabaseClient, parameters: [String: JSONValue] = [:]) async throws -> UUID {
+        let result = try await request(path: "functions/v1/travel-entry", body: parameters, using: source)
+        guard case .number(let code) = result["code"], code == 0, case .object(let entryData) = result["data"],
+              entryData.isEmpty, let accountID = UUID(uuidString: result.string("account_id")) else {
+            throw StoreFailure.message("Unable to prepare your account. Please try again.")
+        }
+        return accountID
+    }
+
+    func signIn(email: String, password: String) async throws {
+        guard !isAuthenticated else { throw StoreFailure.message("Sign out before switching accounts.") }
+        try beginWork()
+        defer { isBusy = false }
+        try await LaunchServices.shared.prepareForLogin()
+        let session = try await client.auth.signIn(email: email, password: password)
+        guard !session.user.isAnonymous, session.user.email == email,
+              client.auth.currentUser?.id == session.user.id else {
+            throw StoreFailure.message("Unable to confirm your sign-in. Please try again.")
+        }
+        do {
+            try await openAccount(for: session)
         } catch {
-            LaunchServices.shared.network.markTransportFailure(error)
+            await clearIdentity()
+            try? await client.auth.signOut(scope: .local)
             throw error
         }
+    }
 
-        guard client.auth.currentSession?.user.id == session.user.id else {
-            throw StoreFailure.message("Unable to save your sign-in. Please try again.")
-        }
+    private func openAccount(for session: Session) async throws {
         let attempt = UUID()
         generation = attempt
-        let result = try await request(path: "functions/v1/travel-entry", body: [:])
-        guard case .number(let code) = result["code"], code == 0, case .object(let entryData) = result["data"], entryData.isEmpty else {
-            throw StoreFailure.message("Unable to prepare your account. Please try again.")
+        let accountID = try await enter(using: client)
+        let finishesUpgrade = guestClient.auth.currentUser?.id == session.user.id
+        if finishesUpgrade, let previousID = try pendingAccountID(), accountID != previousID {
+            throw GuestTransferError()
         }
         let consent = ["consent_version": JSONValue.string(BackendConfiguration.consentVersion)]
         _ = try await request(path: "rest/v1/rpc/travel_action", body: [
@@ -89,12 +158,65 @@ final class TravelStore: ObservableObject {
             "payload": .object(consent)
         ])
         guard generation == attempt else { throw CancellationError() }
-        userID = session.user.id.uuidString.lowercased()
+        userID = accountID.uuidString.lowercased()
         try await loadSnapshot(generation: attempt)
+        guard profile.string("consent_version") == BackendConfiguration.consentVersion else {
+            throw StoreFailure.message("Your agreement could not be saved. Please try again.")
+        }
+        if finishesUpgrade {
+            try previousStorage.remove(key: BackendConfiguration.legacySessionKey)
+            try companyStorage.remove(key: Self.pendingAccountKey)
+            try? await guestClient.auth.signOut(scope: .local)
+        }
         isAuthenticated = true
         payments.recoverUnfinished()
         Task { [weak self] in try? await self?.refreshCoinState() }
         await startRealtime()
+    }
+
+    func entryErrorMessage(_ error: Error) -> String {
+        LaunchServices.shared.network.markTransportFailure(error)
+        if let authError = error as? AuthError {
+            switch authError.errorCode {
+            case .invalidCredentials: return "The email or password is incorrect."
+            case .emailExists, .userAlreadyExists: return "An account with this email already exists. Sign in instead."
+            case .overRequestRateLimit: return "Too many attempts. Please try again later."
+            default: return authError.localizedDescription
+            }
+        }
+        if error is URLError { return "Check your internet connection and try again." }
+        return error.localizedDescription
+    }
+
+    private func pendingAccountID() throws -> UUID? {
+        if let data = try companyStorage.retrieve(key: Self.pendingAccountKey) {
+            guard let value = String(data: data, encoding: .utf8), let id = UUID(uuidString: value) else {
+                throw GuestTransferError()
+            }
+            return id
+        }
+        guard try previousStorage.retrieve(key: BackendConfiguration.legacySessionKey) != nil else { return nil }
+        guard let id = previousClient.auth.currentSession?.user.id else { throw GuestTransferError() }
+        try companyStorage.store(key: Self.pendingAccountKey, value: Data(id.uuidString.utf8))
+        return id
+    }
+
+    private func transferParameters(previousID: UUID?, destination: UUID) async throws -> [String: JSONValue] {
+        guard let previousID else { return [:] }
+        let linked = try await request(path: "rest/v1/rpc/travel_account_identity", body: [:], using: guestClient)
+        if UUID(uuidString: linked.string("account_id")) == previousID { return [:] }
+        guard UUID(uuidString: linked.string("account_id")) == destination else { throw GuestTransferError() }
+        do {
+            let previous = try await previousClient.auth.session
+            guard previous.user.id == previousID else { throw GuestTransferError() }
+            let ticket: [String: String] = try await previousClient
+                .rpc("travel_issue_company_ticket", params: ["destination_id": destination.uuidString])
+                .execute().value
+            guard let code = ticket["ticket"], code.count == 64 else { throw GuestTransferError() }
+            return ["ticket": .string(code)]
+        } catch {
+            throw GuestTransferError()
+        }
     }
 
     func refresh() async throws {
@@ -351,15 +473,18 @@ final class TravelStore: ObservableObject {
             lastRefreshError = nil
             revision += 1
         } catch {
-            guard generation == attempt, snapshotRequest == requestID, !Task.isCancelled else { throw CancellationError() }
+            guard generation == attempt, snapshotRequest == requestID, !Task.isCancelled,
+                  !(error is CancellationError), (error as? URLError)?.code != .cancelled else {
+                throw CancellationError()
+            }
             lastRefreshError = error.localizedDescription
             revision += 1
             throw error
         }
     }
 
-    private func request(path: String, body: [String: JSONValue], optionalRead: Bool = false, timeout: TimeInterval = 30) async throws -> Record {
-        let session = try await client.auth.session
+    private func request(path: String, body: [String: JSONValue], optionalRead: Bool = false, timeout: TimeInterval = 30, using source: SupabaseClient? = nil) async throws -> Record {
+        let session = try await (source ?? client).auth.session
         var request = URLRequest(url: BackendConfiguration.projectURL.appendingPathComponent(path))
         request.httpMethod = "POST"
         request.timeoutInterval = optionalRead ? 5 : timeout
@@ -431,7 +556,8 @@ final class TravelStore: ObservableObject {
         refreshTask = Task { [weak self] in
             try? await Task.sleep(nanoseconds: 250_000_000)
             guard let self, !Task.isCancelled, self.isAuthenticated else { return }
-            do { try await self.refresh() } catch { self.lastRefreshError = error.localizedDescription }
+            // The snapshot loader publishes failures while the request is still current.
+            try? await self.refresh()
         }
     }
 
@@ -461,6 +587,63 @@ final class TravelStore: ObservableObject {
         realtimeError = nil
         revision += 1
     }
+}
+
+// Keep the SDK's existing item format and service names for guests who upgrade.
+private struct GuestCredentialStorage: AuthLocalStorage {
+    let service: String
+
+    private func query(for key: String) -> [String: Any] {
+        [kSecClass as String: kSecClassGenericPassword,
+         kSecAttrService as String: service,
+         kSecAttrAccount as String: key]
+    }
+
+    func retrieve(key: String) throws -> Data? {
+        var request = query(for: key)
+        request[kSecReturnData as String] = true
+        request[kSecMatchLimit as String] = kSecMatchLimitOne
+        var value: CFTypeRef?
+        let status = SecItemCopyMatching(request as CFDictionary, &value)
+        if status == errSecItemNotFound { return nil }
+        guard status == errSecSuccess, let data = value as? Data else {
+            throw StoreFailure.message("Your saved sign-in could not be read. Unlock your device and try again.")
+        }
+        return data
+    }
+
+    func store(key: String, value: Data) throws {
+        try KeychainLocalStorage(service: service).store(key: key, value: value)
+    }
+
+    func remove(key: String) throws {
+        let status = SecItemDelete(query(for: key) as CFDictionary)
+        guard status == errSecSuccess || status == errSecItemNotFound else {
+            throw StoreFailure.message("Your saved sign-in could not be cleared. Unlock your device and try again.")
+        }
+    }
+}
+
+// Email sign-in lasts for this app process. Only pre-upgrade guests rely on Keychain.
+private final class EmailSessionStorage: AuthLocalStorage, @unchecked Sendable {
+    private let lock = NSLock()
+    private var values: [String: Data] = [:]
+
+    func store(key: String, value: Data) throws {
+        lock.withLock { values[key] = value }
+    }
+
+    func retrieve(key: String) throws -> Data? {
+        lock.withLock { values[key] }
+    }
+
+    func remove(key: String) throws {
+        lock.withLock { values[key] = nil }
+    }
+}
+
+struct GuestTransferError: LocalizedError {
+    var errorDescription: String? { "Your saved account could not be restored. Please try again." }
 }
 
 private enum StoreFailure: LocalizedError {

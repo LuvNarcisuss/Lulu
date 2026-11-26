@@ -179,7 +179,91 @@ import Combine
     RemoteImageView(path: path, store: store, height: height, radius: radius)
 }
 
-@MainActor class TravelScreen: UIViewController {
+@MainActor class TravelNoticeScreen: UIViewController {
+    private var pendingNotices: [UIAlertController] = []
+    private var currentProblems: [String: String] = [:]
+    private weak var activeNotice: UIAlertController?
+    private var appeared = false
+    private var noticeScheduled = false
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        appeared = true
+        scheduleNotice()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        appeared = false
+        super.viewWillDisappear(animated)
+    }
+
+    func notice(_ message: String, title: String = "Lulu", recovery: (title: String, action: () -> Void)? = nil) {
+        guard !message.isEmpty, activeNotice?.message != message,
+              !pendingNotices.contains(where: { $0.message == message }) else { return }
+
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: recovery == nil ? "OK" : "Cancel",
+                                      style: recovery == nil ? .default : .cancel) { [weak self] _ in
+            self?.noticeDidClose()
+        })
+        if let recovery {
+            alert.addAction(UIAlertAction(title: recovery.title, style: .default) { [weak self] _ in
+                self?.noticeDidClose()
+                recovery.action()
+            })
+        }
+        alert.view.tintColor = Palette.teal
+        pendingNotices.append(alert)
+        scheduleNotice()
+    }
+
+    private func noticeDidClose() {
+        activeNotice = nil
+        noticeVisibilityChanged(false)
+        scheduleNotice()
+    }
+
+    // Re-rendering a persistent failure must not interrupt the user again.
+    func updateProblem(_ message: String?, for key: String) {
+        guard currentProblems[key] != message else { return }
+        if let old = currentProblems[key] { pendingNotices.removeAll { $0.message == old } }
+        currentProblems[key] = message
+        if let message { notice(message) }
+    }
+
+    private func scheduleNotice(after delay: TimeInterval = 0) {
+        guard appeared, !pendingNotices.isEmpty, !noticeScheduled else { return }
+        noticeScheduled = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            guard let self else { return }
+            self.noticeScheduled = false
+            self.presentNextNotice()
+        }
+    }
+
+    private func presentNextNotice() {
+        guard appeared, !pendingNotices.isEmpty, activeNotice == nil,
+              let window = viewIfLoaded?.window else { return }
+        var host = window.rootViewController
+        while let modal = host?.presentedViewController { host = modal }
+        var ancestor: UIViewController? = self
+        while let current = ancestor, current !== host { ancestor = current.parent }
+        guard ancestor != nil, presentedViewController == nil, transitionCoordinator == nil,
+              window.windowScene?.activationState == .foregroundActive else {
+            // A picker, sheet or navigation transition still owns the presentation.
+            scheduleNotice(after: 0.3)
+            return
+        }
+        let alert = pendingNotices.removeFirst()
+        activeNotice = alert
+        noticeVisibilityChanged(true)
+        present(alert, animated: !UIAccessibility.isReduceMotionEnabled)
+    }
+
+    func noticeVisibilityChanged(_ visible: Bool) {}
+}
+
+@MainActor class TravelScreen: TravelNoticeScreen {
     let store: TravelStore
     let scroll = UIScrollView()
     let content = column(spacing: 20)
@@ -239,7 +323,7 @@ import Combine
         }
         navigationItem.backButtonDisplayMode = .minimal
         if showsReadFailureOverlay {
-            let failure = ServerReadFailureOverlay(store: store)
+            let failure = ServerReadFailureOverlay(store: store, owner: self)
             failure.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(failure)
             NSLayoutConstraint.activate([failure.leadingAnchor.constraint(equalTo: view.leadingAnchor), failure.trailingAnchor.constraint(equalTo: view.trailingAnchor), failure.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor), failure.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor)])
@@ -267,11 +351,6 @@ import Combine
             catch is CancellationError { }
             catch { self?.notice(error.localizedDescription) }
         }
-    }
-    func notice(_ message: String) {
-        guard viewIfLoaded?.window != nil else { return }
-        let dialog = TravelDialogController(title: "Travel notes", message: message, choices: [("OK", false, {})])
-        present(dialog, animated: true)
     }
     func confirm(_ title: String, message: String? = nil, destructive: Bool = false, actionTitle: String? = nil, action work: @escaping () -> Void) {
         let dialog = TravelDialogController(title: title, message: message, choices: [
@@ -334,7 +413,7 @@ private extension UIView {
     var onVisibilityChange: ((Bool) -> Void)?
     private var observation: AnyCancellable?
     private let store: TravelStore
-    init(store: TravelStore, back: (() -> Void)? = nil) {
+    init(store: TravelStore, owner: TravelNoticeScreen, back: (() -> Void)? = nil) {
         self.store = store
         super.init(frame: .zero)
         isHidden = true
@@ -342,10 +421,14 @@ private extension UIView {
         let background = UIImageView(image: UIImage(named: "background-paper"))
         background.contentMode = .scaleAspectFill; background.translatesAutoresizingMaskIntoConstraints = false
         addSubview(background)
-        let message = column([text("A small pause in the journey", 30, display: true), text("This page could not be refreshed. Check your connection and try again.", 17, color: Palette.muted)])
-        let retry = TravelApp.action("Try again", icon: "icon-refresh") { [weak self] in
+        let message = column()
+        let retry = TravelApp.action("Try again", icon: "icon-refresh") { [weak self, weak owner] in
             guard let self else { return }
-            Task { do { try await self.store.refresh() } catch { } }
+            Task {
+                do { try await self.store.refresh() }
+                catch is CancellationError { }
+                catch { owner?.notice(error.localizedDescription) }
+            }
         }
         message.addArrangedSubview(retry)
         if let back { message.addArrangedSubview(TravelApp.action("Go back", icon: "icon-back", filled: false, back)) }
@@ -355,8 +438,9 @@ private extension UIView {
             background.leadingAnchor.constraint(equalTo: leadingAnchor), background.trailingAnchor.constraint(equalTo: trailingAnchor), background.topAnchor.constraint(equalTo: topAnchor), background.bottomAnchor.constraint(equalTo: bottomAnchor),
             message.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24), message.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24), message.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
-        observation = store.$lastRefreshError.combineLatest(store.$isAuthenticated).receive(on: RunLoop.main).sink { [weak self] error, authenticated in
+        observation = store.$lastRefreshError.combineLatest(store.$isAuthenticated).receive(on: RunLoop.main).sink { [weak self, weak owner] error, authenticated in
             let failed = error != nil && authenticated
+            owner?.updateProblem(authenticated ? error : nil, for: "snapshot")
             self?.isHidden = !failed
             self?.onVisibilityChange?(failed)
         }

@@ -10,7 +10,7 @@ Open `LuluApp/Lulu.xcodeproj` to inspect the project. Configuration originates i
 - Explore switches between an English OpenFreeMap street map and a filtered destination list with real photographs, independently written travel notes, official tourism sources, saves, Apple Maps directions and itinerary connections.
 - Journeys keeps private dated itineraries, ordered stops, per-stop/day notes, packing checklists, estimated budgets and journal notes. Date changes preserve retained day records and ask before dropping populated days.
 - Chats uses actual discoverable members, canonical direct threads, groups, persistent text/photo/reply messages, realtime updates, drafts, read state, pinned/muted/archived preferences, member safety controls and camera-based friend codes. It does not simulate connected voice/video calls or remote read receipts.
-- Me includes profile editing, actual works/liked/saved/pending collections, private submission playback, source credits, agreements, safety history and a zero-initial-balance wallet. The wallet displays nine coin packages. Apple supplies storefront prices. Verified Sandbox and Production transactions use separate server ledgers. Ordinary Run does not select a local StoreKit fixture.
+- Me includes profile editing, actual works/liked/saved/pending collections, private submission playback, source credits, agreements, safety history and a zero-initial-balance wallet. Run the shared Lulu scheme from Xcode on Lulu QA to purchase any of the nine consumable coin packages using the local confirmation sheet and a separate test balance. This checkout needs no Apple account or payment backend. Apple sandbox and production purchases use storefront prices and separate verified server ledgers.
 
 ## Content and visual resources
 
@@ -20,11 +20,11 @@ The image model generated **36 transparent icons and two watercolor/paper backgr
 
 ## Backend and entry
 
-The dedicated Supabase project is `dlbaneeshycwmhgfeokx`, named `travel-social-20261103`, in `eu-west-1`, under the owner-selected 139 organization. Its dashboard is https://supabase.com/dashboard/project/dlbaneeshycwmhgfeokx.
+The dedicated backend is [Lulu in Thingtill Org](https://supabase.com/dashboard/project/ziryoihosvlqnbvfdvbw), hosted in Ireland. New builds open company sessions. Returning guests prove ownership through their previous session and retain their original member ID, wallet and social records. See [Company backend cutover](docs/backend/company-cutover.md).
 
-The stage A entry screen uses one-tap guest sign-in after explicit consent on the welcome page. It restores a saved session or creates an anonymous account when none exists. The authenticated `travel-entry` function, consent write and account snapshot must succeed before the home screen opens. The Apple entitlement is present in the source. Hosted Auth setup and verification status are documented in [One-Tap Sign-In](docs/backend/sign-in.md).
+Lulu opens with email and password sign-in. Registration checks email format and matching passwords, then returns to sign-in after the user acknowledges the success dialog. The company Auth service accepts new email accounts without a confirmation email. The home screen opens after password authentication, account bootstrap, consent persistence and an identity-matched snapshot. [Account entry and guest upgrades](docs/backend/sign-in.md)
 
-Public editorial publishers are not fabricated member accounts. New real accounts start with empty personal records, an empty inbox and zero coins. Server-side actions validate ownership, membership, blocking, idempotency and direct-message greeting limits. Private data has RLS; raw unauthenticated roles cannot execute business RPCs. Failed server reads show an opaque error/retry surface instead of displaying previous server content as a fallback; unfinished user input remains in place.
+Public editorial publishers are not fabricated member accounts. New real accounts start with empty personal records, an empty inbox and zero coins. Server-side actions validate ownership, membership, blocking, idempotency and direct-message greeting limits. Private data has RLS; raw unauthenticated roles cannot execute business RPCs. Every screen presents user-facing errors in a modal alert. A failed server read also covers stale data and leaves a retry button available. Unfinished input stays in place.
 
 Stage B external authentication, external Socket, WebView and purchase forwarding have not been requested or implemented. This app has no AI feature. See `docs/backend/integration.md` for deployment and finite backend verification evidence.
 

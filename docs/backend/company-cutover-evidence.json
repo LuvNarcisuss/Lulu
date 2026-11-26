@@ -1,0 +1,219 @@
+{
+  "date": "2026-11-26",
+  "company": {
+    "organization": "Thingtill Org",
+    "project": "Lulu",
+    "ref": "ziryoihosvlqnbvfdvbw",
+    "region": "eu-west-1",
+    "plan": "Pro",
+    "monthly_project_quote_usd": 10
+  },
+  "original": {
+    "ref": "dlbaneeshycwmhgfeokx",
+    "role": "Legacy session refresh and one-use guest transfer tickets. Application writes, signups and payment forwarding are retired."
+  },
+  "data": {
+    "compared": "Post-freeze SHA-256 of ordered PostgreSQL JSON for every original business table and the portable anonymous account fields. Existing tokens and sessions stay with the issuer. The comparison excludes the company's signed-out media owner.",
+    "records": 163,
+    "tables": [
+      {
+        "table": "auth.users",
+        "rows": 22,
+        "matched": true
+      },
+      {
+        "table": "public.profiles",
+        "rows": 24,
+        "matched": true
+      },
+      {
+        "table": "public.places",
+        "rows": 12,
+        "matched": true
+      },
+      {
+        "table": "public.coin_products",
+        "rows": 10,
+        "matched": true
+      },
+      {
+        "table": "public.conversations",
+        "rows": 3,
+        "matched": true
+      },
+      {
+        "table": "public.clips",
+        "rows": 14,
+        "matched": true
+      },
+      {
+        "table": "public.guides",
+        "rows": 12,
+        "matched": true
+      },
+      {
+        "table": "public.guide_offers",
+        "rows": 12,
+        "matched": true
+      },
+      {
+        "table": "private.editorial_display_baselines",
+        "rows": 28,
+        "matched": true
+      },
+      {
+        "table": "public.blocks",
+        "rows": 2,
+        "matched": true
+      },
+      {
+        "table": "public.chat_preferences",
+        "rows": 0,
+        "matched": true
+      },
+      {
+        "table": "public.coin_apple_deliveries",
+        "rows": 0,
+        "matched": true
+      },
+      {
+        "table": "public.comments",
+        "rows": 1,
+        "matched": true
+      },
+      {
+        "table": "public.conversation_members",
+        "rows": 6,
+        "matched": true
+      },
+      {
+        "table": "public.follows",
+        "rows": 2,
+        "matched": true
+      },
+      {
+        "table": "public.guide_unlocks",
+        "rows": 0,
+        "matched": true
+      },
+      {
+        "table": "public.guide_visibility",
+        "rows": 1,
+        "matched": true
+      },
+      {
+        "table": "public.journeys",
+        "rows": 0,
+        "matched": true
+      },
+      {
+        "table": "public.likes",
+        "rows": 6,
+        "matched": true
+      },
+      {
+        "table": "public.messages",
+        "rows": 0,
+        "matched": true
+      },
+      {
+        "table": "public.reports",
+        "rows": 0,
+        "matched": true
+      },
+      {
+        "table": "public.sandbox_coin_deliveries",
+        "rows": 2,
+        "matched": true
+      },
+      {
+        "table": "public.sandbox_guide_unlocks",
+        "rows": 0,
+        "matched": true
+      },
+      {
+        "table": "public.sandbox_wallet_activity",
+        "rows": 2,
+        "matched": true
+      },
+      {
+        "table": "public.saved_clips",
+        "rows": 4,
+        "matched": true
+      },
+      {
+        "table": "public.saved_places",
+        "rows": 0,
+        "matched": true
+      },
+      {
+        "table": "public.submissions",
+        "rows": 0,
+        "matched": true
+      },
+      {
+        "table": "public.wallet_activity",
+        "rows": 0,
+        "matched": true
+      }
+    ]
+  },
+  "storage": {
+    "source_catalog_objects": 42,
+    "source_legal_objects": 4,
+    "copied_objects_with_full_get_sha256_match": 46,
+    "copied_bytes": 60830185,
+    "additional_current_bundle_pdfs_verified": 2,
+    "destination_objects": 48,
+    "private_uploads": 0,
+    "temporary_policies": 0,
+    "folder_markers": 0
+  },
+  "auth": {
+    "original_guest_users": 22,
+    "original_session_rows": 19,
+    "company_auth_rows": 23,
+    "company_member_and_editorial_profiles": 24,
+    "media_owner_without_profile": 1,
+    "linked_real_devices_observed": 0,
+    "active_company_sessions_after_cleanup": 0,
+    "verification": "An isolated source guest with a saved place transferred to a different company Auth UUID, retained its original member ID and saved place, refreshed the company session and opened the original profile again. A separate guest saw no saved places. Source Auth refresh and transfer succeeded after the source write fence. Handoff fixtures were removed from both projects."
+  },
+  "functions": [
+    {
+      "name": "travel-entry",
+      "version": 2,
+      "status": "ACTIVE"
+    },
+    {
+      "name": "travel-coin-purchase",
+      "version": 2,
+      "status": "ACTIVE"
+    }
+  ],
+  "checks": {
+    "old_client_business_write": false,
+    "old_client_guide_visibility_write": false,
+    "old_server_production_credit": false,
+    "old_server_sandbox_credit": false,
+    "old_receipt_status_http": 503,
+    "public_and_private_app_tables_without_rls": 0,
+    "client_can_bind_accounts_directly": false,
+    "client_can_read_bindings": false,
+    "realtime_publication_tables": 3,
+    "company_anonymous_signup_consent_and_snapshot": true,
+    "receipt_readiness": [
+      "Sandbox",
+      "Production"
+    ],
+    "device_build": false,
+    "app_launch": false,
+    "apple_transaction": false
+  },
+  "security_advisors": {
+    "INFO/rls_enabled_no_policy": 1,
+    "WARN/authenticated_security_definer_function_executable": 1,
+    "WARN/auth_allow_anonymous_sign_ins": 23,
+    "WARN/auth_leaked_password_protection": 1
+  }
+}

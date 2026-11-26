@@ -1,6 +1,8 @@
 # Backend Integration
 
-Lulu returned to anonymous one-tap entry on November 9. See [One-Tap Sign-In](sign-in.md) for the current client flow and hosted settings. The original deployment evidence remains recorded here.
+The active backend is now the [company project](company-cutover.md). The deployment details and service checks below describe the original 139 project.
+
+Lulu uses email and password entry on the company project as of November 26. See [Email and password sign-in](sign-in.md) for the current flow and hosted settings. The guest authentication checks below describe the previous release.
 
 Status: stage A deployed and finite backend verification passed for the implemented application data, media and IM paths. Account-deletion deployment requires explicit owner approval. The owner subsequently approved cleanup of the three isolated Auth verification identities, which were removed through the official dashboard. Application build and device acceptance are not authorized and have not been performed. This is not a claim that every stage A release prerequisite is complete.
 

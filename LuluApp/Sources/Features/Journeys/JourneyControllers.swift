@@ -178,8 +178,9 @@ final class JourneyDetailController: TravelScreen {
     override func render() {
         super.render()
         guard let journey = store.rows("journeys").first(where: { $0.id == journeyID }) else {
-            content.addArrangedSubview(text("This journey is unavailable.", 24, display: true)); return
+            updateProblem("This journey is unavailable.", for: "journey"); return
         }
+        updateProblem(nil, for: "journey")
         title = "Travel book"
         content.addArrangedSubview(text(journey.string("title"), 36, display: true))
         content.addArrangedSubview(text(journey.string("start_date") + " — " + journey.string("end_date"), 16, color: Palette.muted))
@@ -198,7 +199,7 @@ final class JourneyDetailController: TravelScreen {
             if stops.isEmpty { content.addArrangedSubview(card([text("Leave a little space", 24, display: true), text("Add a saved place or discover somewhere new.", 16, color: Palette.muted)])) }
             for (index, stop) in stops.enumerated() {
                 let place = store.rows("places").first { $0.id == stop.string("place_id") }
-                var views: [UIView] = [text("\(index + 1). " + (place?.string("name") ?? "Unavailable place"), 23, display: true)]
+                var views: [UIView] = [text("\(index + 1). " + (place?.string("name") ?? "Itinerary stop"), 23, display: true)]
                 if let place {
                     views.insert(remoteImage(place.string("photo_path"), store: store, height: 150), at: 0)
                     views.append(action("Open place", icon: "icon-location", filled: false) { [weak self] in guard let self else { return }; self.openPlaceGuide(place.id, store: self.store) })

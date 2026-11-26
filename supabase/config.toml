@@ -1,4 +1,13 @@
-project_id = "dlbaneeshycwmhgfeokx"
+project_id = "ziryoihosvlqnbvfdvbw"
+
+[auth]
+# Previously issued guest sessions need an anonymous destination during the company handoff.
+enable_anonymous_sign_ins = true
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = false
 
 [functions.travel-account]
 # Modern publishable keys are not JWTs. The function validates the user's token with Auth.
@@ -6,4 +15,8 @@ verify_jwt = false
 
 [functions.travel-entry]
 # The handler validates modern user JWTs through Auth before user-context RPC.
+verify_jwt = false
+
+[functions.travel-coin-purchase]
+# The handler authenticates the caller before accessing the verified receipt ledger.
 verify_jwt = false

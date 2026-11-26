@@ -19,24 +19,19 @@ final class AppleSandboxUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launch()
-        if app.buttons["Start exploring"].waitForExistence(timeout: 8) {
-            capture(app, name: "Owner sign-in required")
-            XCTFail("The owner must complete sign-in and consent before purchase acceptance."); return
-        }
-        guard app.buttons["Me"].waitForExistence(timeout: 60) else {
-            capture(app, name: "Entry blocked")
-            XCTFail("Unable to reach Me through real authentication."); return
-        }
-        app.buttons["Me"].tap()
+        try openProfileAfterOwnerSignIn(app)
         let wallet = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Wallet")).firstMatch
         XCTAssertTrue(wallet.waitForExistence(timeout: 15)); wallet.tap()
         let status = app.staticTexts["wallet.status"]
-        XCTAssertTrue(status.waitForExistence(timeout: 30))
-        let ready = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label == %@", "Choose a coin package."), object: status)
-        guard XCTWaiter.wait(for: [ready], timeout: 45) == .completed else {
+        let problem = app.alerts["Lulu"]
+        let ready = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            problem.exists || (status.exists && status.label == "Choose a coin package.")
+        }, object: nil)
+        guard XCTWaiter.wait(for: [ready], timeout: 45) == .completed, !problem.exists else {
             capture(app, name: "Catalog or delivery blocked")
-            print("WALLET_DIAGNOSTICS \(String(describing: app.buttons["wallet.diagnostics"].value))")
-            XCTFail("Checkout unavailable: \(status.label), environment: \(String(describing: status.value))"); return
+            let reason = problem.exists ? problem.staticTexts.allElementsBoundByIndex.map(\.label).joined(separator: " ") : "Catalog timed out."
+            XCTFail("Checkout unavailable: \(reason)")
+            return
         }
         XCTAssertEqual(status.value as? String, "Sandbox", "Never purchase in Production or Xcode in this test.")
         let initial = Int(app.staticTexts["wallet.balance"].label) ?? -1
@@ -60,12 +55,21 @@ final class AppleSandboxUITests: XCTestCase {
             capture(system, name: "Native purchase \(coins)")
             pay.tap()
             // Apple Account passwords and side-button confirmation remain owner actions.
-            let terminal = ["Coins added to your wallet.", "Purchase cancelled.", "The purchase is pending Apple approval.", "The purchase could not be confirmed. Retry to check for unfinished purchases.", "Your purchase is awaiting confirmation. Check pending purchases shortly."]
-            let delivered = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label IN %@", terminal), object: status)
+            let terminal = ["Coins added to your wallet.", "Purchase cancelled.", "The purchase is pending Apple approval."]
+            let delivered = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+                problem.exists || (status.exists && terminal.contains(status.label))
+            }, object: nil)
             guard XCTWaiter.wait(for: [delivered], timeout: 120) == .completed else {
                 capture(system, name: "Purchase blocked \(coins)")
                 capture(app, name: "Wallet after blocked purchase \(coins)")
                 XCTFail("Sandbox purchase not completed for \(coins) coins."); return
+            }
+            if problem.exists {
+                capture(app, name: "Wallet alert for \(coins) coins")
+                let reason = problem.staticTexts.allElementsBoundByIndex.map(\.label).joined(separator: " ")
+                failures.append("\(coins): \(reason)")
+                problem.buttons["OK"].tap()
+                continue
             }
             print("SANDBOX_TIER coins=\(coins) status=\(status.label)")
             if status.label != "Coins added to your wallet." {
@@ -80,11 +84,21 @@ final class AppleSandboxUITests: XCTestCase {
         }
         XCTAssertTrue(failures.isEmpty, failures.joined(separator: " | "))
         app.terminate(); app.launch()
-        XCTAssertTrue(app.buttons["Me"].waitForExistence(timeout: 60)); app.buttons["Me"].tap()
+        try openProfileAfterOwnerSignIn(app)
         let reopened = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Wallet")).firstMatch
         XCTAssertTrue(reopened.waitForExistence(timeout: 15)); reopened.tap()
         let persisted = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label == %@", String(expected)), object: app.staticTexts["wallet.balance"])
         XCTAssertEqual(XCTWaiter.wait(for: [persisted], timeout: 30), .completed)
+    }
+
+    private func openProfileAfterOwnerSignIn(_ app: XCUIApplication) throws {
+        let profile = app.buttons["Me"]
+        guard profile.waitForExistence(timeout: 120) else {
+            throw NSError(domain: "LuluAppleSandboxUITests", code: 1, userInfo: [
+                NSLocalizedDescriptionKey: "Complete email sign-in and consent on the device after each launch."
+            ])
+        }
+        profile.tap()
     }
 
     private func capture(_ app: XCUIApplication, name: String) {

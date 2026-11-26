@@ -26,14 +26,18 @@ final class LocalStoreKitWallet {
         var balance: Int { creditedCoins - unlocks.values.reduce(0) { $0 + $1.coins } }
     }
     enum Failure: Error { case invalidTransaction, inconsistentLedger, unknownProduct, invalidGuide }
-    static var isEnabled: Bool { ProcessInfo.processInfo.environment["LULU_LOCAL_STOREKIT"] == "1" }
+    // SpringBoard relaunches do not carry Xcode's Run environment.
+    static var isEnabled: Bool { ProcessInfo.processInfo.environment["LULU_LOCAL_STOREKIT"] != "0" }
     private let directory: URL
     private let offers: [String: Int]
 
     init(directory: URL? = nil, offers: [CoinOffer]) {
         self.directory = directory ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("LuluLocalStoreKit", isDirectory: true)
-        self.offers = offers.reduce(into: [:]) { $0[$1.productID] = $1.coins }
+        self.offers = offers.reduce(into: [:]) { amounts, offer in
+            amounts[offer.productID] = offer.coins
+            amounts[offer.originalProductID] = offer.coins
+        }
     }
 
     func state(account: UUID) throws -> State {

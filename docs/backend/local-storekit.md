@@ -1,14 +1,18 @@
 # Lulu local StoreKit verification
 
-## Current mode — November 17, 2026
+## Current mode — November 26, 2026
 
-Debug and Release retain the owner-selected test settings, `im.seex.sao2` and Yu Sun (`JPTS6M4T5B`). Restore `com.lulu.tourtravel` with Team None when the owner requests the switch. Ordinary Run queries Apple's catalog with no `.storekit` selection or `LULU_LOCAL_STOREKIT` launch variable. Production retains `com.lulu.tourtravel`, Apple ID `6832914128`. Hosted version 4 additionally accepts `im.seex.sao2` in Sandbox only. The current 400-coin test product is `neiku_30`; the remaining eight identifiers are unchanged.
+The shared Lulu scheme selects `Configuration/LuluCoins.storekit` and sets `LULU_LOCAL_STOREKIT=1` for Debug Run. Launch from Xcode on the Lulu QA iPhone simulator. After signing in to Lulu, open Me → Wallet, tap a package to open the native StoreKit confirmation sheet. Xcode supplies the product catalog and confirmation sheet without an Apple account. The app checks readiness locally and credits the signed-in account's test wallet on disk, once per purchased transaction. No payment service is contacted. The 400-coin local product is `neiku_30`. Pending local purchases with the original ID retain their 400-coin value.
 
-Local StoreKit remains available through the isolated `LuluPurchaseTests` test target, which explicitly loads the nine-product fixture. To test the local wallet from the app UI, use a Debug simulator build, select `LuluCoins.storekit` for that run, and set `LULU_LOCAL_STOREKIT=1`. Local balances remain account-scoped and separate from hosted wallets.
+Debug simulator launches default to the local wallet, including launches from the Home Screen. Xcode Run installs the fixture for the running bundle. The app checks the local StoreKit environment before submitting a payment. If Xcode still uses an earlier scheme, reopen the project and run Lulu again. For an explicit hosted simulator run, select None for StoreKit Configuration and set `LULU_LOCAL_STOREKIT=0`. Physical iPhones use the hosted wallet. Select None for a physical Apple sandbox run. The isolated `LuluPurchaseTests` target explicitly loads its nine-product fixture.
+
+The November 26 UI check used the Lulu QA iPhone 17 Pro simulator on iOS 26.3, device `F1210B99-EEF7-4000-81D3-E3E05C5C157C`. On the first Run, the simulator's StoreKit service logged removal of the bundle's test configuration. After reopening the project and running the shared Lulu scheme, StoreKit installed the nine-product fixture. A single tap on the 400-coin tier opened the native Xcode sheet showing Lulu, 400 Coins, $0.99 and a one-time charge, without an Apple account prompt. Verification stopped at the purchase button. Credit delivery, Apple sandbox and production purchases were outside this UI check. See the [simulator screenshot](evidence/lulu-qa-confirmation-2026-11-26.png).
+
+The simulator binary identified itself as `com.lulu.tourtravel`. The existing XcodeGen source specifies the test identity `im.seex.sao2` and team `JPTS6M4T5B`. This simulator run did not verify signing or Apple's hosted catalog for either identifier.
 
 Apple sandbox uses separate server balances, delivery records and editorial-guide entitlements. Production and sandbox transactions require Apple verification, matching environment, Bundle ID, product and quantity, plus account-token checks when that field is available in the selected receipt contract. Xcode transactions are never submitted for hosted credit. Sandbox funds cannot purchase real members' paid guides.
 
-The opt-in `LuluAppleSandboxUITests` target requires `LULU_SANDBOX_UI_TESTS=1`, checks that the wallet reports Sandbox before buying, and uses native Apple confirmation. Credentials and side-button confirmation remain owner actions. It must never be treated as a production purchase test.
+The opt-in `LuluAppleSandboxUITests` target requires `LULU_SANDBOX_UI_TESTS=1`, checks that the wallet reports Sandbox before buying, and uses native Apple confirmation. The owner enters the email and password and accepts the agreements after each cold launch, including the final balance check. Credentials and side-button confirmation remain owner actions. It must never be treated as a production purchase test.
 
 ## November 17 removal of the API-key checkout dependency
 

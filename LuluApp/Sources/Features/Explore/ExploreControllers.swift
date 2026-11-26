@@ -27,6 +27,7 @@ final class ExploreController: TravelScreen, MLNMapViewDelegate, UIPopoverPresen
     }
     private let mapStatus = text("No places found", 16)
     private lazy var retryMap = action("Retry map", icon: "icon-refresh", filled: false) { [weak self] in
+        self?.updateProblem(nil, for: "map")
         self?.map.reloadStyle(nil)
     }
     private lazy var mapNotice = card([mapStatus, retryMap])
@@ -320,9 +321,10 @@ final class ExploreController: TravelScreen, MLNMapViewDelegate, UIPopoverPresen
         }
     }
     private func updateMapNotice() {
-        mapStatus.text = mapLoadFailed ? "Street map unavailable" : "No places found"
+        updateProblem(showingMap && mapLoadFailed ? "The street map could not be loaded." : nil, for: "map")
+        mapStatus.isHidden = mapLoadFailed || !noMapResults
         retryMap.isHidden = !mapLoadFailed || mapStyleURL == nil
-        mapNotice.isHidden = !showingMap || (!mapLoadFailed && !noMapResults)
+        mapNotice.isHidden = !showingMap || (mapStatus.isHidden && retryMap.isHidden)
     }
 
     func mapViewDidFailLoadingMap(_ mapView: MLNMapView, withError error: Error) {
@@ -467,9 +469,10 @@ final class PlaceController: TravelScreen {
         super.render()
         guard let place = store.visiblePlaces.first(where: { $0.id == placeID }) else {
             navigationItem.rightBarButtonItems = nil
-            content.addArrangedSubview(text("This guide is unavailable. You can restore hidden guides in Settings.", 22, display: true))
+            updateProblem("This guide is unavailable. You can restore hidden guides in Settings.", for: "place")
             return
         }
+        updateProblem(nil, for: "place")
         title = place.string("city", fallback: "Destination")
         let report = iconButton("icon-report", label: "Report guide") { [weak self] in
             guard let self else { return }
@@ -650,7 +653,7 @@ final class PlaceController: TravelScreen {
 final class MyGuidesController: TravelScreen {
     override func viewDidLoad() {
         super.viewDidLoad()
-        Task { try? await store.refreshCoinState() }
+        run { try await self.store.refreshCoinState() }
     }
 
     override func render() {
@@ -664,8 +667,8 @@ final class MyGuidesController: TravelScreen {
 extension TravelScreen {
     func appendMyGuides() {
         let mine = store.guideOffers.filter { $0.string("author_id") == store.userID }
-        if mine.isEmpty {
-            content.addArrangedSubview(text(store.hasCoinState ? "Choose a destination in Explore to write your first guide." : "Your guides could not be loaded.", color: Palette.muted))
+        if mine.isEmpty && store.hasCoinState {
+            content.addArrangedSubview(text("Choose a destination in Explore to write your first guide.", color: Palette.muted))
         }
         for offer in mine {
             let price = offer.int("price_coins")
@@ -865,7 +868,7 @@ func destinationGuideCover(_ place: Record, store: TravelStore, height: CGFloat,
 }
 
 @MainActor
-extension UIViewController {
+extension TravelNoticeScreen {
     func openPlaceGuide(_ placeID: String, store: TravelStore, guideID: String? = nil,
                         onUnlocked: (() -> Void)? = nil) {
         guard presentedViewController == nil, store.isAuthenticated else { return }
@@ -939,19 +942,15 @@ extension UIViewController {
             do { try await operation() }
             catch is CancellationError { }
             catch GuidePurchaseFailure.insufficientCoins(let balance, let price) {
-                guard self.navigationController?.topViewController === self, self.presentedViewController == nil else { return }
+                guard self.navigationController?.topViewController === self else { return }
                 let message = "Your balance is \(balance) coins. This guide costs \(price) coins. Add \(max(0, price - balance)) more coins to continue."
-                self.present(TravelDialogController(title: "Insufficient coins", message: message, choices: [
-                    ("Cancel", false, {}),
-                    ("Buy coins", false, { [weak self] in
-                        self?.navigationController?.pushViewController(WalletController(store: store), animated: true)
-                    })
-                ]), animated: true)
+                self.notice(message, title: "Insufficient coins", recovery: ("Buy coins", { [weak self] in
+                    self?.navigationController?.pushViewController(WalletController(store: store), animated: true)
+                }))
             }
             catch {
-                guard self.navigationController?.topViewController === self, self.presentedViewController == nil else { return }
-                self.present(TravelDialogController(title: "Guide unavailable", message: error.localizedDescription,
-                                                   choices: [("OK", false, {})]), animated: true)
+                guard self.navigationController?.topViewController === self else { return }
+                self.notice(error.localizedDescription)
             }
         }
     }

@@ -88,53 +88,94 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
-final class EntryController: TravelScreen, UITextViewDelegate {
-    override var usesScrolling: Bool { false }
+final class EntryController: TravelScreen, UITextViewDelegate, UITextFieldDelegate {
     var onEntry: (() -> Void)?
     private let artwork = UIImageView(image: UIImage(named: "background-welcome"))
+    private let emailField = input("Email address")
+    private let passwordField = input("Password")
+    private let confirmationField = input("Confirm password")
+    private var submitButton: UIButton?
     private var accepted = false
+    private var registering = false
     private var signingIn = false
-    private var feedback: String?
+
+    private var email: String {
+        (emailField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    }
+
+    private var validEmail: Bool {
+        let pattern = #"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+([.][a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$"#
+        guard email.utf8.count <= 254, let separator = email.firstIndex(of: "@"),
+              email[..<separator].utf8.count <= 64 else { return false }
+        return email.range(of: pattern, options: .regularExpression) != nil
+    }
+
+    private var passwordsMatch: Bool {
+        (passwordField.text ?? "").utf8.elementsEqual((confirmationField.text ?? "").utf8)
+    }
 
     override func viewDidLoad() {
         automaticRefresh = false
         showsReadFailureOverlay = false
-        content.spacing = 10
+        content.spacing = 14
         artwork.contentMode = .scaleAspectFill
         artwork.clipsToBounds = true
-        artwork.layer.cornerRadius = 24
-        artwork.setContentCompressionResistancePriority(.fittingSizeLevel, for: .vertical)
+        artwork.layer.cornerRadius = 22
         artwork.setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
-        let artworkHeight = artwork.heightAnchor.constraint(equalToConstant: 280)
-        artworkHeight.priority = .defaultLow
-        artworkHeight.isActive = true
+        artwork.setContentCompressionResistancePriority(.fittingSizeLevel, for: .vertical)
+        artwork.heightAnchor.constraint(greaterThanOrEqualToConstant: 112).isActive = true
+        emailField.keyboardType = .emailAddress
+        emailField.textContentType = .username
+        emailField.returnKeyType = .next
+        passwordField.isSecureTextEntry = true
+        confirmationField.isSecureTextEntry = true
+        confirmationField.textContentType = .newPassword
+        confirmationField.returnKeyType = .go
+        for field in [emailField, passwordField, confirmationField] {
+            field.autocorrectionType = .no
+            field.autocapitalizationType = .none
+            field.spellCheckingType = .no
+            field.adjustsFontForContentSizeCategory = true
+            field.attributedPlaceholder = NSAttributedString(string: field.placeholder ?? "", attributes: [
+                .foregroundColor: Palette.muted
+            ])
+            field.delegate = self
+            field.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+        }
         super.viewDidLoad()
-        content.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -24).isActive = true
+        // Grow the cover above the form, then scroll when the keyboard or larger text needs the space.
+        let fitPage = scroll.contentLayoutGuide.heightAnchor.constraint(equalTo: scroll.frameLayoutGuide.heightAnchor)
+        fitPage.priority = UILayoutPriority(249)
+        fitPage.isActive = true
     }
 
     override func render() {
         super.render()
-        navigationController?.setNavigationBarHidden(true, animated: false)
         content.addArrangedSubview(artwork)
-        let flexibleSpace = UIView()
-        flexibleSpace.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
-        content.addArrangedSubview(flexibleSpace)
-        content.addArrangedSubview(text("Lulu", 40, display: true))
-        content.addArrangedSubview(text("Real places. Small discoveries. Stories worth taking home.", 17, color: Palette.muted))
-        content.addArrangedSubview(agreementConsentRow())
-        if let feedback { content.addArrangedSubview(text(feedback, 15, color: Palette.coral)) }
-        let start = action("Start exploring", icon: "icon-route") { [weak self] in
-            guard let self, !self.signingIn else { return }
-            guard self.accepted else {
-                self.askForConsent()
-                return
-            }
-            self.continueEntry()
+        let heading = text(registering ? "Create your account" : "Sign in to Lulu", 32, display: true)
+        heading.accessibilityTraits = .header
+        content.addArrangedSubview(heading)
+        if registering && store.hasGuestToUpgrade {
+            content.addArrangedSubview(text("Add an email and password to keep your trips and wallet.", 16, color: Palette.muted))
         }
-        start.isEnabled = !signingIn
-        start.configuration?.showsActivityIndicator = signingIn
-        start.accessibilityValue = signingIn ? "Signing in" : nil
-        content.addArrangedSubview(start)
+        passwordField.textContentType = registering ? .newPassword : .password
+        passwordField.returnKeyType = registering ? .next : .go
+        let fields = registering ? [emailField, passwordField, confirmationField] : [emailField, passwordField]
+        content.addArrangedSubview(column(fields, spacing: 8))
+        for field in fields { field.isEnabled = !signingIn }
+        content.addArrangedSubview(agreementConsentRow())
+        let submit = action(registering ? "Create account" : "Sign in") { [weak self] in self?.submit() }
+        submit.accessibilityIdentifier = "entry.submit"
+        submit.configuration?.showsActivityIndicator = signingIn
+        submitButton = submit
+        content.addArrangedSubview(submit)
+        let change = action(registering ? "Back to sign in" : "Create account", filled: false) { [weak self] in
+            guard let self else { return }
+            self.changeMode(registering: !self.registering)
+        }
+        change.isEnabled = !signingIn
+        content.addArrangedSubview(change)
+        refreshForm()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -142,34 +183,65 @@ final class EntryController: TravelScreen, UITextViewDelegate {
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
 
-    private func askForConsent() {
-        guard !signingIn, presentedViewController == nil else { return }
-        let reminder = agreementText("To log in, please agree to the Terms of Service and Privacy Policy.")
-        let dialog = AgreementConsentDialog(reminder: reminder) { [weak self] in
-            guard let self else { return }
-            self.accepted = true
-            self.continueEntry()
-        }
-        present(dialog, animated: !UIAccessibility.isReduceMotionEnabled)
+    private func changeMode(registering: Bool) {
+        view.endEditing(true)
+        self.registering = registering
+        passwordField.text = ""
+        confirmationField.text = ""
+        render()
     }
 
-    private func continueEntry() {
-        guard accepted, !signingIn else { return }
+    @objc private func editingChanged() {
+        refreshForm()
+    }
+
+    private func refreshForm() {
+        submitButton?.isEnabled = accepted && !signingIn && !email.isEmpty && !(passwordField.text ?? "").isEmpty &&
+            (!registering || !(confirmationField.text ?? "").isEmpty)
+        submitButton?.alpha = submitButton?.isEnabled == true || signingIn ? 1 : 0.52
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField === emailField { passwordField.becomeFirstResponder() }
+        else if registering && textField === passwordField { confirmationField.becomeFirstResponder() }
+        else {
+            view.endEditing(true)
+            submit()
+        }
+        return false
+    }
+
+    private func submit() {
+        refreshForm()
+        guard submitButton?.isEnabled == true, let password = passwordField.text else { return }
+        guard validEmail else { notice("Enter a valid email address."); return }
+        guard !registering || passwordsMatch else { notice("Passwords do not match."); return }
+        let accountEmail = email
+        view.endEditing(true)
         signingIn = true
-        feedback = nil
         render()
         Task {
             do {
-                try await store.signInWithOneTap()
-            } catch is CancellationError {
+                if registering {
+                    try await store.register(email: accountEmail, password: password)
+                    emailField.text = accountEmail
+                    passwordField.text = ""
+                    confirmationField.text = ""
+                    let dialog = RegistrationSuccessDialog { [weak self] in
+                        guard let self else { return }
+                        self.signingIn = false
+                        self.changeMode(registering: false)
+                    }
+                    present(dialog, animated: !UIAccessibility.isReduceMotionEnabled)
+                } else {
+                    try await store.signIn(email: accountEmail, password: password)
+                    passwordField.text = ""
+                    if store.isAuthenticated { onEntry?() }
+                }
             } catch {
-                feedback = "Unable to sign in. Tap Start exploring to try again."
-            }
-            signingIn = false
-            if store.isAuthenticated {
-                onEntry?()
-            } else {
+                signingIn = false
                 render()
+                notice(store.entryErrorMessage(error))
             }
         }
     }
@@ -249,27 +321,15 @@ final class EntryController: TravelScreen, UITextViewDelegate {
 
     private func openAgreement(for url: URL) {
         guard !signingIn, let document = TravelAgreement.allCases.first(where: { $0.consentLink == url }) else { return }
-        let reader = AgreementController(store: store, document: document)
-        guard let dialog = presentedViewController as? AgreementConsentDialog else {
-            push(reader)
-            return
-        }
-        guard dialog.presentedViewController == nil else { return }
-        let navigation = UINavigationController(rootViewController: reader)
-        reader.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: iconButton("icon-close", label: "Close agreement") { [weak navigation] in
-            navigation?.dismiss(animated: true)
-        })
-        dialog.present(navigation, animated: true)
+        push(AgreementController(store: store, document: document))
     }
 }
 
-private final class AgreementConsentDialog: UIViewController {
-    private let reminder: UITextView
-    private let onAgree: () -> Void
+private final class RegistrationSuccessDialog: UIViewController {
+    private let onClose: () -> Void
 
-    init(reminder: UITextView, onAgree: @escaping () -> Void) {
-        self.reminder = reminder
-        self.onAgree = onAgree
+    init(onClose: @escaping () -> Void) {
+        self.onClose = onClose
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
         modalTransitionStyle = .crossDissolve
@@ -281,14 +341,10 @@ private final class AgreementConsentDialog: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         view.accessibilityViewIsModal = true
-        let heading = text("Before you log in", 23, display: true)
+        let heading = text("Account created", 24, display: true)
         heading.accessibilityTraits = .header
-        let agree = action("Agree and log in") { [weak self] in
-            guard let self else { return }
-            self.close(then: self.onAgree)
-        }
-        let decline = action("Disagree", filled: false) { [weak self] in self?.close() }
-        let panel = card([heading, reminder, agree, decline], color: Palette.cream)
+        let ok = action("OK") { [weak self] in self?.close() }
+        let panel = card([heading, text("Sign in with your email and password."), ok], color: Palette.cream)
         panel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(panel)
         let safeArea = view.safeAreaLayoutGuide
@@ -308,10 +364,10 @@ private final class AgreementConsentDialog: UIViewController {
         return true
     }
 
-    private func close(then work: (() -> Void)? = nil) {
+    private func close() {
         guard view.isUserInteractionEnabled else { return }
         view.isUserInteractionEnabled = false
-        dismiss(animated: !UIAccessibility.isReduceMotionEnabled, completion: work)
+        dismiss(animated: !UIAccessibility.isReduceMotionEnabled, completion: onClose)
     }
 }
 

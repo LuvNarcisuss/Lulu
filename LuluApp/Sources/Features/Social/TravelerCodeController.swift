@@ -35,8 +35,9 @@ final class TravelerCodeController: TravelScreen {
 extension TravelScreen {
     func appendTravelerCode() {
         guard let value = TravelFriendCode.value(for: store.userID), let image = Self.codeImage(value) else {
-            content.addArrangedSubview(text("Your traveler code is unavailable. Please refresh your account.", color: Palette.muted)); return
+            updateProblem("Your traveler code could not be generated. Please refresh your account.", for: "travelerCode"); return
         }
+        updateProblem(nil, for: "travelerCode")
         content.addArrangedSubview(text(store.profile.string("display_name", fallback: "Your traveler code"), 30, display: true))
         content.addArrangedSubview(text("Share this code so another traveler can find your member profile. It contains your traveler ID, not your sign-in details.", color: Palette.muted))
         let code = UIImageView(image: image)
@@ -100,13 +101,13 @@ final class FriendScannerController: TravelScreen {
             if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
         })
         capture.onCode = { [weak self] value in self?.resolve(value) }
-        capture.onFailure = { [weak self] value in self?.cameraStatus.text = value }
+        capture.onFailure = { [weak self] value in self?.showScannerError(value) }
         for notification in [AVCaptureSession.runtimeErrorNotification, AVCaptureSession.wasInterruptedNotification] {
             captureObservers.append(NotificationCenter.default.addObserver(forName: notification, object: capture.session, queue: .main) { [weak self] _ in
                 Task { @MainActor [weak self] in
                     guard let self, self.visible else { return }
                     self.capture.stop()
-                    self.cameraStatus.text = "The camera was interrupted. Choose Scan again or enter a full traveler ID."
+                    self.showScannerError("The camera was interrupted. Choose Scan again or enter a full traveler ID.")
                 }
             })
         }
@@ -123,6 +124,11 @@ final class FriendScannerController: TravelScreen {
     }
     override func viewDidAppear(_ animated: Bool) { super.viewDidAppear(animated); visible = true; startCamera() }
     override func viewWillDisappear(_ animated: Bool) { visible = false; capture.stop(); super.viewWillDisappear(animated) }
+    private func showScannerError(_ message: String) {
+        cameraStatus.text = nil
+        notice(message)
+    }
+
     private func startCamera() {
         guard visible, !resolving, UIApplication.shared.applicationState == .active else { return }
         switch AVCaptureDevice.authorizationStatus(for: .video) {
@@ -132,21 +138,21 @@ final class FriendScannerController: TravelScreen {
                 Task { @MainActor [weak self] in
                     guard let self, self.visible, UIApplication.shared.applicationState == .active else { return }
                     if granted { self.startCamera() }
-                    else { self.cameraStatus.text = "Camera access was not allowed. Enter a full traveler ID or enable access in Settings." }
+                    else { self.showScannerError("Camera access was not allowed. Enter a full traveler ID or enable access in Settings.") }
                 }
             }
-        case .denied, .restricted: cameraStatus.text = "Camera access is unavailable. Enter a full traveler ID or check Settings."
-        @unknown default: cameraStatus.text = "Camera access is unavailable on this device."
+        case .denied, .restricted: showScannerError("Camera access is unavailable. Enter a full traveler ID or check Settings.")
+        @unknown default: showScannerError("Camera access is unavailable on this device.")
         }
     }
     private func resolve(_ raw: String) {
         guard !resolving, visible else { return }
         capture.stop()
         guard let id = TravelFriendCode.memberID(from: raw) else {
-            cameraStatus.text = "This is not a traveler code or a full traveler ID. Choose Scan again to continue."; return
+            showScannerError("This is not a traveler code or a full traveler ID. Choose Scan again to continue."); return
         }
         guard id.caseInsensitiveCompare(store.userID) != .orderedSame else {
-            cameraStatus.text = "This is your own traveler code. Share it with another traveler."; return
+            showScannerError("This is your own traveler code. Share it with another traveler."); return
         }
         resolving = true
         let owner = store.userID
@@ -157,16 +163,19 @@ final class FriendScannerController: TravelScreen {
                 try await self.store.refresh()
                 guard self.visible, owner == self.store.userID else { self.resolving = false; return }
                 guard let profile = self.store.rows("profiles").first(where: { $0.id.caseInsensitiveCompare(id) == .orderedSame && !$0.bool("is_editorial") }) else {
-                    self.cameraStatus.text = "This traveler is unavailable or is not discoverable. Choose Scan again to continue."; self.resolving = false; return
+                    self.showScannerError("This traveler is unavailable or is not discoverable. Choose Scan again to continue."); self.resolving = false; return
                 }
                 guard !isBlocked(profile.id, store: self.store) else {
-                    self.cameraStatus.text = "This traveler cannot be opened while blocked."; self.resolving = false; return
+                    self.showScannerError("This traveler cannot be opened while blocked."); self.resolving = false; return
                 }
                 self.resolving = false
                 self.push(PublicProfileController(store: self.store, profileID: profile.id))
+            } catch is CancellationError {
+                self.resolving = false
+                self.cameraStatus.text = nil
             } catch {
                 self.resolving = false
-                self.cameraStatus.text = "Traveler lookup failed: \(error.localizedDescription)"
+                self.showScannerError("Traveler lookup failed: \(error.localizedDescription)")
             }
         }
     }

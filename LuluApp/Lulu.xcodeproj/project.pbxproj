@@ -74,7 +74,7 @@
 		127B1073E58EE0BCF1AF2EA0 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = Resources/Fonts; sourceTree = SOURCE_ROOT; };
 		1CEFCF9BF8133E6F9290FF9B /* ChatsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsController.swift; sourceTree = "<group>"; };
 		26896DDA98E3B3474DEB95C7 /* TravelApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2C13CE551BA5171BD2D508C3 /* LuluAppleSandboxUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = LuluAppleSandboxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C13CE551BA5171BD2D508C3 /* LuluAppleSandboxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LuluAppleSandboxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F8D87EA615B9E677248A556 /* ExploreControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreControllers.swift; sourceTree = "<group>"; };
 		4ADBA5787201EB1C1B2DB667 /* OpenFreeMapStyleLicense.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OpenFreeMapStyleLicense.txt; sourceTree = "<group>"; };
 		51CB1A55F3C531BFE9465D1B /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
@@ -407,7 +407,6 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					143446A552BBF0CF09C6C45F = {
-						DevelopmentTeam = JPTS6M4T5B;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D8B4B89FFAE1AB314CE025C;
 					};
@@ -614,16 +613,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = JPTS6M4T5B;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lulu.tourtravel.sandbox-tests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lulu.tourtravel;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = TravelApp;
 			};
 			name = Debug;
@@ -750,16 +751,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = JPTS6M4T5B;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.lulu.tourtravel.sandbox-tests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lulu.tourtravel;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = TravelApp;
 			};
 			name = Release;

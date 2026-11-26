@@ -2,9 +2,31 @@ import Combine
 import Foundation
 import StoreKit
 
-struct CoinOffer: Decodable {
+struct CoinOffer {
     let coins: Int
     let productID: String
+    let originalProductID: String
+
+    func matches(_ identifier: String) -> Bool {
+        identifier == productID || identifier == originalProductID
+    }
+}
+
+struct CoinCatalog: Decodable {
+    private struct Tier: Decodable {
+        let coins: Int
+        let productID: String
+        let localProductID: String?
+    }
+    private let tiers: [Tier]
+
+    func offers(localStoreKit: Bool) -> [CoinOffer] {
+        tiers.compactMap { tier in
+            let identifier = localStoreKit ? (tier.localProductID ?? tier.productID) : tier.productID
+            guard tier.coins > 0, !identifier.isEmpty else { return nil }
+            return CoinOffer(coins: tier.coins, productID: identifier, originalProductID: tier.productID)
+        }
+    }
 }
 
 enum CoinWalletEnvironment: String {
@@ -57,7 +79,6 @@ enum GuidePurchaseFailure: LocalizedError {
 
 @MainActor
 final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
-    private struct Configuration: Decodable { let tiers: [CoinOffer] }
     private weak var store: TravelStore?
     private var products: [String: SKProduct] = [:]
     private var invalidProductIDs: Set<String> = []
@@ -69,6 +90,9 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
     private var recoveryRequested = false
     private var sessionID = UUID()
     private var serverReady = false
+    #if DEBUG && targetEnvironment(simulator)
+    private var localSessionReady = false
+    #endif
     private var walletRouting = CoinWalletRouting()
     private let receiptReader = StoreReceiptReader()
     var appleEnvironment: String? { walletRouting.environment?.rawValue }
@@ -81,7 +105,11 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
     private var catalogPhase = "idle"
     private var lastErrorCode = "none"
     private(set) var offers: [CoinOffer] = []
-    private(set) var message = "Loading coin packages…"
+    enum Feedback {
+        case status(String)
+        case problem(String)
+    }
+    private(set) var feedback: Feedback = .status("Loading coin packages…")
     private(set) var loading = false
     private(set) var purchasing = false
     @Published private(set) var revision = 0
@@ -91,8 +119,8 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
         super.init()
         if let url = Bundle.main.url(forResource: "PaymentCatalog", withExtension: "json"),
            let data = try? Data(contentsOf: url),
-           let catalog = try? JSONDecoder().decode(Configuration.self, from: data) {
-            offers = catalog.tiers.filter { $0.coins > 0 && !$0.productID.isEmpty }
+           let catalog = try? JSONDecoder().decode(CoinCatalog.self, from: data) {
+            offers = catalog.offers(localStoreKit: isLocalStoreKit)
         }
     }
 
@@ -254,9 +282,18 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
     private func checkoutReady(_ store: TravelStore) async -> Bool {
         do {
             let environment = resolveEnvironment()
-            #if DEBUG
+            #if DEBUG && targetEnvironment(simulator)
             if environment == .xcode {
                 guard let account = UUID(uuidString: store.userID) else { return false }
+                if !localSessionReady {
+                    guard let result = try? await AppTransaction.shared, case .verified(let app) = result,
+                          app.environment == .xcode, app.bundleID == Bundle.main.bundleIdentifier else {
+                        deliveryDiagnostic = "local_session_missing"
+                        checkoutMessage = "Run Lulu from Xcode with LuluCoins.storekit selected to start local purchases."
+                        return false
+                    }
+                    localSessionReady = true
+                }
                 _ = try localWallet.state(account: account)
                 deliveryDiagnostic = "local_ready"
                 return true
@@ -285,7 +322,7 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
         invalidProductIDs.removeAll()
         catalogPhase = "loading"
         lastErrorCode = "none"
-        message = "Loading Apple coin packages…"
+        feedback = .status("Loading Apple coin packages…")
         revision += 1
 
         let request = SKProductsRequest(productIdentifiers: Set(offers.map(\.productID)))
@@ -297,7 +334,7 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
             self.generation = UUID()
             self.stopCatalogLoading()
             self.catalogPhase = "timedOut"
-            self.message = "Loading took too long. Check your connection and retry."
+            self.feedback = .problem("Loading took too long. Check your connection and retry.")
             self.revision += 1
         }
         request.start()
@@ -323,15 +360,15 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
                 self.serverReady = ready
                 self.catalogPhase = available.isEmpty ? "unavailable" : (available.count == requested.count ? "ready" : "partial")
                 if !SKPaymentQueue.canMakePayments() {
-                    self.message = "In-app purchases are restricted on this device."
+                    self.feedback = .problem("In-app purchases are restricted on this device.")
                 } else if available.isEmpty {
-                    self.message = "Apple returned no coin packages. Please retry later."
+                    self.feedback = .problem("Apple returned no coin packages. Please retry later.")
                 } else if !ready {
-                    self.message = self.checkoutMessage
+                    self.feedback = .problem(self.checkoutMessage)
                 } else if available.count < requested.count {
-                    self.message = "Some packages are unavailable. You can purchase any available package."
+                    self.feedback = .problem("Some packages are unavailable. You can purchase any available package.")
                 } else {
-                    self.message = "Choose a coin package."
+                    self.feedback = .status("Choose a coin package.")
                 }
                 self.loadTask = nil
                 self.stopCatalogLoading()
@@ -348,7 +385,7 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
             self.catalogPhase = "failed"
             let failure = error as NSError
             self.lastErrorCode = "\(failure.domain):\(failure.code)"
-            self.message = "Apple coin packages could not be loaded. Please retry."
+            self.feedback = .problem("Apple coin packages could not be loaded. Please retry.")
             self.revision += 1
         }
     }
@@ -413,7 +450,7 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
         guard let queue = paymentQueue else { return }
         let session = sessionID
         purchasing = true
-        message = "Opening Apple purchase…"
+        feedback = .status("Opening Apple purchase…")
         revision += 1
         Task { [weak self, weak store] in
             guard let self, let store else { return }
@@ -422,7 +459,7 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
                   UUID(uuidString: store.userID) == account else { return }
             guard ready, SKPaymentQueue.canMakePayments() else {
                 self.serverReady = false
-                self.endCheckout("Coin purchases are temporarily unavailable.")
+                self.endCheckout(.problem("Coin purchases are temporarily unavailable."))
                 return
             }
             let payment = SKMutablePayment(product: product)
@@ -433,7 +470,7 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
                      transaction.transactionState == .purchased)
             }
             guard !alreadyQueued else {
-                self.endCheckout("A purchase for this package is already pending.")
+                self.endCheckout(.problem("A purchase for this package is already pending."))
                 self.recoverUnfinished()
                 return
             }
@@ -450,18 +487,20 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
     }
 
     private func handle(_ transaction: SKPaymentTransaction, in queue: SKPaymentQueue) {
-        guard offers.contains(where: { $0.productID == transaction.payment.productIdentifier }) else { return }
+        guard offers.contains(where: { $0.matches(transaction.payment.productIdentifier) }) else { return }
         let isActive = activePayment.map { matchesPayment(transaction.payment, $0) } ?? false
         switch transaction.transactionState {
         case .purchasing:
             break
         case .deferred:
-            if isActive { endCheckout("The purchase is pending Apple approval.") }
+            if isActive { endCheckout(.status("The purchase is pending Apple approval.")) }
         case .failed:
             let error = transaction.error as? SKError
             queue.finishTransaction(transaction)
             if isActive {
-                endCheckout(error?.code == .paymentCancelled ? "Purchase cancelled." : "Apple could not complete the purchase. Please retry.")
+                endCheckout(error?.code == .paymentCancelled
+                    ? .status("Purchase cancelled.")
+                    : .problem("Apple could not complete the purchase. Please retry."))
             }
         case .purchased:
             if isActive { activeTransaction = transaction }
@@ -470,7 +509,7 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
             // The catalog contains only consumables, which have no restorable entitlement.
             queue.finishTransaction(transaction)
         @unknown default:
-            if isActive { endCheckout("Apple returned an unknown purchase status. Check pending purchases shortly.") }
+            if isActive { endCheckout(.problem("Apple returned an unknown purchase status. Check pending purchases shortly.")) }
         }
     }
 
@@ -479,11 +518,11 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
             first.applicationUsername?.lowercased() == second.applicationUsername?.lowercased()
     }
 
-    private func endCheckout(_ status: String) {
+    private func endCheckout(_ feedback: Feedback) {
         activePayment = nil
         activeTransaction = nil
         purchasing = false
-        message = status
+        self.feedback = feedback
         revision += 1
     }
 
@@ -517,11 +556,16 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
             guard transaction.transactionState == .purchased, payment.quantity == 1,
                   let transactionID = transaction.transactionIdentifier, !transactionID.isEmpty,
                   !finished.contains(transactionID), !delivered.contains(transactionID),
-                  offers.contains(where: { $0.productID == payment.productIdentifier }) else { continue }
+                  offers.contains(where: { $0.matches(payment.productIdentifier) }) else { continue }
             // Do not deliver a queued purchase associated with another local account.
             // The server also checks Apple's account token when the receipt includes it.
             if let username = payment.applicationUsername, !username.isEmpty,
                UUID(uuidString: username) != account { continue }
+            #if DEBUG && targetEnvironment(simulator)
+            if isLocalStoreKit, !localSessionReady {
+                guard await checkoutReady(store), sessionID == session else { return delivered }
+            }
+            #endif
             let checkoutPayment: SKPayment? = activePayment.flatMap { payment in
                 guard matchesPayment(transaction.payment, payment) else { return nil }
                 return payment
@@ -536,21 +580,21 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
                 guard sessionID == session else { return delivered }
                 awaitingConfirmation = true
                 if let checkoutPayment, activePayment === checkoutPayment {
-                    endCheckout("Your purchase is awaiting confirmation. Check pending purchases shortly.")
+                    endCheckout(.problem("Your purchase is awaiting confirmation. Check pending purchases shortly."))
                 }
             }
         }
         guard !Task.isCancelled, sessionID == session else { return delivered }
         if let creditedPayment, activePayment === creditedPayment {
-            endCheckout("Coins added to your wallet.")
+            endCheckout(.status("Coins added to your wallet."))
         } else if let checkoutAtStart, activeTransaction === checkoutAtStart, !recoveryRequested {
-            endCheckout("Your purchase is awaiting confirmation. Check pending purchases shortly.")
+            endCheckout(.problem("Your purchase is awaiting confirmation. Check pending purchases shortly."))
         } else if !purchasing, !loading {
             if !delivered.isEmpty {
-                message = "Coins added to your wallet."
+                feedback = .status("Coins added to your wallet.")
                 revision += 1
             } else if awaitingConfirmation {
-                message = "A purchase is awaiting confirmation. Check pending purchases shortly."
+                feedback = .problem("A purchase is awaiting confirmation. Check pending purchases shortly.")
                 revision += 1
             }
         }
@@ -570,7 +614,7 @@ final class PaymentCatalogAdapter: NSObject, SKProductsRequestDelegate, SKPaymen
         products.removeAll()
         invalidProductIDs.removeAll()
         serverReady = false
-        endCheckout("Loading coin packages…")
+        endCheckout(.status("Loading coin packages…"))
     }
 
     private func deliver(_ transaction: SKPaymentTransaction, transactionID: String,

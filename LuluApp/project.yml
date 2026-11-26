@@ -116,8 +116,13 @@ schemes:
         TravelApp: all
     run:
       config: Debug
+      storeKitConfiguration: Configuration/LuluCoins.storekit
+      environmentVariables:
+        LULU_LOCAL_STOREKIT: "1"
     test:
       config: Debug
+      environmentVariables:
+        LULU_LOCAL_STOREKIT: "0"
       targets:
         - name: LuluPurchaseTests
           skipped: false

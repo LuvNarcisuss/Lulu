@@ -187,8 +187,13 @@ final class PublicProfileController: TravelScreen {
         do {
             statistics = try await store.profileStatistics(profileID)
             statisticsFailed = false
+            updateProblem(nil, for: "statistics")
         } catch is CancellationError { return }
-        catch { statistics = nil; statisticsFailed = true }
+        catch {
+            statistics = nil
+            statisticsFailed = true
+            updateProblem("Profile statistics could not be loaded.", for: "statistics")
+        }
         render()
     }
 
@@ -196,8 +201,9 @@ final class PublicProfileController: TravelScreen {
         super.render(); title = "Traveler profile"
         guard let profile = profileID == store.userID ? store.profile : store.rows("profiles").first(where: { $0.id == profileID }) else {
             navigationItem.rightBarButtonItem = nil
-            content.addArrangedSubview(text("This profile is unavailable.", color: Palette.muted)); return
+            updateProblem("This profile is unavailable.", for: "profile"); return
         }
+        updateProblem(nil, for: "profile")
         let avatar = remoteImage(profile.string("avatar_path"), store: store, height: 76, radius: 38)
         avatar.widthAnchor.constraint(equalToConstant: 76).isActive = true
         if profile.string("avatar_path").isEmpty {
@@ -227,6 +233,7 @@ final class PublicProfileController: TravelScreen {
         content.addArrangedSubview(metrics)
         if statisticsFailed {
             content.addArrangedSubview(action("Retry statistics", filled: false) { [weak self] in
+                self?.updateProblem(nil, for: "statistics")
                 Task { await self?.loadStatistics() }
             })
         }

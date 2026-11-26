@@ -59,7 +59,9 @@ final class EditProfileController: TravelScreen, PHPickerViewControllerDelegate 
                 self.loading = false
                 switch result {
                 case .success(let data): self.photo = data; self.uploadedPath = nil; self.photoState.text = "New avatar ready to save"
-                case .failure(let error): self.photoState.text = error.localizedDescription
+                case .failure(let error):
+                    self.photoState.text = self.photo == nil ? nil : "New avatar ready to save"
+                    self.notice(error.localizedDescription)
                 }
             }
         }

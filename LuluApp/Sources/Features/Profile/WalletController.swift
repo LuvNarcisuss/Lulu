@@ -12,7 +12,7 @@ final class WalletController: TravelScreen {
         super.viewDidLoad()
         catalogObservation = catalog.$revision.dropFirst().sink { [weak self] _ in self?.render() }
         catalog.load()
-        Task { try? await catalog.refreshWallet() }
+        run { try await self.catalog.refreshWallet() }
     }
 
     override func render() {
@@ -30,10 +30,16 @@ final class WalletController: TravelScreen {
             content.addArrangedSubview(text("Local StoreKit testing · Separate test balance", 13, color: Palette.muted))
         }
         content.addArrangedSubview(text("Buy coins", 27, display: true))
-        let statusLabel = text(catalog.message, 15, color: Palette.muted)
-        statusLabel.accessibilityIdentifier = "wallet.status"
-        statusLabel.accessibilityValue = catalog.appleEnvironment ?? "Unknown"
-        content.addArrangedSubview(statusLabel)
+        switch catalog.feedback {
+        case .status(let message):
+            updateProblem(nil, for: "wallet")
+            let statusLabel = text(message, 15, color: Palette.muted)
+            statusLabel.accessibilityIdentifier = "wallet.status"
+            statusLabel.accessibilityValue = catalog.appleEnvironment ?? "Unknown"
+            content.addArrangedSubview(statusLabel)
+        case .problem(let message):
+            updateProblem(message, for: "wallet")
+        }
 
         for offset in stride(from: 0, to: catalog.offers.count, by: 3) {
             let row = line([], spacing: 8)
@@ -75,8 +81,12 @@ final class WalletController: TravelScreen {
                 package.addAction(UIAction { [weak self] _ in
                     guard let self else { return }
                     guard let price = self.catalog.price(for: offer), self.catalog.canBuy(offer) else {
-                        self.notice(self.catalog.message)
                         self.catalog.load()
+                        self.notice("This package is unavailable. Please try again after the catalog reloads.")
+                        return
+                    }
+                    if self.catalog.isLocalStoreKit {
+                        self.catalog.buy(offer)
                         return
                     }
                     self.confirm("Buy coins?", message: "Add \(offer.coins.formatted()) coins for \(price)? Apple will ask you to confirm the purchase.") {

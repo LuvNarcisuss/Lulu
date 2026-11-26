@@ -28,8 +28,8 @@ final class LocalPurchaseTests: XCTestCase {
         directory = FileManager.default.temporaryDirectory.appendingPathComponent("LuluPurchaseTests-" + UUID().uuidString)
         account = UUID()
         let url = try XCTUnwrap(Bundle.main.url(forResource: "PaymentCatalog", withExtension: "json"))
-        struct Catalog: Decodable { let tiers: [CoinOffer] }
-        offers = try JSONDecoder().decode(Catalog.self, from: Data(contentsOf: url)).tiers
+        let catalog = try JSONDecoder().decode(CoinCatalog.self, from: Data(contentsOf: url))
+        offers = catalog.offers(localStoreKit: true)
         observer = StoreKitOneObserver()
         SKPaymentQueue.default().add(observer)
     }
