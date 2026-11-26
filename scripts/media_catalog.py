@@ -100,7 +100,15 @@ for slug, name, city, country, region, category, latitude, longitude, summary, s
     places.append(dict(id=stable('place',slug), name=name, city=city, country=country, region=region, category=category, latitude=latitude, longitude=longitude, summary=summary, photo_path=f'catalog/places/{slug}.jpg', source_url=source_url, best_time=best_time, practical_tip=practical_tip))
     guides.append(dict(id=stable('guide',slug), place_id=stable('place',slug), title=name + ': Field Notes', intro=summary, sections=[dict(title=h1,body=b1),dict(title=h2,body=b2)],source_name=source_name,source_url=source_url,reading_minutes=2))
 
-profiles = [dict(id=stable('publisher','europe'),display_name='European Field Notes',bio='An editorial travel collection. Original footage creators are credited on each film; this publisher is not a traveler account.',avatar_path='',is_editorial=True,source_url='https://www.pexels.com/license/',consent_version='editorial-2026-11-03'),dict(id=stable('publisher','north-america'),display_name='North American Field Notes',bio='An editorial destination collection with creator credits and official planning links. This publisher is not a traveler account.',avatar_path='',is_editorial=True,source_url='https://www.nps.gov/aboutus/disclaimer.htm',consent_version='editorial-2026-11-03')]
+profiles = []
+publishers_by_clip = {}
+for publisher in json.loads((ASSETS / 'video-publishers.json').read_text()):
+    publisher_id = stable('publisher', publisher['slug'])
+    profiles.append(dict(id=publisher_id, **publisher['profile']))
+    for clip_slug in publisher['clips']:
+        if clip_slug in publishers_by_clip:
+            raise ValueError(f'Multiple publishers assigned to {clip_slug}')
+        publishers_by_clip[clip_slug] = publisher_id
 CLIP_DATA = {
 'paris-skyline':('Paris in Passing','A recorded daytime time-lapse of the Eiffel Tower and its surrounding cityscape.','paris','Architecture'),
 'paris-street':('A Paris Side Street','Bicycles, neighborhood facades and a calm recorded street scene in Paris.','paris','City'),
@@ -116,6 +124,8 @@ CLIP_DATA = {
 
 clips, files = [], []
 sources = json.loads((ASSETS/'video-sources.json').read_text())
+if set(publishers_by_clip) != {source['slug'] for source in sources}:
+    raise ValueError('Every catalog film must have one publishing collection')
 reviews = {
 'paris-skyline':'Daytime Eiffel Tower, clouds and surrounding buildings; no protected nighttime lighting. No added text or watermark.',
 'paris-street':'Paris street with parked bicycles, facades and passing road users. Incidental street signage only; no added watermark.',
@@ -145,7 +155,7 @@ for source in sources:
         title, caption, place_slug, category = (clip[key] for key in ('title', 'caption', 'place_slug', 'category'))
     entry = dict(id=stable('clip',slug), title=title, caption=caption,
                  place_id=None if slug == 'iceland-waterfall' else stable('place',place_slug),
-                 publisher_id=stable('publisher','north-america' if place_slug in ['new-york','yosemite'] else 'europe'),
+                 publisher_id=publishers_by_clip[slug],
                  video_path=video_path, cover_path=cover_path, source_url=source['@id'].replace('#video',''),
                  author=source.get('author'), duration=meta['duration'], category=category)
     if clip is not None and 'feed_rank' in clip:

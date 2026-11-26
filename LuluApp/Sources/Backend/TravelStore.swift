@@ -23,7 +23,7 @@ final class TravelStore: ObservableObject {
     private(set) var hasGuideVisibility = false
     private static let guideVisibilityPath = "rest/v1/rpc/travel_guide_visibility"
     private var guideVisibilityVersion = UUID()
-    private var contentStatistics = Record()
+    private var workLikeCounts: [String: [String: Int]] = [:]
     private var snapshot = Record()
     private var generation = UUID()
     private var snapshotRequest = UUID()
@@ -62,10 +62,19 @@ final class TravelStore: ObservableObject {
     func rows(_ key: String) -> [Record] { snapshot.records(key) }
 
     func contentLikeCount(kind: String, id: String) -> Int? {
-        guard let item = contentStatistics.records(kind).first(where: { $0.id == id }),
-              case .number(let value) = item["likes"], value.isFinite, value >= 0,
-              value < Double(Int.max), value.rounded() == value else { return nil }
-        return Int(value)
+        workLikeCounts[kind]?[id]
+    }
+
+    private func indexWorkLikes(_ statistics: Record?) -> [String: [String: Int]] {
+        var counts: [String: [String: Int]] = [:]
+        for kind in ["clips", "guides"] {
+            for item in statistics?.records(kind) ?? [] {
+                guard !item.id.isEmpty, case .number(let value) = item["likes"],
+                      value.isFinite, value >= 0, value < Double(Int.max), value.rounded() == value else { continue }
+                counts[kind, default: [:]][item.id] = Int(value)
+            }
+        }
+        return counts
     }
 
     var visiblePlaces: [Record] {
@@ -230,7 +239,7 @@ final class TravelStore: ObservableObject {
         let result = try await request(path: "rest/v1/rpc/travel_profile_stats", body: ["target_profile": .string(profileID)], optionalRead: true)
         guard generation == attempt else { throw CancellationError() }
         guard result.string("profile_id").lowercased() == profileID.lowercased(),
-              ["likes", "saves", "following", "followers"].allSatisfy({ key in
+              ["following", "followers"].allSatisfy({ key in
                   if case .number(let value) = result[key] { return value.isFinite && value >= 0 && value < Double(Int.max) && value.rounded() == value }
                   return false
               }) else { throw StoreFailure.message("Profile statistics could not be loaded.") }
@@ -288,6 +297,9 @@ final class TravelStore: ObservableObject {
                 result = try await request(path: "rest/v1/rpc/travel_action", body: ["action": .string(action), "payload": .object(payload)])
             }
             guard generation == attempt else { throw CancellationError() }
+            if (action == "safety.report" || action == "safety.block"), !result.bool("committed") {
+                throw StoreFailure.message("Your change could not be confirmed. Please try again.")
+            }
             do { try await loadSnapshot(generation: attempt) }
             catch is CancellationError { }
             catch {
@@ -447,7 +459,11 @@ final class TravelStore: ObservableObject {
         do {
             async let statistics = try? request(path: "rest/v1/rpc/travel_content_stats", body: [:], optionalRead: true)
             async let visibility = try? request(path: Self.guideVisibilityPath, body: [:], optionalRead: true)
-            let value = try await request(path: "rest/v1/rpc/travel_snapshot", body: [:])
+            var value = try await request(path: "rest/v1/rpc/travel_snapshot", body: [:])
+            // The snapshot includes the first 2,000 rows of each catalog in ID order.
+            for table in ["clips", "places"] where value[table].array.count == 2000 {
+                value[table] = try await completeWorkCatalog(table, firstPage: value[table].array)
+            }
             let guideState = await visibility
             let latestStatistics = await statistics
             guard generation == attempt, snapshotRequest == requestID, !Task.isCancelled else { throw CancellationError() }
@@ -467,7 +483,7 @@ final class TravelStore: ObservableObject {
                 hiddenPlaceIDs = Set(guideState.strings("hidden_place_ids"))
                 hasGuideVisibility = true
             }
-            contentStatistics = latestStatistics ?? Record()
+            workLikeCounts = indexWorkLikes(latestStatistics)
             snapshot = value
             profile = value.record("profile")
             lastRefreshError = nil
@@ -481,6 +497,24 @@ final class TravelStore: ObservableObject {
             revision += 1
             throw error
         }
+    }
+
+    private func completeWorkCatalog(_ table: String, firstPage: [JSONValue]) async throws -> JSONValue {
+        var catalog = firstPage
+        var cursor = firstPage.compactMap { $0.object["id"]?.string }.max() ?? ""
+        while !cursor.isEmpty {
+            try Task.checkCancellation()
+            let page: [Record] = try await client.from(table).select()
+                .gt("id", value: cursor).order("id").limit(500).execute().value
+            guard let last = page.last else { break }
+            for row in page {
+                var columns = row.values
+                let data = columns.removeValue(forKey: "data")?.object ?? [:]
+                catalog.append(.object(data.merging(columns) { _, column in column }))
+            }
+            cursor = last.id
+        }
+        return .array(catalog)
     }
 
     private func request(path: String, body: [String: JSONValue], optionalRead: Bool = false, timeout: TimeInterval = 30, using source: SupabaseClient? = nil) async throws -> Record {
@@ -576,7 +610,7 @@ final class TravelStore: ObservableObject {
         isAuthenticated = false
         userID = ""
         profile = Record()
-        contentStatistics = Record()
+        workLikeCounts.removeAll()
         snapshot = Record()
         hiddenPlaceIDs.removeAll()
         hasGuideVisibility = false

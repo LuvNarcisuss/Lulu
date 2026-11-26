@@ -7,5 +7,5 @@
   "consentVersion": "travel-4105ae5ce665d809586ccd20",
   "termsSHA256": "cab5f857cfd3eede9b21d0067d3f5ec43ed6bc594367b71704206d8099d51809",
   "privacySHA256": "a0c4dccdb677ab453b0d36c2c1bb6a604523aa10cce323e975a3389137749594",
-  "accountDeletionDeployed": false
+  "accountDeletionDeployed": true
 }

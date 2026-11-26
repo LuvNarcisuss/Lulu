@@ -1,0 +1,88 @@
+[
+  {
+    "slug": "europe",
+    "profile": {
+      "display_name": "European Field Notes",
+      "bio": "An editorial travel collection. Original footage creators are credited on each film; this publisher is not a traveler account.",
+      "avatar_path": "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=512&h=512&fit=crop",
+      "is_editorial": true,
+      "source_url": "https://www.pexels.com/license/",
+      "consent_version": "editorial-2026-11-03",
+      "avatar_credit": "Simon Robben / Pexels",
+      "avatar_is_illustrative": true
+    },
+    "clips": [
+      "paris-skyline",
+      "westminster-walk",
+      "paris-street"
+    ]
+  },
+  {
+    "slug": "north-america",
+    "profile": {
+      "display_name": "North American Field Notes",
+      "bio": "An editorial destination collection with creator credits and official planning links. This publisher is not a traveler account.",
+      "avatar_path": "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=512&h=512&fit=crop",
+      "is_editorial": true,
+      "source_url": "https://www.nps.gov/aboutus/disclaimer.htm",
+      "consent_version": "editorial-2026-11-03",
+      "avatar_credit": "Andrea Piacquadio / Pexels",
+      "avatar_is_illustrative": true
+    },
+    "clips": [
+      "brooklyn-bridge-walk",
+      "yosemite-waterfall"
+    ]
+  },
+  {
+    "slug": "side-street-atlas",
+    "profile": {
+      "display_name": "Side Street Atlas",
+      "bio": "A travel collection of street-level details and unexpected stops along the way.",
+      "avatar_path": "catalog/places/venice.jpg",
+      "is_editorial": true,
+      "source_url": "https://www.pexels.com/photo/venice-16986061/",
+      "consent_version": "editorial-2026-11-26",
+      "avatar_credit": "Evgeniy Petkevich / Pexels"
+    },
+    "clips": [
+      "venice-alley",
+      "colosseum-visitors",
+      "iceland-waterfall"
+    ]
+  },
+  {
+    "slug": "window-seat-journal",
+    "profile": {
+      "display_name": "Window Seat Journal",
+      "bio": "Short films of shifting skylines and cities in motion.",
+      "avatar_path": "catalog/places/lisbon.jpg",
+      "is_editorial": true,
+      "source_url": "https://www.pexels.com/photo/view-of-tram-on-street-1563233/",
+      "consent_version": "editorial-2026-11-26",
+      "avatar_credit": "Kaique Rocha / Pexels"
+    },
+    "clips": [
+      "new-york-times-square",
+      "london-big-ben",
+      "london-tower-bridge"
+    ]
+  },
+  {
+    "slug": "roaming-lens",
+    "profile": {
+      "display_name": "Roaming Lens",
+      "bio": "A travel collection following landscapes and architecture across borders.",
+      "avatar_path": "catalog/places/swiss-alps.jpg",
+      "is_editorial": true,
+      "source_url": "https://www.pexels.com/photo/scenic-swiss-alps-mountain-landscape-30688450/",
+      "consent_version": "editorial-2026-11-26",
+      "avatar_credit": "Jasper Hunter / Pexels"
+    },
+    "clips": [
+      "swiss-alpine-train",
+      "rome-colosseum",
+      "venice-canal"
+    ]
+  }
+]

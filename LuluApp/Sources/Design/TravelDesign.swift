@@ -104,9 +104,13 @@ import Combine
     return logo
 }
 
-@MainActor func iconButton(_ name: String, label: String, _ handler: @escaping () -> Void) -> UIButton {
+@MainActor func iconButton(_ name: String, label: String, selectedIcon: String? = nil, _ handler: @escaping () -> Void) -> UIButton {
     let button = UIButton(type: .custom)
-    button.setImage(UIImage(named: name)?.preparingThumbnail(of: CGSize(width: 27, height: 27)), for: .normal)
+    let iconSize = CGSize(width: 27, height: 27)
+    button.setImage(UIImage(named: name)?.preparingThumbnail(of: iconSize), for: .normal)
+    if let selectedIcon {
+        button.setImage(UIImage(named: selectedIcon)?.preparingThumbnail(of: iconSize), for: .selected)
+    }
     button.backgroundColor = Palette.paper.withAlphaComponent(0.96)
     button.layer.cornerRadius = 22
     let width = button.widthAnchor.constraint(equalToConstant: 44)
@@ -197,7 +201,8 @@ import Combine
         super.viewWillDisappear(animated)
     }
 
-    func notice(_ message: String, title: String = "Lulu", recovery: (title: String, action: () -> Void)? = nil) {
+    func notice(_ message: String, title: String = "Lulu", recovery: (title: String, action: () -> Void)? = nil,
+                onAcknowledged: (() -> Void)? = nil) {
         guard !message.isEmpty, activeNotice?.message != message,
               !pendingNotices.contains(where: { $0.message == message }) else { return }
 
@@ -205,6 +210,7 @@ import Combine
         alert.addAction(UIAlertAction(title: recovery == nil ? "OK" : "Cancel",
                                       style: recovery == nil ? .default : .cancel) { [weak self] _ in
             self?.noticeDidClose()
+            if recovery == nil { onAcknowledged?() }
         })
         if let recovery {
             alert.addAction(UIAlertAction(title: recovery.title, style: .default) { [weak self] _ in

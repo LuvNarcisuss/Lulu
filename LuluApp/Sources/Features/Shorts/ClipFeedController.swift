@@ -31,7 +31,13 @@ class ClipFeedController: TravelNoticeScreen, UIScrollViewDelegate, UIAdaptivePr
     private var readFailed = false
     private var fitEntireScene = false
     private var didPosition = false
-    private var manuallyPaused = false
+    private var manuallyPaused = false {
+        didSet {
+            if films.indices.contains(activeIndex) {
+                films[activeIndex].playIndicator.isHidden = !manuallyPaused
+            }
+        }
+    }
     private var busy = false
     private var requestID = UUID()
     private let feedRefresh = UIRefreshControl()
@@ -261,7 +267,8 @@ class ClipFeedController: TravelNoticeScreen, UIScrollViewDelegate, UIAdaptivePr
         }
         clips[index] = current
         stopCurrentItem()
-        activeIndex = index; manuallyPaused = false
+        manuallyPaused = false
+        activeIndex = index
         let identity = UUID(); requestID = identity
         films[index].setLoadingMessage("Opening this little escape…")
         films[index].retry.isHidden = true
@@ -320,12 +327,10 @@ class ClipFeedController: TravelNoticeScreen, UIScrollViewDelegate, UIAdaptivePr
     private func resumeIfAllowed() {
         guard isActive, !covered, !readFailed, !manuallyPaused, !refreshingFeed, UIApplication.shared.applicationState == .active, player.currentItem?.status == .readyToPlay else { return }
         player.playImmediately(atRate: 1)
-        if films.indices.contains(activeIndex) { films[activeIndex].pauseLabel.isHidden = true }
     }
     private func togglePlayback() {
         manuallyPaused.toggle()
         if manuallyPaused { player.pause() } else { resumeIfAllowed() }
-        if films.indices.contains(activeIndex) { films[activeIndex].pauseLabel.isHidden = !manuallyPaused }
     }
     private func toggle(_ action: String, clip: Record, table: String) {
         guard !busy else { return }; busy = true
@@ -402,6 +407,9 @@ class ClipFeedController: TravelNoticeScreen, UIScrollViewDelegate, UIAdaptivePr
         present(dialog, animated: true); dialog.presentationController?.delegate = self
     }
     private func block(_ clip: Record) {
+        // A blocked film detail can close as soon as the refreshed feed arrives.
+        let previousScreen = navigationController?.viewControllers.dropLast().last as? TravelNoticeScreen
+        let feedbackScreen = discovery ? self : (previousScreen ?? self)
         Task { [weak self] in
             guard let self else { return }
             do {
@@ -413,6 +421,7 @@ class ClipFeedController: TravelNoticeScreen, UIScrollViewDelegate, UIAdaptivePr
                 } else if self.navigationController?.topViewController === self {
                     self.navigationController?.popViewController(animated: true)
                 }
+                feedbackScreen.showBlockSuccess()
             } catch { self.notice(error.localizedDescription) }
         }
     }
@@ -480,9 +489,11 @@ private final class FilmPage: UIView {
     let progress: UISlider = FilmProgressSlider(frame: .zero)
     private lazy var progressBottom = progress.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
     private let loading = text("", 15, color: .white)
-    let pauseLabel = text("Paused · Tap to play", 18, color: .white)
+    let playIndicator = UIImageView(image: UIImage(named: "icon-play"))
     let retry = TravelApp.action("Retry film", icon: "icon-refresh", filled: false) {}
     private let clip: Record
+    private lazy var likeButton = iconButton("icon-heart-outline", label: "Like video", selectedIcon: "icon-heart") { [weak self] in self?.onLike?() }
+    private lazy var saveButton = iconButton("icon-save-outline", label: "Save video", selectedIcon: "icon-save") { [weak self] in self?.onSave?() }
     private let likeCount = text("", 12, color: .white)
     private let saveCount = text("", 12, color: .white)
     private let commentCount = text("", 12, color: .white)
@@ -525,8 +536,7 @@ private final class FilmPage: UIView {
         addSubview(header)
         NSLayoutConstraint.activate([header.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16), header.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16), header.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8)])
         let rail = column(spacing: 13)
-        func railItem(_ icon: String, _ name: String, _ count: UILabel? = nil, _ work: @escaping () -> Void) {
-            let button = iconButton(icon, label: name, work)
+        func railItem(_ button: UIButton, _ count: UILabel? = nil) {
             let container = column([button], spacing: 3); container.alignment = .center
             if let count { container.addArrangedSubview(count) }
             rail.addArrangedSubview(container)
@@ -537,11 +547,11 @@ private final class FilmPage: UIView {
             avatarContainer.alignment = .center
             rail.addArrangedSubview(avatarContainer)
         }
-        railItem("icon-heart", "Like video", likeCount) { [weak self] in self?.onLike?() }
-        railItem("icon-comment", "Open comments", commentCount) { [weak self] in self?.onComments?() }
-        railItem("icon-save", "Save video", saveCount) { [weak self] in self?.onSave?() }
-        railItem("icon-share", "Share video") { [weak self] in self?.onShare?() }
-        railItem("icon-more", "More options") { [weak self] in self?.onMore?() }
+        railItem(likeButton, likeCount)
+        railItem(iconButton("icon-comment", label: "Open comments") { [weak self] in self?.onComments?() }, commentCount)
+        railItem(saveButton, saveCount)
+        railItem(iconButton("icon-share", label: "Share video") { [weak self] in self?.onShare?() })
+        railItem(iconButton("icon-more", label: "More options") { [weak self] in self?.onMore?() })
         let railScroll = UIScrollView()
         railScroll.showsVerticalScrollIndicator = false
         let railContainer = UIView()
@@ -623,12 +633,16 @@ private final class FilmPage: UIView {
             self.onSeek?(self.progress.value)
         }, for: .valueChanged)
         progress.translatesAutoresizingMaskIntoConstraints = false; addSubview(progress)
-        pauseLabel.isHidden = true; pauseLabel.translatesAutoresizingMaskIntoConstraints = false; addSubview(pauseLabel)
+        playIndicator.contentMode = .scaleAspectFit
+        playIndicator.isHidden = true
+        playIndicator.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(playIndicator)
         NSLayoutConstraint.activate([
             railScroll.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -14), railScroll.bottomAnchor.constraint(equalTo: progress.topAnchor, constant: -24), railScroll.widthAnchor.constraint(equalToConstant: 52), railScroll.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 10),
             infoScroll.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16), clip.bool("is_private") ? infoScroll.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16) : infoScroll.trailingAnchor.constraint(equalTo: railScroll.leadingAnchor, constant: -12), infoScroll.bottomAnchor.constraint(equalTo: progress.topAnchor, constant: -12),
             progress.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20), progress.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20), progressBottom,
-            pauseLabel.centerXAnchor.constraint(equalTo: centerXAnchor), pauseLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            playIndicator.centerXAnchor.constraint(equalTo: centerXAnchor), playIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+            playIndicator.widthAnchor.constraint(equalToConstant: 64), playIndicator.heightAnchor.constraint(equalTo: playIndicator.widthAnchor)
         ])
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -644,9 +658,13 @@ private final class FilmPage: UIView {
     func updateCounts(store: TravelStore) {
         let liked = store.rows("likes").contains { $0.string("clip_id") == clip.id }
         let saved = store.rows("saved_clips").contains { $0.string("clip_id") == clip.id }
+        likeButton.isSelected = liked
+        likeButton.accessibilityLabel = liked ? "Unlike video" : "Like video"
+        saveButton.isSelected = saved
+        saveButton.accessibilityLabel = saved ? "Remove from saved videos" : "Save video"
         likeCount.text = store.contentLikeCount(kind: "clips", id: clip.id).map { $0.formatted() } ?? "—"
         likeCount.accessibilityLabel = liked ? "Liked" : "Like"
         saveCount.text = saved ? "Saved" : "Save"
-        commentCount.text = "\(store.rows("comments").filter { $0.string("clip_id") == clip.id }.count)"
+        commentCount.text = "\(store.visibleComments(for: clip.id).count)"
     }
 }

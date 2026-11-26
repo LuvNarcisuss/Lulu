@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate local media integrity and the public catalog without building the app."""
 from datetime import date
+from collections import Counter
 from pathlib import Path
 import hashlib
 import json
@@ -39,6 +40,10 @@ for key,rows in catalog.items():
     for row in rows:
         uuid.UUID(row['id'])
         fields = set(row)
+        if key == 'profiles':
+            fields -= {'avatar_credit', 'avatar_is_illustrative'}
+            if row['avatar_path'].startswith('catalog/'):
+                assert row['avatar_path'] in paths, row['avatar_path']
         if key == 'clips' and 'feed_rank' in fields:
             assert type(row['feed_rank']) is int and row['feed_rank'] > 0
             fields.remove('feed_rank')
@@ -51,6 +56,9 @@ for key,rows in catalog.items():
         if row.get('publisher_id'):
             assert row['publisher_id'] in ids['profiles']
 assert all(row['is_editorial'] for row in catalog['profiles'])
+work_counts = Counter(clip['publisher_id'] for clip in catalog['clips'])
+assert set(work_counts) == ids['profiles']
+assert all(2 <= count <= 3 for count in work_counts.values())
 assert {row['region'] for row in catalog['places']} == {'Europe','North America'}
 icons='shorts explore journeys chats profile search add back close heart comment save share more location map calendar check wallet diamond settings edit camera photo send group pin mute trash report block phone video refresh route globe'.split()
 asset_root=ROOT/'LuluApp/Resources/Assets.xcassets'

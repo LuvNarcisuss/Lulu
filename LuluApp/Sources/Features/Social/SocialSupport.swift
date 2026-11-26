@@ -3,6 +3,12 @@ import PhotosUI
 import UIKit
 import UniformTypeIdentifiers
 
+extension TravelNoticeScreen {
+    func showBlockSuccess() {
+        notice("You can unblock this traveler in Settings under Blocked profiles.", title: "Traveler blocked")
+    }
+}
+
 @MainActor
 func memberName(_ id: String, store: TravelStore) -> String {
     if id == store.userID { return store.profile.string("display_name", fallback: "You") }

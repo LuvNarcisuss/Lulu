@@ -1,5 +1,8 @@
 project_id = "ziryoihosvlqnbvfdvbw"
 
+[db.seed]
+sql_paths = ["./seed.sql", "./seed_editorial_comments.sql"]
+
 [auth]
 # Previously issued guest sessions need an anonymous destination during the company handoff.
 enable_anonymous_sign_ins = true

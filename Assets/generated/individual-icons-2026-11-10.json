@@ -2,7 +2,7 @@
   "engine": "Built-in image_gen.imagegen; model version is not exposed",
   "created_on": "2026-11-10",
   "style": "European watercolor travel journal: deep teal ink, golden ochre and ivory. Upright composition, independent transparent raster assets.",
-  "asset_count": 38,
+  "asset_count": 41,
   "assets": [
     {
       "name": "icon-add",
@@ -347,6 +347,28 @@
       "reference": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-e286ad89-0b26-461a-bb43-c31a9173b958.png"
     },
     {
+      "name": "icon-heart-outline",
+      "created_on": "2026-11-26",
+      "prompt": "Create the UNSELECTED, visibly hollow counterpart of the attached Lulu iOS heart icon. Reference is the selected icon. Draw just the single continuous outer silhouette of the upright symmetric love heart with two round lobes and a downward point with a moderately bold, rounded, deep teal (#164E50) watercolor ink stroke. The center is a large, fully alpha-transparent opening, exactly like the exterior, with absolutely no paint in it. Remove all gold fill, highlights, and the central compass star. Preserve the reference's upright proportions, exact framing, center, size and balanced margins in a square icon. Keep it easily legible at a 27-point button size. Clean isolated silhouette, one icon only, no background, shadows, reflections, paper, ornament, additional strokes, text, or badge. Transparent RGBA.",
+      "reference_asset": "icon-heart",
+      "source_file": "/Users/mac/.codex/generated_images/01a21667-c7c0-7841-aa8e-282c7fb11a95/exec-432369e8-3310-4d9a-8d30-f2db903d3a7a.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-heart-outline.imageset/icon-heart-outline.png",
+      "source_sha256": "b6a5281579f1f21e19bdec00d9c31637786fd71f472ff00fe3415517906c816a",
+      "sha256": "be55fa7d210ecc4b6ed20df1c88fbdda17fb80b1d5fb63f9c9d8b9a3eabf4276",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        30,
+        45,
+        171,
+        164
+      ],
+      "processing": "Full transparent canvas downsampled proportionally to 192 pixels using sips.",
+      "inspection": "Inspected the original and a 27-pixel thumbnail. The upright teal outline has a transparent center and clear exterior margins. Its size matches the filled state."
+    },
+    {
       "name": "icon-journeys",
       "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: an upright vintage golden carry-on suitcase with a centered handle and two straight teal luggage straps. Make it clearly themed, NOT a generic monochrome system symbol. Sophisticated small hand-painted travel keepsake: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
       "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-6f09b043-b7ca-40bc-b86f-3a6d03e9be69.png",
@@ -511,6 +533,27 @@
       "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
     },
     {
+      "name": "icon-play",
+      "created_on": "2026-11-26",
+      "prompt": "One centered, upright, right-pointing playback triangle for a paused travel video in the Lulu iPhone app. A simple solid warm ivory triangle with a clearly defined deep teal ink contour, softly rounded vertices and a trace of golden ochre watercolor pigment inside the contour. Flat orthographic view, vertical left edge, tip points horizontally right. Symmetric, compact silhouette, prominent and immediately recognizable even over busy footage. The triangle alone occupies 74% of the square canvas with generous transparent margins on all sides. Real transparent alpha outside the triangle. No background plate, button circle, outline around the canvas, words, shadows, gradients outside the shape, sparkle or extra decoration.",
+      "source_file": "/Users/mac/.codex/generated_images/01a21667-c7c0-7841-aa8e-282c7fb11a95/exec-50bd281d-b0f8-4d0e-b542-384f81da56c0.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-play.imageset/icon-play.png",
+      "source_sha256": "f16664172c67e134785452cae395cf4d02b68eb430e83de3cc1ad15d3828ffb2",
+      "sha256": "3b70613f3189397f4c2464cd6272bc34163391e683803e4ba2ccfb7987d82eb4",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        0,
+        35,
+        151,
+        173
+      ],
+      "processing": "Full transparent canvas downsampled proportionally to 192 pixels using sips.",
+      "inspection": "Inspected the original and a 64-pixel preview. The upright right-facing triangle has an ivory and ochre fill, a deep teal outline and clear margins."
+    },
+    {
       "name": "icon-profile",
       "prompt": "Use case: stylized-concept. ONE standalone app icon for Lulu, a European watercolor travel-journal app. Subject: upright centered traveler bust silhouette, round head, cream scarf and gold jacket, simple teal outline, no facial features. Cohesive premium hand-painted travel keepsake aesthetic: warm golden ochre watercolor fills, deep teal #164E50 clean medium-bold outlines, sparing warm ivory highlights; subtle watercolor pigment texture INSIDE the object only. Simple legible silhouette at 24\u201328 points, avoid tiny busy details. Perfectly upright orthographic front view, level horizontal edges, centered balanced geometry, NO overall rotation or leaning. Square canvas; main object centered and occupies 72% of canvas; generous transparent margin on all four sides. True alpha transparent background; no paper sheet, no enclosing tile, no ground shadow, no sparkles, splashes, floating decoration, detached marks, lettering, numbers, words, logo text or watermark. Exactly ONE icon per image, never a grid or sprite sheet.",
       "source_file": "/Users/apple/.codex/generated_images/01a1a093-8cb7-7182-b052-ddcc0a4117ba/exec-10ea683a-7636-41a4-a1b2-4dc4f1626c6d.png",
@@ -609,6 +652,28 @@
       ],
       "processing": "Full-canvas proportional downsample to maximum 192 pixels using sips. No sprite extraction, cropping, rotation, painting, or background replacement during packaging.",
       "inspection": "Visually inspected individual output: coherent teal, gold and ivory watercolor; recognizable isolated subject; no neighboring icon fragments or surrounding glow."
+    },
+    {
+      "name": "icon-save-outline",
+      "created_on": "2026-11-26",
+      "prompt": "Create the UNSELECTED, visibly hollow counterpart of the attached Lulu iOS save icon. Reference is the selected icon. Draw just the single continuous outer silhouette of the upright vertical bookmark ribbon, flat top and V notch cut up into the bottom with a moderately bold, rounded, deep teal (#164E50) watercolor ink stroke. The center is a large, fully alpha-transparent opening, exactly like the exterior, with absolutely no paint in it. Remove all gold fill, highlights, and the central compass star. Preserve the reference's upright proportions, exact framing, center, size and balanced margins in a square icon. Keep it easily legible at a 27-point button size. Clean isolated silhouette, one icon only, no background, shadows, reflections, paper, ornament, additional strokes, text, or badge. Transparent RGBA.",
+      "reference_asset": "icon-save",
+      "source_file": "/Users/mac/.codex/generated_images/01a21667-c7c0-7841-aa8e-282c7fb11a95/exec-f69f0c77-a7a1-4964-8129-02cbcdd0dd8d.png",
+      "project_file": "LuluApp/Resources/Assets.xcassets/icon-save-outline.imageset/icon-save-outline.png",
+      "source_sha256": "5cf2ebd9ce5fdf3c2aa329d69f16782734b404fd72aac989d0caa7217958bd8d",
+      "sha256": "0e0d65a0dd7bec46d07ceded0ebdc06d546aea7bb0ebfccb706eb2ecae104654",
+      "size": [
+        192,
+        192
+      ],
+      "alpha_bounds": [
+        50,
+        25,
+        161,
+        169
+      ],
+      "processing": "Full transparent canvas downsampled proportionally to 192 pixels using sips.",
+      "inspection": "Inspected the original and a 27-pixel thumbnail. The upright teal outline has a transparent center and clear exterior margins. Its size matches the filled state."
     },
     {
       "name": "icon-search",

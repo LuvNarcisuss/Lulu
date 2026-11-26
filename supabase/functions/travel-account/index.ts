@@ -13,7 +13,15 @@ Deno.serve((request) => deleteAccount(request, {
       if (error.status && error.status >= 400 && error.status < 500 && error.status !== 429) return null;
       throw error;
     }
-    return data.user?.id ?? null;
+    return data.user && !data.user.is_anonymous ? data.user.id : null;
+  },
+  async begin(login) {
+    const { data, error } = await admin.rpc("travel_begin_self_deletion", { login_id: login });
+    if (error) throw error;
+    if (typeof data !== "string" || !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(data)) {
+      throw Error("Invalid account identity");
+    }
+    return data;
   },
   async prepare(account) {
     const { data, error } = await admin.rpc("travel_account_media", { target_user: account, publish: false });

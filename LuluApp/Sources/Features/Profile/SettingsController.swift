@@ -32,8 +32,12 @@ final class SettingsController: TravelScreen {
             .flatMap { try? JSONDecoder().decode(Record.self, from: $0) }?.bool("accountDeletionDeployed") ?? false
         let deleteButton = action("Delete my account", icon: "icon-trash", filled: false) { [weak self] in
             guard let self else { return }
-            self.confirm("Permanently delete your account?", message: "Your profile, private activity and uploads will be deleted. Published videos and guides will stay in the community without your profile. This cannot be undone.", destructive: true, actionTitle: "Delete account") {
-                self.run { try await self.store.deleteAccount() }
+            let account = self.store.userID
+            self.confirm("Permanently delete your account?", message: "Your profile, private activity and private uploads will be deleted. Published videos and guides will stay in the community without your profile. This cannot be undone.", destructive: true, actionTitle: "Delete account") {
+                self.run {
+                    guard self.store.isAuthenticated, self.store.userID == account else { return }
+                    try await self.store.deleteAccount()
+                }
             }
         }
         deleteButton.isEnabled = deletionConfigured

@@ -20,7 +20,7 @@ This matrix describes implemented source routes. The [November 10 functional acc
 | Wallet | WalletController / PaymentCatalogAdapter | Nine StoreKit 1 consumables, Apple JWS verification and server coin ledger | Confirmed identity com.lulu.tourtravel; separate verified Sandbox/Production ledgers; unavailable taps provide feedback/retry; no unverified credit |
 | Agreements | AgreementController | Verified public PDFs + matching bundled PDF | Same entry/settings links; not production legal-operator approval |
 | Sign out | SettingsController | SDK local signout, secure state cleanup | Does not delete cloud records; guest access may be unrecoverable |
-| Own-account deletion | SettingsController / travel-account source | Not deployed | Explicit authorization absent; automatic review rejection disclosed; UI unavailable |
+| Own-account deletion | SettingsController / travel-account | Company service deployed | Explicit confirmation in Settings. Hosted checks covered disposable accounts, private data cleanup and isolation. |
 | Push | LaunchServices / AppDelegate | Callback and permission coordinator source | Signing identity/entitlement absent; registration feature disabled, no token fabrication |
 
 ## November 16 payment repair coverage

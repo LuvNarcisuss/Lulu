@@ -48,8 +48,10 @@
   },
   "accountDeletion": {
     "sourceAuthored": true,
-    "deployed": false,
-    "blockedBy": "automatic approval review: explicit authorization required"
+    "deployed": true,
+    "project": "ziryoihosvlqnbvfdvbw",
+    "functionVersion": 1,
+    "verification": "integration.md#account-deletion-with-community-retention"
   },
   "fixtureCleanup": {
     "uploadedObjectsRemoved": 2,

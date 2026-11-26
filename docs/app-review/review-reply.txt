@@ -1,0 +1,8 @@
+Hello App Review Team,
+
+Thank you for reporting the sign-in issue in Lulu 1.0 (build 4). We fixed the issue that prevented reviewers from entering the app after tapping “Start exploring.” The updated version uses email and password in place of the previous guest sign-in.
+
+To review Lulu, enter the review account’s email address and password on the “Sign in to Lulu” screen, select the checkbox for the Terms of Service and Privacy Policy, then tap “Sign in.” The review credentials are in the Sign-In Information section of App Store Connect.
+
+Thank you,
+The Lulu Team

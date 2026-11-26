@@ -3,6 +3,7 @@ type StorageEntry = { id: string | null; name: string };
 
 export interface AccountDeletionServices {
   authenticate(token: string): Promise<string | null>;
+  begin(login: string): Promise<string>;
   prepare(account: string): Promise<MediaCopy[]>;
   copy(source: string, destination: string): Promise<void>;
   publish(account: string): Promise<void>;
@@ -26,8 +27,9 @@ export async function deleteAccount(request: Request, services: AccountDeletionS
   }
 
   try {
-    const account = await services.authenticate(token);
-    if (!account) return response({ error: "Authentication required" }, 401);
+    const login = await services.authenticate(token);
+    if (!login) return response({ error: "Authentication required" }, 401);
+    const account = await services.begin(login);
     for (const item of await services.prepare(account)) {
       if (!item.source.startsWith(account + "/") || !item.destination.startsWith("community/")) {
         throw Error("Invalid media retention plan");
@@ -36,7 +38,8 @@ export async function deleteAccount(request: Request, services: AccountDeletionS
     }
     await services.publish(account);
     await removeFolder(account, services);
-    await services.removeIdentity(account);
+    if (login !== account) await removeFolder(login, services);
+    await services.removeIdentity(login);
     return response({ deleted: true });
   } catch {
     return response({ error: "Account deletion could not be completed. Please try again." }, 503);

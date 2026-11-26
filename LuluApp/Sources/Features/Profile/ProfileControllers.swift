@@ -1,6 +1,36 @@
 import UIKit
 
 @MainActor
+private struct PublishedProfileWorks {
+    let clips: [Record]
+    let guides: [(offer: Record, place: Record)]
+
+    init(profileID: String, store: TravelStore) {
+        clips = store.rows("clips").filter { $0.string("publisher_id") == profileID }
+        let places = Dictionary(store.rows("places").map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        guides = store.guideOffers.compactMap { offer in
+            guard offer.string("status") == "published", let place = places[offer.string("place_id")],
+                  guidePublisherID(place: place, offer: offer, store: store) == profileID else { return nil }
+            return (offer, place)
+        }
+    }
+
+    func receivedLikes(in store: TravelStore) -> Int? {
+        guard store.hasCoinState else { return nil }
+        var total = 0
+        for (kind, ids) in [("clips", clips.map(\.id)), ("guides", guides.map { $0.offer.string("guide_id") })] {
+            for id in ids {
+                guard let likes = store.contentLikeCount(kind: kind, id: id) else { return nil }
+                let (sum, overflow) = total.addingReportingOverflow(likes)
+                guard !overflow else { return nil }
+                total = sum
+            }
+        }
+        return total
+    }
+}
+
+@MainActor
 final class MeController: TravelScreen {
     private var selection = 0
     override func render() {
@@ -15,15 +45,16 @@ final class MeController: TravelScreen {
         let profile = store.profile
         let following = store.rows("follows").filter { $0.string("follower_id") == store.userID }.count
         let followers = store.rows("follows").filter { $0.string("following_id") == store.userID }.count
-        let works = store.rows("clips").filter { $0.string("publisher_id") == store.userID }
-        let stats = "\(works.count) works · \(following) following · \(followers) followers"
+        let works = PublishedProfileWorks(profileID: store.userID, store: store)
+        let likes = works.receivedLikes(in: store)?.formatted() ?? "—"
+        let stats = "\(likes) likes · \(following) following · \(followers) followers"
         content.addArrangedSubview(profileCover(profile, stats: stats))
         let walletTitle = store.payments.walletBalance.map { "Wallet · \($0.formatted()) coins" } ?? "Wallet"
         content.addArrangedSubview(action(walletTitle, icon: "icon-wallet") { [weak self] in guard let self else { return }; self.push(WalletController(store: self.store)) })
         content.addArrangedSubview(collectionTabs())
         var clips: [Record] = []
         switch selection {
-        case 0: clips = works
+        case 0: clips = works.clips
         case 1:
             let ids = Set(store.rows("likes").filter { $0.string("user_id") == store.userID }.map { $0.string("clip_id") })
             clips = store.rows("clips").filter { ids.contains($0.id) }
@@ -217,24 +248,35 @@ final class PublicProfileController: TravelScreen {
         if profile.bool("is_editorial") { identity.append(text(profile.bool("avatar_is_illustrative") ? "Editorial collection · Illustrative portrait" : "Editorial collection", 13, color: Palette.teal)) }
         content.addArrangedSubview(card(identity))
 
+        let works = PublishedProfileWorks(profileID: profileID, store: store)
+        let blocked = isBlocked(profileID, store: store)
+        let likes = blocked ? nil : works.receivedLikes(in: store)
         let metrics = line([], spacing: 4)
         metrics.distribution = .fillEqually
-        for (key, label) in [("likes", "Likes"), ("saves", "Saves"), ("following", "Following"), ("followers", "Followers")] {
-            let value = text(statistics.map { $0.int(key).formatted() } ?? "—", 28, display: true)
+        for (label, count) in [("Likes", likes), ("Following", statistics?.int("following")), ("Followers", statistics?.int("followers"))] {
+            let value = text(count?.formatted() ?? "—", 28, display: true)
             let caption = text(label, 12, color: Palette.muted)
             value.textAlignment = .center; caption.textAlignment = .center
             let item = column([value, caption], spacing: 4)
             item.isAccessibilityElement = true
             item.accessibilityLabel = label
-            item.accessibilityValue = statistics.map { String($0.int(key)) } ?? "Unavailable"
-            if key == "likes" || key == "saves" { item.accessibilityHint = "Received on published short videos" }
+            item.accessibilityValue = count?.formatted() ?? "Unavailable"
+            if label == "Likes" { item.accessibilityHint = "Received on published shorts and guides" }
             metrics.addArrangedSubview(item)
         }
         content.addArrangedSubview(metrics)
-        if statisticsFailed {
+        let needsWorkCounts = !blocked && likes == nil
+        if statisticsFailed || needsWorkCounts {
             content.addArrangedSubview(action("Retry statistics", filled: false) { [weak self] in
-                self?.updateProblem(nil, for: "statistics")
-                Task { await self?.loadStatistics() }
+                guard let self else { return }
+                self.updateProblem(nil, for: "statistics")
+                self.run {
+                    if needsWorkCounts {
+                        try await self.store.refresh()
+                        try await self.store.refreshCoinState()
+                    }
+                    await self.loadStatistics()
+                }
             })
         }
         if profileID != store.userID { addRelationshipActions(profile) }
@@ -261,9 +303,8 @@ final class PublicProfileController: TravelScreen {
         }
         categories.addArrangedSubview(UIView())
         content.addArrangedSubview(categories)
-        let blocked = isBlocked(profileID, store: store)
         if selectedWorks == 0 {
-            let published = blocked ? [] : store.rows("clips").filter { $0.string("publisher_id") == profileID }
+            let published = blocked ? [] : works.clips
             if published.isEmpty { content.addArrangedSubview(text("No published videos to show.", color: Palette.muted)) }
             let videos = published.enumerated().map { index, clip -> UIView in
                 let open = { [weak self] in
@@ -297,18 +338,16 @@ final class PublicProfileController: TravelScreen {
         }
 
         let reported = Set(store.rows("reports").filter { $0.string("target_kind") == "guide" }.map { $0.string("target_id") })
-        let guides = store.guideOffers.filter { offer in
-            guard !blocked, offer.string("status") == "published", !reported.contains(offer.string("guide_id")),
-                  let place = store.visiblePlaces.first(where: { $0.id == offer.string("place_id") }) else { return false }
-            return guidePublisherID(place: place, offer: offer, store: store) == profileID
+        let guides = works.guides.filter { guide in
+            !blocked && !reported.contains(guide.offer.string("guide_id")) && !store.hiddenPlaceIDs.contains(guide.place.id)
         }
         if !store.hasCoinState {
             content.addArrangedSubview(action("Load guides", icon: "icon-refresh", filled: false) { [weak self] in
                 guard let self else { return }; self.run { try await self.store.refreshCoinState() }
             })
         } else if guides.isEmpty { content.addArrangedSubview(text("No published guides to show.", color: Palette.muted)) }
-        appendGrid(guides.compactMap { offer in
-            guard let place = store.visiblePlaces.first(where: { $0.id == offer.string("place_id") }) else { return nil }
+        appendGrid(guides.map { guide in
+            let (offer, place) = guide
             let open = { [weak self] in
                 guard let self else { return }
                 self.openPlaceGuide(place.id, store: self.store, guideID: offer.string("guide_id"))
@@ -359,6 +398,7 @@ final class PublicProfileController: TravelScreen {
             self.confirm(blocked ? "Unblock traveler?" : "Block traveler?", message: blocked ? "They may interact with you again." : "Messaging and social interactions with this profile will be restricted.", destructive: !blocked) {
                 self.run {
                     try await self.store.perform("safety.block", ["profile_id": .string(self.profileID), "enabled": .bool(!blocked)])
+                    if !blocked { self.showBlockSuccess() }
                     try await self.store.refreshCoinState()
                     await self.loadStatistics()
                 }

@@ -38,6 +38,7 @@ Snapshot keys: `clips`, `places`, `guides`, `profiles`, `likes`, `saved_clips`, 
 
 - profile: id, display_name, bio, avatar_path, is_editorial, source_url, consent_version. `profiles` includes editorial publishers (never auth users) and discoverable real members. Only actual members support chat. Profile lookup uses id.
 - clip: id, title, caption, place_id, publisher_id, video_path, cover_path, source_url, author, duration, category, optional positive feed_rank for discovery order. No fabricated interaction rows. Owner-authorized editorial display baselines are separate private server records; `travel_content_stats` returns display counts without private liker identities.
+- The 14 catalog films are distributed across five editorial publishers, with two or three films each. `Assets/video-publishers.json` records the fixed assignments by film slug. A film and its publisher's Shorts grid use the same publisher ID. Original footage credits stay with the film.
 - place: id, name, city, country, region (`Europe` or `North America`), category, latitude, longitude, summary, photo_path, source_url, best_time, practical_tip.
 - guide: id, place_id, title, intro, sections (array of {title,body}), source_name, source_url, reading_minutes.
 - likes/saved_clips: id, clip_id, user_id. saved_places: id, place_id, user_id.
@@ -55,12 +56,12 @@ Snapshot keys: `clips`, `places`, `guides`, `profiles`, `likes`, `saved_clips`, 
 All payload keys below are snake_case. Optional IDs use null when absent. Every action validates auth, ownership, content lengths, relationships and membership on the server.
 
 - `profile.update`: display_name, bio, avatar_path (optional), consent_version (optional).
-- `clip.like` / `clip.save`: clip_id, enabled (bool).
-- `place.save`: place_id, enabled.
+- `clip.like` / `clip.save`: clip_id, enabled (bool). The video rail shows an outline heart or bookmark until the current member's corresponding record is saved, then shows the filled icon. Removing the record restores the outline.
+- `place.save`: place_id, enabled. The destination bookmark follows the same outline and filled states.
 - `safety.hide_place`: place_id, enabled. The store routes this action to the separate `travel_guide_visibility` RPC. Calling that RPC without arguments returns the viewer's `hidden_place_ids`.
-- `comment.add`: clip_id, body, parent_id (nullable); `comment.delete`: comment_id.
+- `comment.add`: clip_id, body, parent_id (nullable); `comment.delete`: comment_id. A comment's `user_id` identifies its author in `profiles`. Each of the 14 catalog films has two prewritten notes from the existing editorial collections. Their stable IDs support member replies and reports. The comment list labels these notes and links each avatar and name to the same author profile.
 - `relationship.follow`: profile_id, enabled.
-- `safety.block`: profile_id, enabled; `safety.report`: target_kind, target_id, reason, details; `safety.unreport`: report_id.
+- `safety.block`: profile_id, enabled; `safety.report`: target_kind, target_id, reason, details; `safety.unreport`: report_id. Reports and new blocks show a success alert after the server confirms the write. Acknowledging a report returns to the previous screen.
 - `journey.save`: full journey fields above (without owner_id); `journey.delete`: journey_id.
 - `chat.direct`: profile_id; returns conversation_id. Canonical pair, never duplicate threads.
 - `chat.group`: title, member_ids (at least two other real members); returns conversation_id.

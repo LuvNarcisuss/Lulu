@@ -19,7 +19,7 @@ The 22 original anonymous member identities have been imported. Their 19 origina
 
 ## Deployment and evidence
 
-The company baseline reproduced all 22 original application function definitions before the identity changes. The company and original-project SQL files under `supabase/cutover/` target different projects. Apply each only to the project named in its opening comment. The original project's retired purchase handler returns an update requirement. The company deploys the normal receipt verifier. Account deletion retains its previous deployment gate.
+The company baseline reproduced all 22 original application function definitions before the identity changes. The company and original-project SQL files under `supabase/cutover/` target different projects. Apply each only to the project named in its opening comment. The original project's retired purchase handler returns an update requirement. The company hosts the receipt verifier and the self-account deletion service. For transferred accounts, the deletion service resolves the imported guest from the verified login before cleaning up private data. [Account deletion verification](integration.md#account-deletion-with-community-retention)
 
 After the source write fence, digests matched for all 163 original records across 28 compared relations. The 42 catalog files and four historical legal PDFs matched their source bytes on full downloads. Both current agreement PDFs were also published under the consent version and matched the bundle checksums. The company project has 48 Storage objects. One signed-out anonymous identity owns the imported public files. It has no public profile, session, or lasting upload permission. The separate guest handoff fixtures were removed.
 

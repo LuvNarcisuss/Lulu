@@ -22,6 +22,7 @@ function fixture() {
   let failRemoval = false;
   const services: AccountDeletionServices = {
     async authenticate(token) { return token === "verified" ? user : null; },
+    async begin(login) { assert.equal(login, user); return user; },
     async prepare(owner) {
       assert.equal(owner, user);
       events.push("prepare");
@@ -74,6 +75,19 @@ test("published media is secured before personal storage and the verified identi
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), { deleted: true });
   assert.deepEqual(events, ["prepare", "copy", "publish", "list", "delete"]);
+});
+
+test("a transferred login uses its own member folder and deletes only the verified login", async () => {
+  const { services, events } = fixture();
+  const login = "77777777-7777-4777-8777-777777777777";
+  services.authenticate = async () => login;
+  services.begin = async (id) => { assert.equal(id, login); return user; };
+  const folders: string[] = [];
+  services.list = async (folder) => { folders.push(folder); return []; };
+  services.removeIdentity = async (id) => { assert.equal(id, login); events.push("delete"); };
+  assert.equal((await deleteAccount(request(), services)).status, 200);
+  assert.deepEqual(folders, [user, login]);
+  assert.deepEqual(events, ["prepare", "copy", "publish", "delete"]);
 });
 
 test("a copy failure leaves private storage and the identity untouched", async () => {

@@ -6,7 +6,6 @@ final class ReportController: TravelScreen {
     private let targetID: String
     private let details = multilineInput("Report details", height: 150)
     private let reasonSlot = column()
-    private let status = text("", 14, color: Palette.muted)
     private let reasons = ["Harassment or bullying", "Hate or discrimination", "Sexual or harmful content", "Scam or impersonation", "Copyright concern", "Unsafe travel advice", "Other"]
     private var selected = 0
     private var built = false
@@ -22,7 +21,6 @@ final class ReportController: TravelScreen {
         content.addArrangedSubview(text("Details · up to 500 characters", 14, color: Palette.muted))
         content.addArrangedSubview(details)
         content.addArrangedSubview(action("Submit report", icon: "icon-report") { [weak self] in self?.submit() })
-        content.addArrangedSubview(status)
         updateReasons()
     }
     private func updateReasons() {
@@ -41,10 +39,16 @@ final class ReportController: TravelScreen {
         let reason = reasons[selected]
         run { [self] in
             submitting = true
-            defer { submitting = false }
-            try await store.perform("safety.report", ["target_kind": .string(kind), "target_id": .string(targetID), "reason": .string(reason), "details": .string(body)])
-            status.text = "Report submitted"
-            navigationController?.popViewController(animated: true)
+            do {
+                try await store.perform("safety.report", ["target_kind": .string(kind), "target_id": .string(targetID), "reason": .string(reason), "details": .string(body)])
+            } catch {
+                submitting = false
+                throw error
+            }
+            notice("You can find your report in Settings under Your reports.", title: "Report submitted", onAcknowledged: { [weak self] in
+                guard let self, self.navigationController?.topViewController === self else { return }
+                self.navigationController?.popViewController(animated: true)
+            })
         }
     }
 }

@@ -486,7 +486,7 @@ final class PlaceController: TravelScreen {
         content.addArrangedSubview(text(place.string("summary"), 18))
         let saved = store.rows("saved_places").contains { $0.string("place_id") == placeID }
         content.addArrangedSubview(line([
-            action(saved ? "Saved" : "Save place", icon: "icon-save", filled: false) { [weak self] in
+            action(saved ? "Saved" : "Save place", icon: saved ? "icon-save" : "icon-save-outline", filled: false) { [weak self] in
                 guard let self else { return }
                 self.run { try await self.store.perform("place.save", ["place_id": .string(self.placeID), "enabled": .bool(!saved)]) }
             },
@@ -624,6 +624,7 @@ final class PlaceController: TravelScreen {
                 guard let self else { return }
                 self.run {
                     try await self.store.perform("safety.block", ["profile_id": .string(author), "enabled": .bool(true)])
+                    self.showBlockSuccess()
                     try await self.store.refreshCoinState()
                 }
             }),

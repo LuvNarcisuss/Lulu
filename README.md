@@ -28,13 +28,14 @@ Public editorial publishers are not fabricated member accounts. New real account
 
 Stage B external authentication, external Socket, WebView and purchase forwarding have not been requested or implemented. This app has no AI feature. See `docs/backend/integration.md` for deployment and finite backend verification evidence.
 
+Settings → Delete my account opens a confirmation. Confirming deletes the signed-in member through the company service and returns the app to sign-in. Published films and guides stay available with the member association removed. [Account deletion and verification](docs/backend/integration.md#account-deletion-with-community-retention)
+
 ## Owner configuration still required
 
 - Apple registration and distribution signing for `com.lulu.tourtravel`. The owner confirmed this Bundle ID and Apple ID `6832914128` on November 16, 2026. Physical-device sandbox testing requires an explicit provisioning profile; the existing wildcard profile is not valid acceptance evidence.
 - Apple App ID configuration, App Store Connect registration for the nine consumables and actual Apple environment acceptance. See [Coins and paid guides](docs/backend/coins-and-guides.md).
 - Signing and APNs entitlement configuration before push registration is enabled. Registration callbacks are prepared, but background notifications are not claimed as operational.
 - Publish the revised [Lulu agreements](docs/backend/legal/2026-11-09-lulu/README.md) at the existing URLs and review the account wording before public distribution.
-- Explicit authorization to deploy the self-account deletion service. Automatic review rejected that deployment because destructive account/data effects had not been explicitly authorized. The function source is provided, deployment is absent, and the UI accurately marks deletion unavailable.
 
 ## Verification boundaries
 
