@@ -88,18 +88,18 @@ import Combine
     return button
 }
 
-@MainActor func appLogoView() -> UIImageView {
+@MainActor func appLogoView(size: CGFloat = 32) -> UIImageView {
     let logo = UIImageView(image: UIImage(named: "logo-lulu"))
     logo.translatesAutoresizingMaskIntoConstraints = false
     logo.contentMode = .scaleAspectFit
-    logo.layer.cornerRadius = 8
+    logo.layer.cornerRadius = size / 4
     logo.clipsToBounds = true
     logo.isAccessibilityElement = true
     logo.accessibilityLabel = "Lulu logo"
     logo.accessibilityTraits = .image
     NSLayoutConstraint.activate([
-        logo.widthAnchor.constraint(equalToConstant: 32),
-        logo.heightAnchor.constraint(equalToConstant: 32)
+        logo.widthAnchor.constraint(equalToConstant: size),
+        logo.heightAnchor.constraint(equalToConstant: size)
     ])
     return logo
 }

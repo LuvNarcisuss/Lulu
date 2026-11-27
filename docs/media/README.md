@@ -42,7 +42,7 @@ The welcome illustration is a watercolor collage, not a geographically literal d
 
 ## Brand artwork
 
-The owner supplied `logo.png` on November 10, 2026. The source SHA-256 is `5f5261a452c12ebbd05ce536af10198d7e2c2a21df5b50fdfe29ff7d3f766dff`. The 1024×1024 `AppIcon` retains the source RGB pixels with the fully opaque alpha channel removed. The 96×96 `logo-lulu` asset uses the same artwork for the 32-point toolbar mark and the existing editorial avatar fallback. The generation records for the original compass artwork describe the previous app icon and toolbar logo.
+The owner supplied `logo.png` on November 10, 2026. The source SHA-256 is `5f5261a452c12ebbd05ce536af10198d7e2c2a21df5b50fdfe29ff7d3f766dff`. The 1024×1024 `AppIcon` retains the source RGB pixels with the fully opaque alpha channel removed. The 336×336 `logo-lulu` asset is downsampled from that icon for the 112-point welcome mark on 3× displays. The toolbar uses the same asset at 32 points, and editorial avatars retain it as their fallback. The generation records for the original compass artwork describe the previous app icon and toolbar logo.
 
 ## Street map
 

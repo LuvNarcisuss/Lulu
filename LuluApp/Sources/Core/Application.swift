@@ -50,20 +50,20 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func start() {
         LaunchServices.shared.start()
         configureAppearance()
-        showEntry()
+        window.rootViewController = WelcomeController { [weak self] in self?.showSignIn() }
         observation = store.$isAuthenticated.removeDuplicates().dropFirst().sink { [weak self] authenticated in
-            if !authenticated { self?.showEntry() }
+            if !authenticated { self?.showSignIn() }
         }
     }
-    private func showEntry() {
-        let welcome = EntryController(store: store)
-        welcome.onEntry = { [weak self] in
+    private func showSignIn() {
+        let entry = EntryController(store: store)
+        entry.onEntry = { [weak self] in
             guard let self else { return }
             let tabs = TravelTabController(store: self.store)
             self.window.rootViewController = tabs
             if let friendID = self.pendingFriendID { self.pendingFriendID = nil; tabs.loadViewIfNeeded(); tabs.openFriend(friendID) }
         }
-        window.rootViewController = UINavigationController(rootViewController: welcome)
+        window.rootViewController = UINavigationController(rootViewController: entry)
     }
     func open(_ url: URL) {
         guard let memberID = TravelFriendCode.memberID(from: url.absoluteString) else { return }
@@ -88,13 +88,55 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
+private final class WelcomeController: UIViewController {
+    private let onContinue: () -> Void
+
+    init(onContinue: @escaping () -> Void) {
+        self.onContinue = onContinue
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = Palette.cream
+        let cover = UIImageView(image: UIImage(named: "background-welcome"))
+        cover.contentMode = .scaleAspectFill
+        cover.clipsToBounds = true
+        cover.isAccessibilityElement = false
+        cover.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(cover)
+
+        let logo = appLogoView(size: 112)
+        view.addSubview(logo)
+
+        let button = action("Welcome to Lulu", onContinue)
+        button.accessibilityIdentifier = "welcome.continue"
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+
+        let safe = view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            cover.topAnchor.constraint(equalTo: view.topAnchor),
+            cover.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            cover.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            cover.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            logo.centerXAnchor.constraint(equalTo: safe.centerXAnchor),
+            safe.topAnchor.anchorWithOffset(to: logo.centerYAnchor).constraint(equalTo: safe.heightAnchor, multiplier: 0.17),
+            button.leadingAnchor.constraint(equalTo: safe.leadingAnchor, constant: 20),
+            button.trailingAnchor.constraint(equalTo: safe.trailingAnchor, constant: -20),
+            button.bottomAnchor.constraint(equalTo: safe.bottomAnchor, constant: -20)
+        ])
+    }
+}
+
 final class EntryController: TravelScreen, UITextViewDelegate, UITextFieldDelegate {
     var onEntry: (() -> Void)?
     private let artwork = UIImageView(image: UIImage(named: "background-welcome"))
     private let emailField = input("Email address")
     private let passwordField = input("Password")
     private let confirmationField = input("Confirm password")
-    private var submitButton: UIButton?
     private var accepted = false
     private var registering = false
     private var signingIn = false
@@ -140,7 +182,6 @@ final class EntryController: TravelScreen, UITextViewDelegate, UITextFieldDelega
                 .foregroundColor: Palette.muted
             ])
             field.delegate = self
-            field.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
         }
         super.viewDidLoad()
         // Grow the cover above the form, then scroll when the keyboard or larger text needs the space.
@@ -164,18 +205,42 @@ final class EntryController: TravelScreen, UITextViewDelegate, UITextFieldDelega
         content.addArrangedSubview(column(fields, spacing: 8))
         for field in fields { field.isEnabled = !signingIn }
         content.addArrangedSubview(agreementConsentRow())
-        let submit = action(registering ? "Create account" : "Sign in") { [weak self] in self?.submit() }
+        let submit = action(registering ? "Sign up" : "Sign in") { [weak self] in self?.submit() }
         submit.accessibilityIdentifier = "entry.submit"
         submit.configuration?.showsActivityIndicator = signingIn
-        submitButton = submit
+        submit.isEnabled = !signingIn
         content.addArrangedSubview(submit)
-        let change = action(registering ? "Back to sign in" : "Create account", filled: false) { [weak self] in
+        content.addArrangedSubview(accountSwitchRow())
+    }
+
+    private func accountSwitchRow() -> UIStackView {
+        let prompt = text(registering ? "Have an account?" : "Don’t have an account?", 15, color: Palette.muted)
+        let title = registering ? "Sign in" : "Sign up"
+        let link = UIButton(type: .system)
+        link.tintColor = Palette.teal
+        link.titleLabel?.font = FontBook.font(15)
+        link.titleLabel?.adjustsFontForContentSizeCategory = true
+        link.setAttributedTitle(NSAttributedString(string: title, attributes: [
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]), for: .normal)
+        link.accessibilityLabel = title
+        link.accessibilityIdentifier = "entry.switchMode"
+        link.isEnabled = !signingIn
+        link.setContentCompressionResistancePriority(.required, for: .horizontal)
+        NSLayoutConstraint.activate([
+            link.widthAnchor.constraint(greaterThanOrEqualToConstant: 44),
+            link.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
+        ])
+        link.addAction(UIAction { [weak self] _ in
             guard let self else { return }
             self.changeMode(registering: !self.registering)
-        }
-        change.isEnabled = !signingIn
-        content.addArrangedSubview(change)
-        refreshForm()
+        }, for: .touchUpInside)
+
+        let row = line([prompt, link], spacing: 4)
+        let container = column([row])
+        container.alignment = .center
+        row.widthAnchor.constraint(lessThanOrEqualTo: container.widthAnchor).isActive = true
+        return container
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -191,16 +256,6 @@ final class EntryController: TravelScreen, UITextViewDelegate, UITextFieldDelega
         render()
     }
 
-    @objc private func editingChanged() {
-        refreshForm()
-    }
-
-    private func refreshForm() {
-        submitButton?.isEnabled = accepted && !signingIn && !email.isEmpty && !(passwordField.text ?? "").isEmpty &&
-            (!registering || !(confirmationField.text ?? "").isEmpty)
-        submitButton?.alpha = submitButton?.isEnabled == true || signingIn ? 1 : 0.52
-    }
-
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField === emailField { passwordField.becomeFirstResponder() }
         else if registering && textField === passwordField { confirmationField.becomeFirstResponder() }
@@ -212,10 +267,18 @@ final class EntryController: TravelScreen, UITextViewDelegate, UITextFieldDelega
     }
 
     private func submit() {
-        refreshForm()
-        guard submitButton?.isEnabled == true, let password = passwordField.text else { return }
+        guard !signingIn else { return }
+        guard !email.isEmpty else { notice("Enter your email address."); return }
         guard validEmail else { notice("Enter a valid email address."); return }
-        guard !registering || passwordsMatch else { notice("Passwords do not match."); return }
+        guard let password = passwordField.text, !password.isEmpty else { notice("Enter your password."); return }
+        if registering {
+            guard !(confirmationField.text ?? "").isEmpty else { notice("Confirm your password."); return }
+            guard passwordsMatch else { notice("Passwords do not match."); return }
+        }
+        guard accepted else {
+            notice("Please agree to the Terms of Service and Privacy Policy to continue.")
+            return
+        }
         let accountEmail = email
         view.endEditing(true)
         signingIn = true
